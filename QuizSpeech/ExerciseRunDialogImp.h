@@ -29,6 +29,8 @@ class ExerciseRunDialogImp : public ExerciseRunDialog
 		void CloseOnButtonClick( wxCommandEvent& event );
 		void OnInitDialog(wxInitDialogEvent& event);
 		void RecordOnButtonClick(wxCommandEvent& event);
+		void AudioPlayOnButtonClick(wxCommandEvent& event);
+
 
 	public:
 		/** Constructor */
