@@ -45,19 +45,16 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	size_t siz = viewModel.GetQuestions().size();
 	viewModel.CreateRunQuestions();
 	RenderQuestions();
-	AudioPlayerPanelImp* playerPanel = new AudioPlayerPanelImp(this, &player);
-	this->bSizer10->Add(playerPanel);
-	szQuestion->Layout();
-	szPlayer->Layout();
-	szQuestion->Layout();
-	szWrap->Layout();
+	//AudioPlayerPanelImp* playerPanel = new AudioPlayerPanelImp(this, &player);
+	//this->bSizer10->Add(playerPanel);
+
 	if (viewModel.GetRunQuestions().size() > 0)
 	{
 		viewModel.SetCurrentQuestionIndex(0);
 		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
 		SetQuestion(viewModel.GetRunQuestions().at(viewModel.GetCurrentQuestionIndex()));
 	}
-	dialogSizer->Layout();
+
 }
 
 void ExerciseRunDialogImp::RenderQuestions()

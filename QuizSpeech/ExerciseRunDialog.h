@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Dec  8 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __EXERCISERUNDIALOG_H__
@@ -19,7 +19,6 @@
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/radiobox.h>
-#include <wx/wrapsizer.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
 #include <wx/dataview.h>
@@ -42,16 +41,14 @@ class ExerciseRunDialog : public wxDialog
 		wxSplitterWindow* listSplitter;
 		wxPanel* pnlQuestion;
 		wxBoxSizer* szQuestion;
-		wxButton* btnRecord;
-		wxButton* btnSkip;
-		wxRadioBox* rdoEvaluation;
-		wxButton* btnNext;
 		wxBoxSizer* bSizer10;
 		wxStaticText* lblQuestion;
-		wxBoxSizer* szAudioPlayer;
-		wxGridSizer* szPlayer;
-		wxWrapSizer* szWrap;
+		wxButton* btnAudioPlay;
 		wxStaticText* lblAnswer;
+		wxButton* btnRecord;
+		wxButton* btnSkip;
+		wxButton* btnNext;
+		wxRadioBox* rdoEvaluation;
 		wxTextCtrl* txtQuestion;
 		wxTextCtrl* txtAnswer;
 		wxStaticText* lblStatus;
@@ -66,10 +63,11 @@ class ExerciseRunDialog : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void AudioPlayOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RecordOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SkipOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void EvaluationOnRadioBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void NextOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EvaluationOnRadioBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CloseOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
