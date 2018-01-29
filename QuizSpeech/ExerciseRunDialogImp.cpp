@@ -31,6 +31,10 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 	}
 }
 
+void ExerciseRunDialogImp::AudioPlayOnButtonClick(wxCommandEvent& event)
+{
+
+}
 void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 {
 	deleteIcon.CopyFromBitmap(*wxGetApp().GetImages().delete_icon);
