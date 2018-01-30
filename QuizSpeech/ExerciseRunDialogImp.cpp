@@ -83,7 +83,11 @@ void ExerciseRunDialogImp::NextOnButtonClick(wxCommandEvent& event)
 void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 {
 	deleteIcon.CopyFromBitmap(*wxGetApp().GetImages().delete_icon);
-	SetIcon(wxIcon(deleteIcon));
+	//SetIcon(wxIcon(deleteIcon));
+	
+	taskCompleteIcon.CopyFromBitmap(*wxGetApp().GetImages().taskcomplete_icon);
+	taskRejectIcon.CopyFromBitmap(*wxGetApp().GetImages().taskreject_icon);
+
 
 	btnRecord->SetBitmap(*wxGetApp().GetImages().record_icon);
 	btnNext->SetBitmap(*wxGetApp().GetImages().next_icon);
@@ -120,15 +124,15 @@ void ExerciseRunDialogImp::RenderQuestions()
 		data.push_back(wxVariant(boost::lexical_cast<std::wstring>(i)));
 		data.push_back(wxVariant(question.GetQuestion().GetLimitedQuestionText()));
 		//answered
-		data.push_back(wxVariant(wxDataViewIconText(L"No", deleteIcon)));
+		data.push_back(wxVariant(wxDataViewIconText(L"No", taskCompleteIcon)));
 		//result
 		if (question.GetIsCorrect())
 		{
-			data.push_back(wxVariant(wxDataViewIconText(L"", deleteIcon)));
+			data.push_back(wxVariant(wxDataViewIconText(L"", taskCompleteIcon)));
 		}
 		else
 		{
-			data.push_back(wxVariant(wxDataViewIconText(L"", deleteIcon)));
+			data.push_back(wxVariant(wxDataViewIconText(L"", taskRejectIcon)));
 		}
 		lstQuestions->AppendItem(data, wxUIntPtr(&question));
 		data.clear();

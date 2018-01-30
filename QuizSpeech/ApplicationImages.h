@@ -28,5 +28,7 @@ public:
 	std::unique_ptr<wxBitmap> unlock_icon;
 	std::unique_ptr<wxIcon> disconnect_icon;
 	std::unique_ptr<wxBitmap> next_icon;
+	std::unique_ptr<wxBitmap> taskcomplete_icon;
+	std::unique_ptr<wxBitmap> taskreject_icon;
 };
 

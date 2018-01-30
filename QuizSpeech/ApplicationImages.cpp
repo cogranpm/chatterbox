@@ -30,5 +30,7 @@ void ApplicationImages::Init()
 	lock_icon = std::make_unique<wxBitmap>(wxBITMAP_PNG(icon_png_lock));
 	unlock_icon = std::make_unique<wxBitmap>(wxBITMAP_PNG(icon_png_unlock));
 	next_icon = std::make_unique<wxBitmap>(wxBITMAP_PNG(icon_png_next));
+	taskcomplete_icon = std::make_unique<wxBitmap>(wxBITMAP_PNG(icon_png_taskcomplete));
+	taskreject_icon = std::make_unique<wxBitmap>(wxBITMAP_PNG(icon_png_taskreject));
 	disconnect_icon = std::make_unique<wxIcon>(wxICON(icon_ico_disconnect));
 }
