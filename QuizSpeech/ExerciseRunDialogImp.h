@@ -27,6 +27,11 @@ class ExerciseRunDialogImp : public ExerciseRunDialog, AudioPlayerWrapperClient
 	AudioPlayerWrapper questionPlayer;
 	AudioPlayerWrapper answerPlayer;
 	AudioPlayerWrapper correctAnswerPlayer;
+	bool Save();
+	bool Validate();
+	void GoNextQuestion();
+	bool MoreQuestions();
+	bool IsFirstQuestion();
 	
 	protected:
 		// Handlers for ExerciseRunDialog events.

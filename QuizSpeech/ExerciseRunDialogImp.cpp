@@ -68,7 +68,15 @@ void ExerciseRunDialogImp::EvaluationOnRadioBox(wxCommandEvent& event)
 
 void ExerciseRunDialogImp::NextOnButtonClick(wxCommandEvent& event)
 {
-
+	bool updateResult = Save();
+	if (!updateResult)
+	{
+		event.Skip();
+	}
+	else
+	{
+		GoNextQuestion();
+	}
 }
 
 
@@ -145,4 +153,60 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 void ExerciseRunDialogImp::PlayCompleted()
 {
 
+}
+
+bool ExerciseRunDialogImp::Save()
+{
+	QuizRunQuestion* question = GetCurrentQuestion();
+	if (!Validate())
+	{
+		return false;
+	}
+	if (question->GetQuizRunQuestionId() > 0)
+	{
+		wxGetApp().GetProvider()->GetQuizProvider().Update(*question);
+	}
+	else
+	{
+		wxGetApp().GetProvider()->GetQuizProvider().Insert(*question);
+	}
+	return true;
+}
+
+bool ExerciseRunDialogImp::Validate()
+{
+	QuizRunQuestion* question = GetCurrentQuestion();
+	/* need answer text or answer file */
+	if (question->GetAnswerFile().empty() && question->GetAnswerText().empty())
+	{
+		return false;
+	}
+	return true;
+}
+
+void ExerciseRunDialogImp::GoNextQuestion()
+{
+	if (MoreQuestions())
+	{
+		int nextQuestionIndex = viewModel.GetCurrentQuestionIndex() + 1;
+		viewModel.SetCurrentQuestionIndex(nextQuestionIndex);
+		RenderQuestions();
+		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
+		SetQuestion(*GetCurrentQuestion());
+	}
+	else
+	{
+		/* show the result */
+	}
+}
+
+bool ExerciseRunDialogImp::MoreQuestions()
+{
+	return viewModel.GetCurrentQuestionIndex() >= viewModel.GetRunQuestions().size();
+}
+
+
+bool ExerciseRunDialogImp::IsFirstQuestion()
+{
+	return viewModel.GetCurrentQuestionIndex() == 1;
 }
