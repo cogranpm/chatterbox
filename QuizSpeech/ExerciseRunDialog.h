@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -40,20 +40,21 @@ class ExerciseRunDialog : public wxDialog
 		wxStaticText* lblQuizName;
 		wxSplitterWindow* listSplitter;
 		wxPanel* pnlQuestion;
-		wxBoxSizer* szQuestion;
-		wxBoxSizer* bSizer10;
+		wxBoxSizer* szInput;
+		wxBoxSizer* szQuestionTool;
 		wxStaticText* lblQuestion;
 		wxButton* btnAudioPlay;
 		wxButton* btnSkip;
+		wxTextCtrl* txtQuestion;
+		wxBoxSizer* szAnswer;
 		wxStaticText* lblAnswer;
 		wxButton* btnRecord;
 		wxButton* btnPlayAnswer;
-		wxTextCtrl* txtQuestion;
 		wxTextCtrl* txtAnswer;
 		wxStaticText* m_staticText6;
+		wxButton* btnPlayCorrectAnswer;
 		wxRadioBox* rdoEvaluation;
 		wxButton* btnNext;
-		wxButton* btnPlayCorrectAnswer;
 		wxTextCtrl* txtCorrectAnswer;
 		wxStaticText* lblStatus;
 		wxPanel* pnlList;
@@ -70,9 +71,10 @@ class ExerciseRunDialog : public wxDialog
 		virtual void AudioPlayOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SkipOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RecordOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void PlayAnswerOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void PlayCorrectAnswerOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EvaluationOnRadioBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void NextOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void PlayCorrectAnswerOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CloseOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

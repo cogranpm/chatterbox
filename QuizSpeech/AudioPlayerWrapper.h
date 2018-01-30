@@ -24,5 +24,6 @@ public:
 	void Play();
 	void Stop();
 	AudioPlayer& GetAudioPlayer() { return audioPlayer; }
+	void SetURL(std::wstring url);
 };
 

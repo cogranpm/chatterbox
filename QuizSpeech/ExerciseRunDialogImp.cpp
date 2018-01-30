@@ -7,7 +7,7 @@
 
 ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId)
 :
-ExerciseRunDialog( parent ), viewModel(quizId)
+ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L"")), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
 
 }
@@ -21,20 +21,57 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 {
 	/* show the record dialog */
 	std::wstring filePathBuffer(L"");
-	QuizRunQuestion currentQuestion = viewModel.GetRunQuestions().at(viewModel.GetCurrentQuestionIndex());
-	int returnValue = DictationOverlayClientHelper::ShowDictationDialog(currentQuestion.GetAnswerFile(), this, txtAnswer, &player, &filePathBuffer);
+	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	int returnValue = DictationOverlayClientHelper::ShowDictationDialog(currentQuestion->GetAnswerFile(), this, txtAnswer, nullptr, &filePathBuffer);
 	if (returnValue == wxID_OK)
 	{
-		currentQuestion.SetAnswerText(filePathBuffer);
+		currentQuestion->SetAnswerFile(filePathBuffer);
+		currentQuestion->SetAnswerText(txtAnswer->GetValue().ToStdWstring());
 		rdoEvaluation->Enable();
 		btnNext->Enable();
+		btnPlayAnswer->Enable();
+		btnPlayCorrectAnswer->Enable();
 	}
 }
 
 void ExerciseRunDialogImp::AudioPlayOnButtonClick(wxCommandEvent& event)
 {
+	/* play the question audio */
+	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
+	questionPlayer.Play();
+}
+
+void ExerciseRunDialogImp::PlayAnswerOnButtonClick(wxCommandEvent& event)
+{
+	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	answerPlayer.SetURL(currentQuestion->GetAnswerFile());
+	answerPlayer.Play();
+}
+
+void ExerciseRunDialogImp::SkipOnButtonClick(wxCommandEvent& event)
+{
 
 }
+
+void ExerciseRunDialogImp::PlayCorrectAnswerOnButtonClick(wxCommandEvent& event)
+{
+	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	correctAnswerPlayer.SetURL(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile());
+	correctAnswerPlayer.Play();
+}
+
+void ExerciseRunDialogImp::EvaluationOnRadioBox(wxCommandEvent& event)
+{
+
+}
+
+void ExerciseRunDialogImp::NextOnButtonClick(wxCommandEvent& event)
+{
+
+}
+
+
 void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 {
 	deleteIcon.CopyFromBitmap(*wxGetApp().GetImages().delete_icon);
@@ -42,6 +79,10 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 
 	btnRecord->SetBitmap(*wxGetApp().GetImages().record_icon);
 	btnNext->SetBitmap(*wxGetApp().GetImages().next_icon);
+	btnAudioPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
+	btnPlayAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
+	btnPlayCorrectAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
+	btnSkip->SetBitmap(*wxGetApp().GetImages().next_icon);
 
 	/* load the data */
 	wxGetApp().GetProvider()->GetQuizProvider().Insert(viewModel.GetHeader());
@@ -49,8 +90,7 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	size_t siz = viewModel.GetQuestions().size();
 	viewModel.CreateRunQuestions();
 	RenderQuestions();
-	//AudioPlayerPanelImp* playerPanel = new AudioPlayerPanelImp(this, &player);
-	//this->bSizer10->Add(playerPanel);
+
 
 	if (viewModel.GetRunQuestions().size() > 0)
 	{
@@ -87,11 +127,22 @@ void ExerciseRunDialogImp::RenderQuestions()
 	}
 }
 
+QuizRunQuestion* ExerciseRunDialogImp::GetCurrentQuestion()
+{
+	return &viewModel.GetRunQuestions().at(viewModel.GetCurrentQuestionIndex());
+}
+
+
 void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 {
 	txtQuestion->SetValue(question.GetQuestion().GetQuestionText());
-	if (!question.GetQuestion().GetQuestionFile().empty())
-	{
-		player.SetURL(question.GetQuestion().GetQuestionFile());
-	}
+	//if (!question.GetQuestion().GetQuestionFile().empty())
+	//{
+	//	questionPlayer.SetURL(question.GetQuestion().GetQuestionFile());
+	//}
+}
+
+void ExerciseRunDialogImp::PlayCompleted()
+{
+
 }

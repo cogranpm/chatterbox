@@ -14,14 +14,15 @@ DictationOverlayClientHelper::~DictationOverlayClientHelper()
 {
 }
 
-const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& audioFilePath,
-	wxWindow* parent,
-	wxTextCtrl* txtBox,
-	AudioPlayer* player,
-	std::wstring* filePathBuffer
-	)
-{
 
+const int DictationOverlayClientHelper::ShowDictationDialog(
+	const std::wstring& audioFilePath,
+	wxWindow* parent,
+	std::wstring* textBuffer,
+	AudioPlayer* player,
+	std::wstring* filePathBuffer,
+	wxTextCtrl* txtBox)
+{
 	int returnVal = wxID_CANCEL;
 	try
 	{
@@ -47,7 +48,14 @@ const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& 
 			{
 				std::wstring recognizedText;
 				dialog.GetRecognizedText(recognizedText);
-				txtBox->SetValue(recognizedText);
+				if (txtBox != nullptr)
+				{
+					txtBox->SetValue(recognizedText);
+				}
+				if (textBuffer != nullptr)
+				{
+					textBuffer->assign(recognizedText);
+				}
 				/* if player currently has a valid audio file, delete it before applying the new */
 				if (wxGetApp().GetFileHandler().FileExists(audioFilePath))
 				{
@@ -57,7 +65,7 @@ const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& 
 				fileNameChanged = true;
 			}
 		}
-		if (fileNameChanged)
+		if (fileNameChanged && (player != nullptr))
 		{
 			//set this outside of dialog scope
 			player->SetURL(*filePathBuffer);
@@ -68,6 +76,26 @@ const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& 
 		wxMessageBox(e.what(), L"Error", wxICON_ERROR);
 	}
 	return returnVal;
+
+}
+
+const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& audioFilePath,
+	wxWindow* parent,
+	std::wstring* textBuffer,
+	AudioPlayer* player,
+	std::wstring* filePathBuffer)
+{
+	return DictationOverlayClientHelper::ShowDictationDialog(audioFilePath, parent, textBuffer, player, filePathBuffer, nullptr);
+}
+
+const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& audioFilePath,
+	wxWindow* parent,
+	wxTextCtrl* txtBox,
+	AudioPlayer* player,
+	std::wstring* filePathBuffer
+	)
+{
+	return DictationOverlayClientHelper::ShowDictationDialog(audioFilePath, parent, nullptr, player, filePathBuffer, txtBox);
 }
 
 

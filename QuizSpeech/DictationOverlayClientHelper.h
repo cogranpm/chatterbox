@@ -7,6 +7,15 @@
 
 class DictationOverlayClientHelper
 {
+
+	static const int ShowDictationDialog(
+		const std::wstring& audioFilePath,
+		wxWindow* parent,
+		std::wstring* textBuffer,
+		AudioPlayer* player,
+		std::wstring* filePathBuffer,
+		wxTextCtrl* txtBox);
+
 public:
 	DictationOverlayClientHelper();
 	~DictationOverlayClientHelper();
@@ -15,6 +24,13 @@ public:
 		wxTextCtrl* txtBox,
 		AudioPlayer* player,
 		std::wstring* filePathBuffer);
+
+	static const int ShowDictationDialog(const std::wstring& audioFilePath,
+		wxWindow* parent,
+		std::wstring* textBuffer,
+		AudioPlayer* player,
+		std::wstring* filePathBuffer);
+
 	static const void ClearAudio(const std::wstring& audioFilePath, wxWindow* parent, wxTextCtrl* txtBox, AudioPlayer* player);
 };
 

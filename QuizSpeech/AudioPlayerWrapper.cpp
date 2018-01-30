@@ -14,6 +14,10 @@ AudioPlayerWrapper::~AudioPlayerWrapper()
 {
 }
 
+void AudioPlayerWrapper::SetURL(std::wstring url)
+{
+	this->url = url;
+}
 
 void AudioPlayerWrapper::Play()
 {
