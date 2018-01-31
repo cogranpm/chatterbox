@@ -3476,7 +3476,7 @@
                                                                                                         <property name="label">Complete</property>
                                                                                                         <property name="name">colQuizRunComplete</property>
                                                                                                         <property name="permission">protected</property>
-                                                                                                        <property name="type">Toggle</property>
+                                                                                                        <property name="type">IconText</property>
                                                                                                     </object>
                                                                                                 </object>
                                                                                             </object>

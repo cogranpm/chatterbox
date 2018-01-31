@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Jun 28 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -287,7 +287,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	
 	lstQuizRun = new wxDataViewListCtrl( panelRun, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	colDateRun = lstQuizRun->AppendTextColumn( wxT("Date") );
-	colQuizRunComplete = lstQuizRun->AppendToggleColumn( wxT("Complete") );
+	colQuizRunComplete = lstQuizRun->AppendIconTextColumn( wxT("Complete") );
 	bSizer161->Add( lstQuizRun, 1, wxALL|wxEXPAND, 5 );
 	
 	
