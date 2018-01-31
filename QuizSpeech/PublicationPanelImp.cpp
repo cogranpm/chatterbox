@@ -29,28 +29,34 @@ PublicationPanelImp::~PublicationPanelImp()
 	}
 
 
-	if(this->_topicModel != 0)
+	if(this->_topicModel != nullptr)
 	{
 		this->_topicModel->DeleteAllItems();
-		this->_topicModel = 0;
+		this->_topicModel = nullptr;
 		delete this->_topicModel;
 		
 	}
 
-	if(this->_noteModel != 0)
+	if(this->_noteModel != nullptr)
 	{
 		this->_noteModel->DeleteAllItems();
-		this->_noteModel = 0;
+		this->_noteModel = nullptr;
 		delete this->_noteModel;
 		
 	}
 
-	if(this->_quizModel != 0)
+	if(this->_quizModel != nullptr)
 	{
 		this->_quizModel->DeleteAllItems();
-		this->_quizModel = 0;
+		this->_quizModel = nullptr;
 		delete this->_quizModel;
-		
+	}
+
+	if (this->quizRunModel != nullptr)
+	{
+		this->quizRunModel->DeleteAllItems();
+		this->quizRunModel = nullptr;
+		delete this->quizRunModel;
 	}
 }
 
@@ -69,13 +75,14 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	btnDeleteTopic->SetBitmap(*wxGetApp().GetImages().delete_icon);
 	btnDeleteNote->SetBitmap(*wxGetApp().GetImages().delete_icon);
 	btnDeleteQuiz->SetBitmap(*wxGetApp().GetImages().delete_icon);
+	btnDeleteQuizRun->SetBitmap(*wxGetApp().GetImages().delete_icon);
 
 	btnPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
 	btnPlayAll->SetBitmap(*wxGetApp().GetImages().playstep_icon);
 	btnStop->SetBitmap(*wxGetApp().GetImages().stop_icon);
 
 	btnRunQuiz->SetBitmap(*wxGetApp().GetImages().start_icon);
-
+	btnViewQuizRun->SetBitmap(*wxGetApp().GetImages().start_icon);
 
 	this->BindModel();
 	this->btnApply->Enable(false);
@@ -84,17 +91,22 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	_topicModel = new wxDataViewListStore();
 	_noteModel = new wxDataViewListStore();
 	_quizModel = new wxDataViewListStore();
+	quizRunModel = new wxDataViewListStore();
 	this->lstTopics->AssociateModel(_topicModel);
 	this->lstNotes->AssociateModel(_noteModel);
 	this->lstQuiz->AssociateModel(_quizModel);
+	lstQuizRun->AssociateModel(quizRunModel);
 	_topicModel->DecRef();
 	_noteModel->DecRef();
 	_quizModel->DecRef();
+	quizRunModel->DecRef();
 	this->SetupSpeechHandlers();
 	wxGetApp().GetProvider()->GetTopicsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetTopicList());
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
+	wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
 	this->RenderTopics(nullptr);
 	this->RenderExercises(nullptr);
+	this->RenderQuizRuns();
 }
 
 void PublicationPanelImp::SetupSpeechHandlers()
@@ -627,6 +639,51 @@ void PublicationPanelImp::RunQuizOnUpdateUI(wxUpdateUIEvent& event)
 
 void PublicationPanelImp::Refresh()
 {
-//	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
-//	this->RenderExercises(nullptr);
+	this->_viewModel->GetQuizList()->clear();
+	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
+	this->RenderExercises(nullptr);
+}
+
+
+void PublicationPanelImp::RenderQuizRuns()
+{
+	this->quizRunModel->DeleteAllItems();
+	lstQuizRun->DeleteAllItems();
+	wxVector<wxVariant> data;
+	boost::ptr_vector<QuizRunHeader>* list = this->_viewModel->GetQuizRunHeaderList();
+	for (int i = 0; i < list->size(); i++)
+	{
+		data.clear();
+		data.push_back(list->at(i).GetCreatedDate().FormatDate());
+		quizRunModel->AppendItem(data, wxUIntPtr(&list->at(i)));
+		/*if (quiz != nullptr && list->at(i).GetQuizId() == quiz->GetQuizId())
+		{
+			this->lstQuiz->SelectRow(i);
+		}*/
+	}
+}
+
+void PublicationPanelImp::ViewQuizRunOnButtonClick(wxCommandEvent& event)
+{
+
+}
+void PublicationPanelImp::ViewQuizRunOnUpdateUI(wxUpdateUIEvent& event)
+{
+
+}
+void PublicationPanelImp::DeleteQuizRunOnButtonClick(wxCommandEvent& event)
+{
+
+}
+void PublicationPanelImp::DeleteQuizRunOnUpdateUI(wxUpdateUIEvent& event)
+{
+
+}
+void PublicationPanelImp::QuizRunOnItemActivated(wxDataViewEvent& event)
+{
+
+}
+void PublicationPanelImp::QuizRunOnSelectionChanged(wxDataViewEvent& event)
+{
+
 }

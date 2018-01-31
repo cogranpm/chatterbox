@@ -25,7 +25,6 @@ class ExerciseRunDialogImp : public ExerciseRunDialog, AudioPlayerWrapperClient
 	ExerciseRunViewModel viewModel;
 	void RenderQuestions();
 	void SetQuestion(QuizRunQuestion& question);
-	QuizRunQuestion* GetCurrentQuestion();
 	AudioPlayerWrapper questionPlayer;
 	AudioPlayerWrapper answerPlayer;
 	AudioPlayerWrapper correctAnswerPlayer;
@@ -34,6 +33,7 @@ class ExerciseRunDialogImp : public ExerciseRunDialog, AudioPlayerWrapperClient
 	void GoNextQuestion();
 	bool MoreQuestions();
 	bool IsFirstQuestion();
+	
 	
 	protected:
 		// Handlers for ExerciseRunDialog events.

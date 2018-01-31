@@ -24,6 +24,7 @@ class PublicationPanelImp : public pnlMain
 		wxDataViewListStore* _topicModel;
 		wxDataViewListStore* _noteModel;
 		wxDataViewListStore* _quizModel;
+		wxDataViewListStore* quizRunModel;
 		PublicationViewModel* _viewModel;
 		NoteListAudioPlayer noteListAudioPlayer;
 		NoteAudioPlayer noteAudioPlayer;
@@ -38,6 +39,7 @@ class PublicationPanelImp : public pnlMain
 		void RenderExercises(Quiz* quiz);
 		void OnSelectExercise(Quiz* quiz);
 		void OnEditExercise();
+		void RenderQuizRuns();
 		void SetupSpeechHandlers();
 	protected:
 		void OnInitDialog( wxInitDialogEvent& event );
@@ -82,6 +84,14 @@ class PublicationPanelImp : public pnlMain
 		void QuizOnSelectionChanged(wxDataViewEvent& event);
 		void RunQuizOnButtonClick(wxCommandEvent& event);
 		void RunQuizOnUpdateUI(wxUpdateUIEvent& event);
+
+		/* quiz run */
+		void ViewQuizRunOnButtonClick(wxCommandEvent& event);
+		void ViewQuizRunOnUpdateUI(wxUpdateUIEvent& event);
+		void DeleteQuizRunOnButtonClick(wxCommandEvent& event);
+		void DeleteQuizRunOnUpdateUI(wxUpdateUIEvent& event);
+		void QuizRunOnItemActivated(wxDataViewEvent& event);
+		void QuizRunOnSelectionChanged(wxDataViewEvent& event);
 
 
 	public:

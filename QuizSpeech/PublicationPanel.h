@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  8 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __PUBLICATIONPANEL_H__
@@ -86,11 +86,11 @@ class pnlMain : public wxPanel
 		wxDataViewColumn* m_dataViewListColumn3;
 		wxPanel* panelRun;
 		wxStaticText* lblExam;
-		wxButton* m_button15;
-		wxButton* m_button16;
-		wxButton* m_button17;
+		wxButton* btnViewQuizRun;
+		wxButton* btnDeleteQuizRun;
 		wxDataViewListCtrl* lstQuizRun;
 		wxDataViewColumn* colDateRun;
+		wxDataViewColumn* colQuizRunComplete;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
@@ -129,6 +129,12 @@ class pnlMain : public wxPanel
 		virtual void RunQuizOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void QuizOnItemActivated( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void QuizOnSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void ViewQuizRunOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ViewQuizRunOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void DeleteQuizRunOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DeleteQuizRunOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void QuizRunOnItemActivated( wxDataViewEvent& event ) { event.Skip(); }
+		virtual void QuizRunOnSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
 		
 	
 	public:

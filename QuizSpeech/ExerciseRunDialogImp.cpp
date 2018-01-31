@@ -21,7 +21,7 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 {
 	/* show the record dialog */
 	std::wstring filePathBuffer(L"");
-	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	int returnValue = DictationOverlayClientHelper::ShowDictationDialog(currentQuestion->GetAnswerFile(), this, txtAnswer, nullptr, &filePathBuffer);
 	if (returnValue == wxID_OK)
 	{
@@ -37,14 +37,14 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 void ExerciseRunDialogImp::AudioPlayOnButtonClick(wxCommandEvent& event)
 {
 	/* play the question audio */
-	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
 	questionPlayer.Play();
 }
 
 void ExerciseRunDialogImp::PlayAnswerOnButtonClick(wxCommandEvent& event)
 {
-	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	answerPlayer.SetURL(currentQuestion->GetAnswerFile());
 	answerPlayer.Play();
 }
@@ -56,7 +56,7 @@ void ExerciseRunDialogImp::SkipOnButtonClick(wxCommandEvent& event)
 
 void ExerciseRunDialogImp::PlayCorrectAnswerOnButtonClick(wxCommandEvent& event)
 {
-	QuizRunQuestion* currentQuestion = GetCurrentQuestion();
+	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	correctAnswerPlayer.SetURL(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile());
 	correctAnswerPlayer.Play();
 }
@@ -124,25 +124,29 @@ void ExerciseRunDialogImp::RenderQuestions()
 		data.push_back(wxVariant(boost::lexical_cast<std::wstring>(i)));
 		data.push_back(wxVariant(question.GetQuestion().GetLimitedQuestionText()));
 		//answered
-		data.push_back(wxVariant(wxDataViewIconText(L"No", taskCompleteIcon)));
-		//result
-		if (question.GetIsCorrect())
+		if (viewModel.IsAnswered())
 		{
-			data.push_back(wxVariant(wxDataViewIconText(L"", taskCompleteIcon)));
+			data.push_back(wxVariant(wxDataViewIconText(L"Yes", taskCompleteIcon)));
 		}
 		else
 		{
-			data.push_back(wxVariant(wxDataViewIconText(L"", taskRejectIcon)));
+			data.push_back(wxVariant(wxDataViewIconText(L"No", taskRejectIcon)));
+		}
+		//result
+		if (question.GetIsCorrect())
+		{
+			data.push_back(wxVariant(wxDataViewIconText(L"Yes", taskCompleteIcon)));
+		}
+		else
+		{
+			data.push_back(wxVariant(wxDataViewIconText(L"No", taskRejectIcon)));
 		}
 		lstQuestions->AppendItem(data, wxUIntPtr(&question));
 		data.clear();
 	}
 }
 
-QuizRunQuestion* ExerciseRunDialogImp::GetCurrentQuestion()
-{
-	return &viewModel.GetRunQuestions().at(viewModel.GetCurrentQuestionIndex());
-}
+
 
 
 void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
@@ -161,7 +165,8 @@ void ExerciseRunDialogImp::PlayCompleted()
 
 bool ExerciseRunDialogImp::Save()
 {
-	QuizRunQuestion* question = GetCurrentQuestion();
+	QuizRunQuestion* question = viewModel.GetCurrentQuestion();
+	question->SetIsCorrect(rdoEvaluation->GetSelection() == 0);
 	if (!Validate())
 	{
 		return false;
@@ -179,7 +184,7 @@ bool ExerciseRunDialogImp::Save()
 
 bool ExerciseRunDialogImp::Validate()
 {
-	QuizRunQuestion* question = GetCurrentQuestion();
+	QuizRunQuestion* question = viewModel.GetCurrentQuestion();
 	/* need answer text or answer file */
 	if (question->GetAnswerFile().empty() && question->GetAnswerText().empty())
 	{
@@ -196,11 +201,12 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		viewModel.SetCurrentQuestionIndex(nextQuestionIndex);
 		RenderQuestions();
 		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
-		SetQuestion(*GetCurrentQuestion());
+		SetQuestion(*viewModel.GetCurrentQuestion());
 	}
 	else
 	{
 		/* show the result */
+		RenderQuestions();
 	}
 }
 

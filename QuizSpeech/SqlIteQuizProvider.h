@@ -27,6 +27,8 @@ private:
 	void SetQuizFromRecord(Quiz* entity, wxSQLite3ResultSet& set);
 	void SetQuestionFromRecord(Question* entity, wxSQLite3ResultSet& set);
 	void SetAnswerFromRecord(Answer* entity, wxSQLite3ResultSet& set);
+	void SetQuizRunHeaderFromRecord(QuizRunHeader* entity, wxSQLite3ResultSet& set);
+	void SetQuizRunQuestionFromRecord(QuizRunQuestion* entity, wxSQLite3ResultSet& set);
 	void GetAnswerByQuestion(Question* question);
 public:
 	SqlIteQuizProvider(wxSQLite3Database* db, SqliteDDLProvider* ddl);
@@ -43,6 +45,7 @@ public:
 	void Delete(Question* entity);
 	void GetQuestionsByQuiz(Quiz* quiz, boost::ptr_vector<Question>* list);
 	void GetQuestionsByQuizId(unsigned long quizId, boost::ptr_vector<Question>* list);
+	void GetQuestionById(unsigned long questionId, Question* question);
 
 	void Insert(Answer* entity);
 	void Update(Answer* entity);
@@ -53,7 +56,9 @@ public:
 	void Update(QuizRunQuestion& quizRunQuestion);
 	void Delete(QuizRunHeader& entity);
 	void Delete(QuizRunQuestion& entity);
-	void GetQuizRunScore(int quizRunHeaderId, QuizScore& quizScore);
+	void GetQuizRunsByPublication(Publication* publication, boost::ptr_vector<QuizRunHeader>* list);
+	void GetQuizRunsByQuiz(Quiz* quiz, boost::ptr_vector<QuizRunHeader>* list);
+	//void GetQuizRunScore(int quizRunHeaderId, QuizScore& quizScore);
 
 	void CreateSampleData(Topic* topic);
 	bool InitDB();

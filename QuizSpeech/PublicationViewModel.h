@@ -5,6 +5,7 @@
 #include "Topic.h"
 #include "Note.h"
 #include "Quiz.h"
+#include "QuizRunHeader.h"
 
 class PublicationViewModel
 {
@@ -17,7 +18,7 @@ private:
 	boost::ptr_vector<Topic>* _topicList;
 	boost::ptr_vector<Note>* _noteList;
 	boost::ptr_vector<Quiz>* _quizList;
-
+	boost::ptr_vector<QuizRunHeader>* quizRunHeaderList;
 
 public:
 	PublicationViewModel(void);
@@ -35,6 +36,7 @@ public:
 	boost::ptr_vector<Topic>* GetTopicList() {return _topicList;}
 	boost::ptr_vector<Note>* GetNoteList() { return _noteList;}
 	boost::ptr_vector<Quiz>* GetQuizList() { return _quizList;}
+	boost::ptr_vector<QuizRunHeader>* GetQuizRunHeaderList() { return quizRunHeaderList; }
 
 };
 

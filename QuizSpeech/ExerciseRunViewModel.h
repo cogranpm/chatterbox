@@ -12,6 +12,7 @@ class ExerciseRunViewModel
 	boost::ptr_vector<QuizRunQuestion> runQuestions;
 	boost::ptr_vector<Question> questions;
 	int currentQuestionIndex;
+	
 
 public:
 	ExerciseRunViewModel(unsigned long quizId);
@@ -22,5 +23,7 @@ public:
 	void CreateRunQuestions();
 	void SetCurrentQuestionIndex(const int index) { currentQuestionIndex = index; }
 	int GetCurrentQuestionIndex() { return currentQuestionIndex; }
+	QuizRunQuestion* GetCurrentQuestion();
+	bool IsAnswered();
 };
 

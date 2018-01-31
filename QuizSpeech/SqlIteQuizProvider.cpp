@@ -223,6 +223,17 @@ void SqlIteQuizProvider::GetAnswerByQuestion(Question* question)
 	}
 }
 
+void SqlIteQuizProvider::GetQuestionById(unsigned long questionId, Question* entity)
+{
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM Question WHERE QuestionId = ?;");
+	stmt.Bind(1, wxLongLong(questionId));
+	wxSQLite3ResultSet set = stmt.ExecuteQuery();
+	while (set.NextRow())
+	{
+		this->SetQuestionFromRecord(entity, set);
+	}
+}
+
 void SqlIteQuizProvider::GetQuestionsByQuiz(Quiz* quiz, boost::ptr_vector<Question>* list)
 {
 	GetQuestionsByQuizId(quiz->GetQuizId(), list);
@@ -429,8 +440,69 @@ void SqlIteQuizProvider::Delete(QuizRunQuestion& entity)
 }
 
 
-void SqlIteQuizProvider::GetQuizRunScore(int quizRunHeaderId, QuizScore& quizScore)
+void SqlIteQuizProvider::SetQuizRunHeaderFromRecord(QuizRunHeader* entity, wxSQLite3ResultSet& set)
 {
+	entity->SetQuizId(set.GetInt64("QuizId").ToLong());
+	entity->SetQuizRunHeaderId(set.GetInt64("QuizRunHeaderId").ToLong());
+	entity->SetCreatedDate(set.GetDateTime("CreatedDate"));
+}
+
+void SqlIteQuizProvider::SetQuizRunQuestionFromRecord(QuizRunQuestion* entity, wxSQLite3ResultSet& set)
+{
+	entity->SetQuizRunHeaderId(set.GetInt64("QuizRunHeaderId").ToLong());
+	
+	if (!set.IsNull("AnswerText"))
+	{
+		entity->SetAnswerText(set.GetAsString("AnswerText").ToStdWstring());
+	}
+	if (!set.IsNull("AnswerFile"))
+	{
+		entity->SetAnswerFile(set.GetAsString("AnswerFile").ToStdWstring());
+	}
+	if (!set.IsNull("IsCorrect"))
+	{
+		entity->SetIsCorrect(set.GetBool("IsCorrect"));
+	}
+	else
+	{
+		entity->SetIsCorrect(false);
+	}
+	entity->SetQuizRunQuestionId(set.GetInt64("QuizRunQuestionId").ToLong());
+
+	/* automatically load the question */
+	unsigned long questionId = set.GetInt64("QuestionId").ToLong();
+	GetQuestionById(questionId, &entity->GetQuestion());
+}
+
+void SqlIteQuizProvider::GetQuizRunsByPublication(Publication* publication, boost::ptr_vector<QuizRunHeader>* list)
+{
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM QuizRunHeader WHERE QuizId in (select quizId from Quiz where publicationId = ? ) ORDER BY CreatedDate DESC;");
+	stmt.Bind(1, wxLongLong(publication->getPublicationId()));
+	wxSQLite3ResultSet set = stmt.ExecuteQuery();
+	while (set.NextRow())
+	{
+		QuizRunHeader* header = new QuizRunHeader();
+		this->SetQuizRunHeaderFromRecord(header, set);
+		list->push_back(header);
+	}
+}
+
+
+void SqlIteQuizProvider::GetQuizRunsByQuiz(Quiz* quiz, boost::ptr_vector<QuizRunHeader>* list)
+{
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM QuizRunHeader WHERE QuizId = ? ORDER BY CreatedDate DESC;");
+	stmt.Bind(1, wxLongLong(quiz->GetQuizId()));
+	wxSQLite3ResultSet set = stmt.ExecuteQuery();
+	while (set.NextRow())
+	{
+		QuizRunHeader* header = new QuizRunHeader(quiz->GetQuizId());
+		this->SetQuizRunHeaderFromRecord(header, set);
+		list->push_back(header);
+	}
+}
+
+//void SqlIteQuizProvider::GetQuizRunScore(int quizRunHeaderId, QuizScore& quizScore)
+//{
 	//std::string query = "select c.Total, y.Correct from (select count(*) as Total, QuizRunHeaderid from quizrunquestion group by quizrunheaderid) c inner join (select count(*) as Correct, QuizRunHeaderid from quizrunquestion where IsCorrect = 1 group by quizrunheaderid) y on y.QuizRunHeaderid = c.QuizRunHeaderid WHERE c.QuizRunHeaderId = ?";
 	//Poco::Data::Statement select(*_session);
 	//select << query,
@@ -449,6 +521,6 @@ void SqlIteQuizProvider::GetQuizRunScore(int quizRunHeaderId, QuizScore& quizSco
 	//	more = rs.moveNext();
 	//}
 
-}
+//}
 
 

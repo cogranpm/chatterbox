@@ -22,3 +22,15 @@ void ExerciseRunViewModel::CreateRunQuestions()
 		runQuestions.push_back(runQuestion);
 	}
 }
+
+QuizRunQuestion* ExerciseRunViewModel::GetCurrentQuestion()
+{
+	return &runQuestions.at(currentQuestionIndex);
+}
+
+bool ExerciseRunViewModel::IsAnswered()
+{
+	QuizRunQuestion* question = GetCurrentQuestion();
+	return (question->GetQuizRunQuestionId() > 0 || 
+		(!question->GetAnswerFile().empty()) || (!question->GetAnswerText().empty()));
+}

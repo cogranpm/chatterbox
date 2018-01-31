@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  8 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "PublicationPanel.h"
@@ -273,14 +273,11 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	wxBoxSizer* bSizer15;
 	bSizer15 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_button15 = new wxButton( panelRun, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
-	bSizer15->Add( m_button15, 0, 0, 5 );
+	btnViewQuizRun = new wxButton( panelRun, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
+	bSizer15->Add( btnViewQuizRun, 0, 0, 5 );
 	
-	m_button16 = new wxButton( panelRun, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
-	bSizer15->Add( m_button16, 0, 0, 5 );
-	
-	m_button17 = new wxButton( panelRun, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
-	bSizer15->Add( m_button17, 0, 0, 5 );
+	btnDeleteQuizRun = new wxButton( panelRun, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
+	bSizer15->Add( btnDeleteQuizRun, 0, 0, 5 );
 	
 	
 	bSizer14->Add( bSizer15, 0, wxEXPAND, 5 );
@@ -290,6 +287,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	
 	lstQuizRun = new wxDataViewListCtrl( panelRun, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	colDateRun = lstQuizRun->AppendTextColumn( wxT("Date") );
+	colQuizRunComplete = lstQuizRun->AppendToggleColumn( wxT("Complete") );
 	bSizer161->Add( lstQuizRun, 1, wxALL|wxEXPAND, 5 );
 	
 	
@@ -361,6 +359,12 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	btnRunQuiz->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::RunQuizOnUpdateUI ), NULL, this );
 	lstQuiz->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( pnlMain::QuizOnItemActivated ), NULL, this );
 	lstQuiz->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( pnlMain::QuizOnSelectionChanged ), NULL, this );
+	btnViewQuizRun->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::ViewQuizRunOnButtonClick ), NULL, this );
+	btnViewQuizRun->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::ViewQuizRunOnUpdateUI ), NULL, this );
+	btnDeleteQuizRun->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::DeleteQuizRunOnButtonClick ), NULL, this );
+	btnDeleteQuizRun->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::DeleteQuizRunOnUpdateUI ), NULL, this );
+	lstQuizRun->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( pnlMain::QuizRunOnItemActivated ), NULL, this );
+	lstQuizRun->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( pnlMain::QuizRunOnSelectionChanged ), NULL, this );
 }
 
 pnlMain::~pnlMain()
@@ -402,5 +406,11 @@ pnlMain::~pnlMain()
 	btnRunQuiz->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::RunQuizOnUpdateUI ), NULL, this );
 	lstQuiz->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( pnlMain::QuizOnItemActivated ), NULL, this );
 	lstQuiz->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( pnlMain::QuizOnSelectionChanged ), NULL, this );
+	btnViewQuizRun->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::ViewQuizRunOnButtonClick ), NULL, this );
+	btnViewQuizRun->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::ViewQuizRunOnUpdateUI ), NULL, this );
+	btnDeleteQuizRun->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::DeleteQuizRunOnButtonClick ), NULL, this );
+	btnDeleteQuizRun->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::DeleteQuizRunOnUpdateUI ), NULL, this );
+	lstQuizRun->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEventHandler( pnlMain::QuizRunOnItemActivated ), NULL, this );
+	lstQuizRun->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( pnlMain::QuizRunOnSelectionChanged ), NULL, this );
 	
 }
