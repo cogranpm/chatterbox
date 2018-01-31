@@ -21,8 +21,7 @@ class PublicationPanelImp : public pnlMain
 {
 
 	private:
-		wxIcon taskCompleteIcon;
-		wxIcon taskRejectIcon;
+
 		wxDataViewListStore* _topicModel;
 		wxDataViewListStore* _noteModel;
 		wxDataViewListStore* _quizModel;

@@ -64,8 +64,7 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 {
 
 	//icons 
-	taskCompleteIcon.CopyFromBitmap(*wxGetApp().GetImages().taskcomplete_icon);
-	taskRejectIcon.CopyFromBitmap(*wxGetApp().GetImages().taskreject_icon);
+
 
 	btnEditTopic->SetBitmap(*wxGetApp().GetImages().edit_icon);
 	btnEditNote->SetBitmap(*wxGetApp().GetImages().edit_icon);
@@ -657,8 +656,15 @@ void PublicationPanelImp::RenderQuizRuns()
 	for (int i = 0; i < list->size(); i++)
 	{
 		data.clear();
-		data.push_back(list->at(i).GetCreatedDate().FormatDate());
-		data.push_back(wxVariant(wxDataViewIconText(L"Yes", taskCompleteIcon)));
+		data.push_back(list->at(i).GetCreatedDate().FormatISOCombined());
+		if (list->at(i).GetIsComplete())
+		{
+			data.push_back(wxVariant(wxDataViewIconText(L"Yes", *wxGetApp().GetImages().taskCompleteIcon)));
+		}
+		else
+		{
+			data.push_back(wxVariant(wxDataViewIconText(L"No", *wxGetApp().GetImages().taskRejectIcon)));
+		}
 		quizRunModel->AppendItem(data, wxUIntPtr(&list->at(i)));
 		/*if (quiz != nullptr && list->at(i).GetQuizId() == quiz->GetQuizId())
 		{

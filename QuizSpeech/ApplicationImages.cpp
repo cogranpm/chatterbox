@@ -33,4 +33,10 @@ void ApplicationImages::Init()
 	taskcomplete_icon = std::make_unique<wxBitmap>(wxBITMAP_PNG(icon_png_taskcomplete));
 	taskreject_icon = std::make_unique<wxBitmap>(wxBITMAP_PNG(icon_png_taskreject));
 	disconnect_icon = std::make_unique<wxIcon>(wxICON(icon_ico_disconnect));
+
+	//icons from png, for the listviews etc
+	taskCompleteIcon = std::make_unique<wxIcon>();
+	taskCompleteIcon->CopyFromBitmap(*taskcomplete_icon);
+	taskRejectIcon = std::make_unique<wxIcon>();
+	taskRejectIcon->CopyFromBitmap(*taskreject_icon);
 }

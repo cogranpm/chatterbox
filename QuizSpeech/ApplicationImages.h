@@ -13,6 +13,7 @@ public:
 	ApplicationImages();
 	~ApplicationImages();
 	void Init();
+	//not sure these even need to be pointers
 	std::unique_ptr<wxBitmap> start_icon;
 	std::unique_ptr<wxBitmap> pause_icon;
 	std::unique_ptr<wxBitmap> record_icon;
@@ -30,5 +31,7 @@ public:
 	std::unique_ptr<wxBitmap> next_icon;
 	std::unique_ptr<wxBitmap> taskcomplete_icon;
 	std::unique_ptr<wxBitmap> taskreject_icon;
+	std::unique_ptr<wxIcon> taskCompleteIcon;
+	std::unique_ptr<wxIcon> taskRejectIcon;
 };
 
