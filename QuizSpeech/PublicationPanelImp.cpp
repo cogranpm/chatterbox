@@ -84,7 +84,7 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	btnStop->SetBitmap(*wxGetApp().GetImages().stop_icon);
 
 	btnRunQuiz->SetBitmap(*wxGetApp().GetImages().start_icon);
-	btnViewQuizRun->SetBitmap(*wxGetApp().GetImages().start_icon);
+	btnViewQuizRun->SetBitmap(*wxGetApp().GetImages().docpreview_bmp);
 
 	this->BindModel();
 	this->btnApply->Enable(false);
@@ -656,7 +656,11 @@ void PublicationPanelImp::RenderQuizRuns()
 	for (int i = 0; i < list->size(); i++)
 	{
 		data.clear();
-		data.push_back(list->at(i).GetCreatedDate().FormatISOCombined());
+		wxString createdDate;
+		createdDate.Append(list->at(i).GetCreatedDate().FormatDate());
+		createdDate.Append(L" ");
+		createdDate.Append(list->at(i).GetCreatedDate().FormatTime());
+		data.push_back(createdDate);
 		if (list->at(i).GetIsComplete())
 		{
 			data.push_back(wxVariant(wxDataViewIconText(L"Yes", *wxGetApp().GetImages().taskCompleteIcon)));
@@ -679,7 +683,7 @@ void PublicationPanelImp::ViewQuizRunOnButtonClick(wxCommandEvent& event)
 }
 void PublicationPanelImp::ViewQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 {
-
+	// lstQuizRun->GetSelection() != NULL;
 }
 void PublicationPanelImp::DeleteQuizRunOnButtonClick(wxCommandEvent& event)
 {

@@ -3239,7 +3239,7 @@
                                                                                                     <property name="dock">Dock</property>
                                                                                                     <property name="dock_fixed">0</property>
                                                                                                     <property name="docking">Left</property>
-                                                                                                    <property name="enabled">1</property>
+                                                                                                    <property name="enabled">0</property>
                                                                                                     <property name="fg"></property>
                                                                                                     <property name="floatable">1</property>
                                                                                                     <property name="font"></property>
@@ -3327,7 +3327,7 @@
                                                                                                     <property name="dock">Dock</property>
                                                                                                     <property name="dock_fixed">0</property>
                                                                                                     <property name="docking">Left</property>
-                                                                                                    <property name="enabled">1</property>
+                                                                                                    <property name="enabled">0</property>
                                                                                                     <property name="fg"></property>
                                                                                                     <property name="floatable">1</property>
                                                                                                     <property name="font"></property>
@@ -3476,7 +3476,7 @@
                                                                                                         <property name="label">Complete</property>
                                                                                                         <property name="name">colQuizRunComplete</property>
                                                                                                         <property name="permission">protected</property>
-                                                                                                        <property name="type">IconText</property>
+                                                                                                        <property name="type">Toggle</property>
                                                                                                     </object>
                                                                                                 </object>
                                                                                             </object>

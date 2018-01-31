@@ -33,5 +33,7 @@ public:
 	std::unique_ptr<wxBitmap> taskreject_icon;
 	std::unique_ptr<wxIcon> taskCompleteIcon;
 	std::unique_ptr<wxIcon> taskRejectIcon;
+	std::unique_ptr<wxBitmap> docpreview_bmp;
+	std::unique_ptr<wxIcon> docpreview_icon;
 };
 

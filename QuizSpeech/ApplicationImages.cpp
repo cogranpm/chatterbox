@@ -39,4 +39,9 @@ void ApplicationImages::Init()
 	taskCompleteIcon->CopyFromBitmap(*taskcomplete_icon);
 	taskRejectIcon = std::make_unique<wxIcon>();
 	taskRejectIcon->CopyFromBitmap(*taskreject_icon);
+
+	docpreview_bmp = std::make_unique<wxBitmap>(wxBITMAP_PNG(ICON_PNG_DOCPREVIEW));
+	docpreview_icon = std::make_unique<wxIcon>();
+	docpreview_icon->CopyFromBitmap(*docpreview_bmp);
+
 }
