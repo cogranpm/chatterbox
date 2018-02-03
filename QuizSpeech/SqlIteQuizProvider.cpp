@@ -453,6 +453,15 @@ void SqlIteQuizProvider::SetQuizRunHeaderFromRecord(QuizRunHeader* entity, wxSQL
 {
 	entity->SetQuizId(set.GetInt64("QuizId").ToLong());
 	entity->SetQuizRunHeaderId(set.GetInt64("QuizRunHeaderId").ToLong());
+	if (!set.IsNull("IsComplete"))
+	{
+		entity->SetIsComplete(set.GetBool("IsComplete"));
+	}
+	else
+	{
+		entity->SetIsComplete(false);
+	}
+	
 	entity->SetCreatedDate(set.GetDateTime("CreatedDate"));
 }
 
@@ -485,7 +494,7 @@ void SqlIteQuizProvider::SetQuizRunQuestionFromRecord(QuizRunQuestion* entity, w
 
 void SqlIteQuizProvider::GetQuizRunsByPublication(Publication* publication, boost::ptr_vector<QuizRunHeader>* list)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM QuizRunHeader WHERE QuizId in (select quizId from Quiz where publicationId = ? ) ORDER BY CreatedDate DESC;");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT QuizRunHeaderId, QuizId, IsComplete, datetime(CreatedDate, 'localtime') AS CreatedDate FROM QuizRunHeader WHERE QuizId in (select quizId from Quiz where publicationId = ? ) ORDER BY CreatedDate DESC;");
 	stmt.Bind(1, wxLongLong(publication->getPublicationId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while (set.NextRow())
@@ -499,7 +508,7 @@ void SqlIteQuizProvider::GetQuizRunsByPublication(Publication* publication, boos
 
 void SqlIteQuizProvider::GetQuizRunsByQuiz(Quiz* quiz, boost::ptr_vector<QuizRunHeader>* list)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM QuizRunHeader WHERE QuizId = ? ORDER BY CreatedDate DESC;");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT  QuizRunHeaderId, QuizId, IsComplete, datetime(CreatedDate, 'localtime') AS CreatedDate FROM QuizRunHeader WHERE QuizId = ? ORDER BY CreatedDate DESC;");
 	stmt.Bind(1, wxLongLong(quiz->GetQuizId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while (set.NextRow())

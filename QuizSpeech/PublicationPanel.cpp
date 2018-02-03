@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -274,9 +274,13 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer15 = new wxBoxSizer( wxHORIZONTAL );
 	
 	btnViewQuizRun = new wxButton( panelRun, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
+	btnViewQuizRun->Enable( false );
+	
 	bSizer15->Add( btnViewQuizRun, 0, 0, 5 );
 	
 	btnDeleteQuizRun = new wxButton( panelRun, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
+	btnDeleteQuizRun->Enable( false );
+	
 	bSizer15->Add( btnDeleteQuizRun, 0, 0, 5 );
 	
 	
@@ -286,8 +290,8 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer161 = new wxBoxSizer( wxVERTICAL );
 	
 	lstQuizRun = new wxDataViewListCtrl( panelRun, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	colDateRun = lstQuizRun->AppendTextColumn( wxT("Date") );
-	colQuizRunComplete = lstQuizRun->AppendIconTextColumn( wxT("Complete") );
+	colDateRun = lstQuizRun->AppendTextColumn( wxT("Date Started") );
+	colQuizRunComplete = lstQuizRun->AppendToggleColumn( wxT("Complete") );
 	bSizer161->Add( lstQuizRun, 1, wxALL|wxEXPAND, 5 );
 	
 	

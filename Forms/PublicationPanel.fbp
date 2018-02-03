@@ -3467,7 +3467,7 @@
                                                                                                     <event name="OnSize"></event>
                                                                                                     <event name="OnUpdateUI"></event>
                                                                                                     <object class="dataViewListColumn" expanded="0">
-                                                                                                        <property name="label">Date</property>
+                                                                                                        <property name="label">Date Started</property>
                                                                                                         <property name="name">colDateRun</property>
                                                                                                         <property name="permission">protected</property>
                                                                                                         <property name="type">Text</property>
