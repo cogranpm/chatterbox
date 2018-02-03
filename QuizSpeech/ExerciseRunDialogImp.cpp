@@ -97,12 +97,10 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	btnSkip->SetBitmap(*wxGetApp().GetImages().next_icon);
 
 	/* load the data */
-	wxGetApp().GetProvider()->GetQuizProvider().Insert(viewModel.GetHeader());
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuestionsByQuizId(viewModel.GetHeader().GetQuizId(), &viewModel.GetQuestions());
 	size_t siz = viewModel.GetQuestions().size();
 	viewModel.CreateRunQuestions();
 	RenderQuestions();
-
 
 	if (viewModel.GetRunQuestions().size() > 0)
 	{
@@ -116,6 +114,7 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 void ExerciseRunDialogImp::RenderQuestions()
 {
 	wxVector<wxVariant> data;
+	lstQuestions->DeleteAllItems();
 	for (int i = 0; i < viewModel.GetRunQuestions().size(); i++)
 	{
 		//	wxVariant temp;
@@ -171,6 +170,12 @@ bool ExerciseRunDialogImp::Save()
 	{
 		return false;
 	}
+
+	if (!(viewModel.GetHeader().GetQuizRunHeaderId() > 0))
+	{
+		wxGetApp().GetProvider()->GetQuizProvider().Insert(viewModel.GetHeader());
+	}
+	question->SetQuizRunHeaderId(viewModel.GetHeader().GetQuizRunHeaderId());
 	if (question->GetQuizRunQuestionId() > 0)
 	{
 		wxGetApp().GetProvider()->GetQuizProvider().Update(*question);
@@ -205,14 +210,28 @@ void ExerciseRunDialogImp::GoNextQuestion()
 	}
 	else
 	{
-		/* show the result */
-		RenderQuestions();
+		
+		RenderComplete();
 	}
+}
+
+void ExerciseRunDialogImp::RenderComplete()
+{
+	/* update the questions */
+	RenderQuestions();
+
+	/* if none have been skipped then save the header */
+	viewModel.GetHeader().SetIsComplete(true);
+	wxGetApp().GetProvider()->GetQuizProvider().Update(viewModel.GetHeader());
+
+	//how do we redraw this then
+	pnlEntries->Show(false);
+	pnlComplete->Show(true);
 }
 
 bool ExerciseRunDialogImp::MoreQuestions()
 {
-	return viewModel.GetCurrentQuestionIndex() >= viewModel.GetRunQuestions().size();
+	return viewModel.GetCurrentQuestionIndex() < viewModel.GetRunQuestions().size();
 }
 
 

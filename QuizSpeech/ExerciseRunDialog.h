@@ -41,6 +41,8 @@ class ExerciseRunDialog : public wxDialog
 		wxSplitterWindow* listSplitter;
 		wxPanel* pnlQuestion;
 		wxBoxSizer* szInput;
+		wxPanel* pnlEntries;
+		wxBoxSizer* szQuestion;
 		wxBoxSizer* szQuestionTool;
 		wxStaticText* lblQuestion;
 		wxButton* btnAudioPlay;
@@ -51,12 +53,15 @@ class ExerciseRunDialog : public wxDialog
 		wxButton* btnRecord;
 		wxButton* btnPlayAnswer;
 		wxTextCtrl* txtAnswer;
+		wxBoxSizer* szEvaluate;
 		wxStaticText* m_staticText6;
 		wxButton* btnPlayCorrectAnswer;
 		wxRadioBox* rdoEvaluation;
 		wxButton* btnNext;
 		wxTextCtrl* txtCorrectAnswer;
 		wxStaticText* lblStatus;
+		wxPanel* pnlComplete;
+		wxStaticText* lblFinished;
 		wxPanel* pnlList;
 		wxStaticText* m_staticText2;
 		wxDataViewListCtrl* lstQuestions;

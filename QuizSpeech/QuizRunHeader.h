@@ -18,11 +18,13 @@ public:
 
 	const wxDateTime& GetCreatedDate() const { return createdDate; }
 	void SetCreatedDate(const wxDateTime &createdDate) { this->createdDate = createdDate; }
-	bool GetIsComplete() { return false; } //to do, need to implement this correctly
+	bool GetIsComplete() { return isComplete; }
+	void SetIsComplete(bool isComplete) { this->isComplete = isComplete; }
 private:
 	unsigned long _quizRunHeaderId;
 	unsigned long _quizId;
 	wxDateTime createdDate;
+	bool isComplete;
 	//QuizRunQuestion _currentQuizRunQuestion;
 };
 
