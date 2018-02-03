@@ -91,6 +91,7 @@ class pnlMain : public wxPanel
 		wxDataViewListCtrl* lstQuizRun;
 		wxDataViewColumn* colDateRun;
 		wxDataViewColumn* colQuizRunComplete;
+		wxDataViewColumn* colQuizRunName;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }

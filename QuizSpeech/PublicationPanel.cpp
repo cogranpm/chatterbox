@@ -291,7 +291,8 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	
 	lstQuizRun = new wxDataViewListCtrl( panelRun, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	colDateRun = lstQuizRun->AppendTextColumn( wxT("Date Started") );
-	colQuizRunComplete = lstQuizRun->AppendToggleColumn( wxT("Complete") );
+	colQuizRunComplete = lstQuizRun->AppendIconTextColumn( wxT("Complete") );
+	colQuizRunName = lstQuizRun->AppendTextColumn( wxT("Name") );
 	bSizer161->Add( lstQuizRun, 1, wxALL|wxEXPAND, 5 );
 	
 	
