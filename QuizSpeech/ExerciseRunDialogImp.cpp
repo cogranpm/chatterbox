@@ -37,9 +37,7 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 void ExerciseRunDialogImp::AudioPlayOnButtonClick(wxCommandEvent& event)
 {
 	/* play the question audio */
-	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
-	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
-	questionPlayer.Play();
+	PlayQuestion();
 }
 
 void ExerciseRunDialogImp::PlayAnswerOnButtonClick(wxCommandEvent& event)
@@ -107,8 +105,16 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 		viewModel.SetCurrentQuestionIndex(0);
 		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
 		SetQuestion(viewModel.GetRunQuestions().at(viewModel.GetCurrentQuestionIndex()));
+		PlayQuestion();
 	}
 
+}
+
+void ExerciseRunDialogImp::PlayQuestion()
+{
+	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
+	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
+	questionPlayer.Play();
 }
 
 void ExerciseRunDialogImp::RenderQuestions()
@@ -207,6 +213,7 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		RenderQuestions();
 		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
 		SetQuestion(*viewModel.GetCurrentQuestion());
+		PlayQuestion();
 	}
 	else
 	{
@@ -231,7 +238,7 @@ void ExerciseRunDialogImp::RenderComplete()
 
 bool ExerciseRunDialogImp::MoreQuestions()
 {
-	return viewModel.GetCurrentQuestionIndex() < viewModel.GetRunQuestions().size();
+	return (viewModel.GetCurrentQuestionIndex() + 1) < viewModel.GetRunQuestions().size();
 }
 
 
