@@ -12,6 +12,7 @@ class Quiz : public BaseEntity
 	public:
 		Quiz(const unsigned long publicationId, const std::wstring& name);
 		Quiz(const unsigned long publicationId);
+		Quiz();
 		
 		virtual ~Quiz(){}
 		

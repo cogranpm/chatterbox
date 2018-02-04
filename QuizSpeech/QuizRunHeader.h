@@ -2,6 +2,7 @@
 #include "QuizRunQuestion.h"
 #include "BaseEntity.h"
 #include <wx/datetime.h>
+#include "Quiz.h"
 
 class QuizRunHeader : public BaseEntity
 {
@@ -20,11 +21,14 @@ public:
 	void SetCreatedDate(const wxDateTime &createdDate) { this->createdDate = createdDate; }
 	bool GetIsComplete() { return isComplete; }
 	void SetIsComplete(bool isComplete) { this->isComplete = isComplete; }
+
+	Quiz& GetQuiz() { return quiz; }
 private:
 	unsigned long _quizRunHeaderId;
 	unsigned long _quizId;
 	wxDateTime createdDate;
 	bool isComplete;
+	Quiz quiz;
 	//QuizRunQuestion _currentQuizRunQuestion;
 };
 

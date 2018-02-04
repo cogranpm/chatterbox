@@ -465,6 +465,9 @@ void SqlIteQuizProvider::SetQuizRunHeaderFromRecord(QuizRunHeader* entity, wxSQL
 	}
 	
 	entity->SetCreatedDate(set.GetDateTime("CreatedDate"));
+
+	/* auto load the associated quiz */
+	GetQuizById(entity->GetQuizId(), &entity->GetQuiz());
 }
 
 void SqlIteQuizProvider::SetQuizRunQuestionFromRecord(QuizRunQuestion* entity, wxSQLite3ResultSet& set)

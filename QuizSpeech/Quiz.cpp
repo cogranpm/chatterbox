@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Quiz.h"
 
+Quiz::Quiz() : Quiz(0)
+{
+
+}
 
 Quiz::Quiz(const unsigned long publicationId) : Quiz(publicationId, L"")
 {

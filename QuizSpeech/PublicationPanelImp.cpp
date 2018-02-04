@@ -669,6 +669,7 @@ void PublicationPanelImp::RenderQuizRuns()
 		{
 			data.push_back(wxVariant(wxDataViewIconText(L"No", *wxGetApp().GetImages().taskRejectIcon)));
 		}
+		data.push_back(wxVariant(wxString(list->at(i).GetQuiz().GetName())));
 		quizRunModel->AppendItem(data, wxUIntPtr(&list->at(i)));
 		/*if (quiz != nullptr && list->at(i).GetQuizId() == quiz->GetQuizId())
 		{
@@ -683,7 +684,14 @@ void PublicationPanelImp::ViewQuizRunOnButtonClick(wxCommandEvent& event)
 }
 void PublicationPanelImp::ViewQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 {
-	// lstQuizRun->GetSelection() != NULL;
+	if (lstQuizRun->GetSelectedItemsCount() > 0)
+	{
+		btnViewQuizRun->Enable();
+	}
+	else
+	{
+		btnViewQuizRun->Disable();
+	}
 }
 void PublicationPanelImp::DeleteQuizRunOnButtonClick(wxCommandEvent& event)
 {
@@ -691,7 +699,14 @@ void PublicationPanelImp::DeleteQuizRunOnButtonClick(wxCommandEvent& event)
 }
 void PublicationPanelImp::DeleteQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 {
-
+	if (lstQuizRun->GetSelectedItemsCount() > 0)
+	{
+		btnDeleteQuizRun->Enable();
+	}
+	else
+	{
+		btnDeleteQuizRun->Disable();
+	}
 }
 void PublicationPanelImp::QuizRunOnItemActivated(wxDataViewEvent& event)
 {
