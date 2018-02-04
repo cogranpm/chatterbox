@@ -678,9 +678,20 @@ void PublicationPanelImp::RenderQuizRuns()
 	}
 }
 
+void PublicationPanelImp::ViewQuizRun()
+{
+	if (lstQuizRun->GetSelectedRow() != wxNOT_FOUND)
+	{
+		QuizRunHeader header = _viewModel->GetQuizRunHeaderList()->at(lstQuizRun->GetSelectedRow());
+		ExerciseRunDialogImp runDialog(this, header);
+		runDialog.ShowModal();
+	}
+	
+}
+
 void PublicationPanelImp::ViewQuizRunOnButtonClick(wxCommandEvent& event)
 {
-
+	ViewQuizRun();
 }
 void PublicationPanelImp::ViewQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 {
@@ -710,7 +721,7 @@ void PublicationPanelImp::DeleteQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 }
 void PublicationPanelImp::QuizRunOnItemActivated(wxDataViewEvent& event)
 {
-
+	ViewQuizRun();
 }
 void PublicationPanelImp::QuizRunOnSelectionChanged(wxDataViewEvent& event)
 {

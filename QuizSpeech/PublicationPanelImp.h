@@ -42,6 +42,9 @@ class PublicationPanelImp : public pnlMain
 		void OnEditExercise();
 		void RenderQuizRuns();
 		void SetupSpeechHandlers();
+		void ViewQuizRun();
+
+
 	protected:
 		void OnInitDialog( wxInitDialogEvent& event );
 		void TitleOnText( wxCommandEvent& event );

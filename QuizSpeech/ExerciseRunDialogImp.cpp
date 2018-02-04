@@ -9,6 +9,17 @@ ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quiz
 :
 ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L"")), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
+	Init();
+}
+
+ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader) :
+	ExerciseRunDialog(parent), viewModel(quizRunHeader), questionPlayer(this, std::wstring(L"")), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
+{
+	Init();
+}
+
+void ExerciseRunDialogImp::Init()
+{
 
 }
 
@@ -102,6 +113,12 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	size_t siz = viewModel.GetQuestions().size();
 	viewModel.CreateRunQuestions();
 	RenderQuestions();
+
+	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
+	{
+		ShowComplete();
+		return;
+	}
 
 	if (viewModel.GetRunQuestions().size() > 0)
 	{
@@ -234,8 +251,11 @@ void ExerciseRunDialogImp::RenderComplete()
 	/* if none have been skipped then save the header */
 	viewModel.GetHeader().SetIsComplete(true);
 	wxGetApp().GetProvider()->GetQuizProvider().Update(viewModel.GetHeader());
+	ShowComplete();
+}
 
-	//how do we redraw this then
+void ExerciseRunDialogImp::ShowComplete()
+{
 	pnlEntries->Show(false);
 	pnlComplete->Show(true);
 }

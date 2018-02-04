@@ -12,9 +12,10 @@ class ExerciseRunViewModel
 	boost::ptr_vector<QuizRunQuestion> runQuestions;
 	boost::ptr_vector<Question> questions;
 	int currentQuestionIndex;
-	
+	std::map<std::wstring, QuizRunQuestion> existingQuestions;
 
 public:
+	ExerciseRunViewModel(QuizRunHeader header);
 	ExerciseRunViewModel(unsigned long quizId);
 	~ExerciseRunViewModel();
 	QuizRunHeader& GetHeader() { return header; }

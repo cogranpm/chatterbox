@@ -1,5 +1,9 @@
 #include "ExerciseRunViewModel.h"
 
+ExerciseRunViewModel::ExerciseRunViewModel(QuizRunHeader header) : header(header),
+runQuestions(), currentQuestionIndex(0)
+{
+}
 
 
 ExerciseRunViewModel::ExerciseRunViewModel(unsigned long quizId) : header(quizId),
