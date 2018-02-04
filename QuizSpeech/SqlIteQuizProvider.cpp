@@ -532,6 +532,18 @@ void SqlIteQuizProvider::GetQuizRunsByQuiz(Quiz* quiz, boost::ptr_vector<QuizRun
 	}
 }
 
+void SqlIteQuizProvider::GetQuizRunQuestionsByQuiz(unsigned long quizId, boost::ptr_vector<QuizRunQuestion>* list)
+{
+	/* this may not work with multiple quiz run headers */
+	wxString sql(L"select question.questionid, question.createddate, question.bodyfile, question.body, ");
+	sql.Append(L"quizrunquestion.isanswered, quizrunquestion.iscorrect, quizrunquestion.answerfile, ");
+	sql.Append(L"quizrunquestion.answertext from question left join quizrunquestion ");
+	sql.Append(L"on question.questionid = quizrunquestion.questionid where question.quizid = ? ");
+	sql.Append(L" and (quizrunquestion.QuizRunHeaderId = ? or quizrunquestion.QuizRunHeaderId is null; ");
+	wxSQLite3Statement stmt = db->PrepareStatement(sql);
+
+}
+
 //void SqlIteQuizProvider::GetQuizRunScore(int quizRunHeaderId, QuizScore& quizScore)
 //{
 	//std::string query = "select c.Total, y.Correct from (select count(*) as Total, QuizRunHeaderid from quizrunquestion group by quizrunheaderid) c inner join (select count(*) as Correct, QuizRunHeaderid from quizrunquestion where IsCorrect = 1 group by quizrunheaderid) y on y.QuizRunHeaderid = c.QuizRunHeaderid WHERE c.QuizRunHeaderId = ?";

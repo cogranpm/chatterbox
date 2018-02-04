@@ -46,7 +46,7 @@ public:
 	void GetQuestionsByQuiz(Quiz* quiz, boost::ptr_vector<Question>* list);
 	void GetQuestionsByQuizId(unsigned long quizId, boost::ptr_vector<Question>* list);
 	void GetQuestionById(unsigned long questionId, Question* question);
-	
+	void GetQuizRunQuestionsByQuiz(unsigned long quizId, boost::ptr_vector<QuizRunQuestion>* list);
 
 	void Insert(Answer* entity);
 	void Update(Answer* entity);
