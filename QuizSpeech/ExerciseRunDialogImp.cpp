@@ -49,7 +49,10 @@ void ExerciseRunDialogImp::PlayAnswerOnButtonClick(wxCommandEvent& event)
 
 void ExerciseRunDialogImp::SkipOnButtonClick(wxCommandEvent& event)
 {
-
+	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
+	currentQuestion->SetIsAnswered(false);
+	bool retValue = Save();
+	GoNextQuestion();
 }
 
 void ExerciseRunDialogImp::PlayCorrectAnswerOnButtonClick(wxCommandEvent& event)
@@ -172,6 +175,7 @@ bool ExerciseRunDialogImp::Save()
 {
 	QuizRunQuestion* question = viewModel.GetCurrentQuestion();
 	question->SetIsCorrect(rdoEvaluation->GetSelection() == 0);
+	question->SetIsAnswered(true);
 	if (!Validate())
 	{
 		return false;

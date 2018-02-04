@@ -21,7 +21,7 @@ bool SqlIteQuizProvider::InitDB()
 	this->createFlag = this->ddl->CreateTable("Question", "CREATE TABLE Question (QuestionId INTEGER PRIMARY KEY AUTOINCREMENT, QuizId INTEGER NOT NULL, Body VARCHAR, BodyFile VARCHAR, CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 	this->createFlag = this->ddl->CreateTable("Answer", "CREATE TABLE Answer (AnswerId INTEGER PRIMARY KEY AUTOINCREMENT, QuestionId INTEGER NOT NULL, Body VARCHAR, BodyFile VARCHAR, AnswerType INTEGER, CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 	this->createFlag = this->ddl->CreateTable("QuizRunHeader", "CREATE TABLE QuizRunHeader (QuizRunHeaderId INTEGER PRIMARY KEY AUTOINCREMENT, QuizId INTEGER NOT NULL, IsComplete INTEGER, CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
-	this->createFlag = this->ddl->CreateTable("QuizRunQuestion", "CREATE TABLE QuizRunQuestion (QuizRunQuestionId INTEGER PRIMARY KEY AUTOINCREMENT, QuizRunHeaderId INTEGER, QuestionId INTEGER NOT NULL, AnswerText VARCHAR, AnswerFile VARCHAR, IsCorrect INTEGER, CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
+	this->createFlag = this->ddl->CreateTable("QuizRunQuestion", "CREATE TABLE QuizRunQuestion (QuizRunQuestionId INTEGER PRIMARY KEY AUTOINCREMENT, QuizRunHeaderId INTEGER, QuestionId INTEGER NOT NULL, AnswerText VARCHAR, AnswerFile VARCHAR, IsCorrect INTEGER, IsAnswered INTEGER, CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 	this->ddl->CreateDeleteTrigger("Publication", "Quiz", "PublicationId");
 	this->ddl->CreateDeleteTrigger("Topic", "Quiz", "TopicId");
 	this->ddl->CreateDeleteTrigger("Quiz", "Question", "QuizId");
@@ -369,7 +369,7 @@ void SqlIteQuizProvider::Insert(QuizRunQuestion& entity)
 {
 	try
 	{
-		wxSQLite3Statement stmt = db->PrepareStatement("insert into QuizRunQuestion(QuizRunHeaderId, QuestionId, AnswerText, AnswerFile, IsCorrect) values (?, ?, ?, ?, ?);");
+		wxSQLite3Statement stmt = db->PrepareStatement("insert into QuizRunQuestion(QuizRunHeaderId, QuestionId, AnswerText, AnswerFile, IsCorrect, IsAnswered) values (?, ?, ?, ?, ?, ?);");
 		stmt.Bind(1, wxLongLong(entity.GetQuizRunHeaderId()));
 		if (entity.GetQuestion().GetQuestionId() > 0)
 		{
@@ -396,6 +396,7 @@ void SqlIteQuizProvider::Insert(QuizRunQuestion& entity)
 			stmt.BindNull(4);
 		}
 		stmt.BindBool(5, entity.GetIsCorrect());
+		stmt.BindBool(6, entity.GetIsAnswered());
 		stmt.ExecuteUpdate();
 		long id = this->ddl->GetLastRowID();
 		entity.SetQuizRunQuestionId(id);
@@ -410,7 +411,7 @@ void SqlIteQuizProvider::Insert(QuizRunQuestion& entity)
 
 void SqlIteQuizProvider::Update(QuizRunQuestion& entity)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("update Question set AnswerText = ?, AnswerFile = ?, IsCorrect = ? where QuizRunQuestionId = ?;");
+	wxSQLite3Statement stmt = db->PrepareStatement("update Question set AnswerText = ?, AnswerFile = ?, IsCorrect = ?, IsAnswered = ? where QuizRunQuestionId = ?;");
 	
 	if (!entity.GetAnswerText().empty())
 	{
@@ -429,7 +430,8 @@ void SqlIteQuizProvider::Update(QuizRunQuestion& entity)
 		stmt.BindNull(2);
 	}
 	stmt.BindBool(3, entity.GetIsCorrect());
-	stmt.Bind(4, wxLongLong(entity.GetQuizRunQuestionId()));
+	stmt.BindBool(4, entity.GetIsAnswered());
+	stmt.Bind(5, wxLongLong(entity.GetQuizRunQuestionId()));
 	stmt.ExecuteUpdate();
 	
 }
@@ -484,6 +486,14 @@ void SqlIteQuizProvider::SetQuizRunQuestionFromRecord(QuizRunQuestion* entity, w
 	else
 	{
 		entity->SetIsCorrect(false);
+	}
+	if (!set.IsNull("IsAnswered"))
+	{
+		entity->SetIsAnswered(set.GetBool("IsAnswered"));
+	}
+	else
+	{
+		entity->SetIsAnswered(false);
 	}
 	entity->SetQuizRunQuestionId(set.GetInt64("QuizRunQuestionId").ToLong());
 

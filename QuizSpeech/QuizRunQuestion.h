@@ -23,6 +23,9 @@ public:
 	bool GetIsCorrect() {return _isCorrect;}
 	void SetIsCorrect(bool isCorrect) {_isCorrect = isCorrect;}
 
+	bool GetIsAnswered() { return isAnswered; }
+	void SetIsAnswered(bool isAnswered) { this->isAnswered = isAnswered; }
+
 	Question& GetQuestion() { return question; }
 	void SetQuestion(Question& question) { this->question = question; }
 
@@ -34,6 +37,7 @@ private:
 	std::wstring _answerText;
 	std::wstring _answerFile;
 	bool _isCorrect;
+	bool isAnswered;
 
 
 };
