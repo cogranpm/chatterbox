@@ -5,6 +5,7 @@
 class QuizRunQuestion : public BaseEntity
 {
 public:
+	QuizRunQuestion();
 	QuizRunQuestion(Question& question);
 	~QuizRunQuestion(void);
 
