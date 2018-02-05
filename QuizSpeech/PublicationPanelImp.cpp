@@ -645,6 +645,7 @@ void PublicationPanelImp::Refresh()
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
 	this->RenderExercises(nullptr);
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
+	this->RenderQuizRuns();
 }
 
 

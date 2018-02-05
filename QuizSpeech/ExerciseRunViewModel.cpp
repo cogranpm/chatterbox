@@ -18,12 +18,19 @@ ExerciseRunViewModel::~ExerciseRunViewModel()
 
 void ExerciseRunViewModel::CreateRunQuestions()
 {
-	for (int i = 0; i < questions.size(); ++i)
+	if (header.GetQuizRunHeaderId() > 0)
 	{
-		Question question = questions.at(i);
-		QuizRunQuestion* runQuestion = new QuizRunQuestion(question);
-		runQuestion->SetQuizRunHeaderId(header.GetQuizRunHeaderId());
-		runQuestions.push_back(runQuestion);
+
+	}
+	else
+	{
+		for (int i = 0; i < questions.size(); ++i)
+		{
+			Question question = questions.at(i);
+			QuizRunQuestion* runQuestion = new QuizRunQuestion(question);
+			runQuestion->SetQuizRunHeaderId(header.GetQuizRunHeaderId());
+			runQuestions.push_back(runQuestion);
+		}
 	}
 }
 
