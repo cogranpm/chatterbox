@@ -234,6 +234,7 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		RenderQuestions();
 		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
 		SetQuestion(*viewModel.GetCurrentQuestion());
+		this->lblStatus->SetLabelText(wxString::Format(L"Question %i of %i", viewModel.GetCurrentQuestionIndex(), viewModel.GetRunQuestions().size()));
 		PlayQuestion();
 	}
 	else
