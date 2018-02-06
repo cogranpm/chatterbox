@@ -109,9 +109,17 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	btnSkip->SetBitmap(*wxGetApp().GetImages().next_icon);
 
 	/* load the data */
-	wxGetApp().GetProvider()->GetQuizProvider().GetQuestionsByQuizId(viewModel.GetHeader().GetQuizId(), &viewModel.GetQuestions());
+	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
+	{
+		wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunQuestionsByQuiz(viewModel.GetHeader().GetQuizId(), viewModel.GetHeader().GetQuizRunHeaderId(),
+			&viewModel.GetRunQuestions());
+	}
+	else
+	{
+		wxGetApp().GetProvider()->GetQuizProvider().GetQuestionsByQuizId(viewModel.GetHeader().GetQuizId(), &viewModel.GetQuestions());
+		viewModel.CreateRunQuestions();
+	}
 	size_t siz = viewModel.GetQuestions().size();
-	viewModel.CreateRunQuestions();
 	RenderQuestions();
 
 	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)

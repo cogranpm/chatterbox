@@ -535,20 +535,27 @@ void SqlIteQuizProvider::GetQuizRunsByQuiz(Quiz* quiz, boost::ptr_vector<QuizRun
 void SqlIteQuizProvider::GetQuizRunQuestionsByQuiz(unsigned long quizId, unsigned long quizRunHeaderId, boost::ptr_vector<QuizRunQuestion>* list)
 {
 	/* this may not work with multiple quiz run headers */
-	wxString sql(L"select question.questionid, question.createddate, question.bodyfile, question.body, ");
-	sql.Append(L"quizrunquestion.isanswered, quizrunquestion.iscorrect, quizrunquestion.answerfile, ");
-	sql.Append(L"quizrunquestion.answertext from question left join quizrunquestion ");
-	sql.Append(L"on question.questionid = quizrunquestion.questionid where question.quizid = ? ");
-	sql.Append(L" and (quizrunquestion.QuizRunHeaderId = ? or quizrunquestion.QuizRunHeaderId is null; ");
-	wxSQLite3Statement stmt = db->PrepareStatement(sql);
-	stmt.Bind(1, wxLongLong(quizId));
-	stmt.Bind(2, wxLongLong(quizRunHeaderId));
-	wxSQLite3ResultSet set = stmt.ExecuteQuery();
-	while (set.NextRow())
+	try
 	{
-		QuizRunQuestion* question = new QuizRunQuestion();
-		this->SetQuizRunQuestionFromRecord(question, set);
-		list->push_back(question);
+		wxString sql(L"select question.questionid, question.createddate, question.bodyfile, question.body, ");
+		sql.Append(L"quizrunquestion.isanswered, quizrunquestion.iscorrect, quizrunquestion.answerfile, ");
+		sql.Append(L"quizrunquestion.answertext from question left join quizrunquestion ");
+		sql.Append(L"on question.questionid = quizrunquestion.questionid where question.quizid = ? ");
+		sql.Append(L" and (quizrunquestion.QuizRunHeaderId = ? or quizrunquestion.QuizRunHeaderId is null; ");
+		wxSQLite3Statement stmt = db->PrepareStatement(sql);
+		stmt.Bind(1, wxLongLong(quizId));
+		stmt.Bind(2, wxLongLong(quizRunHeaderId));
+		wxSQLite3ResultSet set = stmt.ExecuteQuery();
+		while (set.NextRow())
+		{
+			QuizRunQuestion* question = new QuizRunQuestion();
+			this->SetQuizRunQuestionFromRecord(question, set);
+			list->push_back(question);
+		}
+	}
+	catch (wxSQLite3Exception& ex)
+	{
+		throw ex.GetMessage().ToStdWstring();
 	}
 }
 
