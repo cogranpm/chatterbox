@@ -102,7 +102,6 @@ void ExerciseRunDialogImp::QuestionsSelectionChanged(wxDataViewEvent& event)
 
 	viewModel.SetCurrentQuestionIndex(event.GetSelection());
 	this->lblStatus->SetLabelText(wxString::Format(L"Question %i of %i", viewModel.GetCurrentQuestionIndex(), viewModel.GetRunQuestions().size()));
-	PlayQuestion();
 	SetQuestion(*question);
 	HideComplete();
 }
@@ -201,10 +200,14 @@ void ExerciseRunDialogImp::RenderQuestions()
 void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 {
 	txtQuestion->SetValue(question.GetQuestion().GetQuestionText());
-	//if (!question.GetQuestion().GetQuestionFile().empty())
-	//{
-	//	questionPlayer.SetURL(question.GetQuestion().GetQuestionFile());
-	//}
+	int index = viewModel.GetCurrentQuestionIndex();
+	size_t total = viewModel.GetRunQuestions().size();
+	std::wstring sTotal = boost::lexical_cast<std::wstring>(total);
+	this->lblStatus->SetLabelText(wxString::Format(L"Question %d of %s", index, sTotal));
+	btnRecord->Disable();
+	btnPlayAnswer->Disable();
+	btnPlayCorrectAnswer->Disable();
+	btnNext->Disable();
 }
 
 void ExerciseRunDialogImp::PlayCompleted()
@@ -258,7 +261,6 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		RenderQuestions();
 		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
 		SetQuestion(*viewModel.GetCurrentQuestion());
-		this->lblStatus->SetLabelText(wxString::Format(L"Question %i of %i", viewModel.GetCurrentQuestionIndex(), viewModel.GetRunQuestions().size()));
 		PlayQuestion();
 	}
 	else
@@ -267,6 +269,7 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		RenderComplete();
 	}
 }
+
 
 void ExerciseRunDialogImp::RenderComplete()
 {

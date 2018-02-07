@@ -39,6 +39,8 @@ class ExerciseRunDialogImp : public ExerciseRunDialog, AudioPlayerWrapperClient
 	void HideComplete();
 	void PlayQuestion();
 	void Init();
+
+
 	protected:
 		// Handlers for ExerciseRunDialog events.
 		void CloseOnButtonClick( wxCommandEvent& event );

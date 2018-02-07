@@ -1,12 +1,12 @@
 #include "ExerciseRunViewModel.h"
 
-ExerciseRunViewModel::ExerciseRunViewModel(QuizRunHeader header) : header(header),
+ExerciseRunViewModel::ExerciseRunViewModel(QuizRunHeader& header) : header(header),
 runQuestions(), currentQuestionIndex(0)
 {
 }
 
 
-ExerciseRunViewModel::ExerciseRunViewModel(unsigned long quizId) : header(quizId),
+ExerciseRunViewModel::ExerciseRunViewModel(const unsigned long& quizId) : header(quizId),
 runQuestions(), currentQuestionIndex(0)
 {
 }

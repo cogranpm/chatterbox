@@ -13,17 +13,18 @@ class ExerciseRunViewModel
 	boost::ptr_vector<Question> questions;
 	int currentQuestionIndex;
 	std::map<std::wstring, QuizRunQuestion> existingQuestions;
+	
 
 public:
-	ExerciseRunViewModel(QuizRunHeader header);
-	ExerciseRunViewModel(unsigned long quizId);
+	ExerciseRunViewModel(QuizRunHeader& header);
+	ExerciseRunViewModel(const unsigned long& quizId);
 	~ExerciseRunViewModel();
 	QuizRunHeader& GetHeader() { return header; }
 	boost::ptr_vector<QuizRunQuestion>& GetRunQuestions() { return runQuestions; }
 	boost::ptr_vector<Question>& GetQuestions() { return questions; }
 	void CreateRunQuestions();
-	void SetCurrentQuestionIndex(const int index) { currentQuestionIndex = index; }
-	int GetCurrentQuestionIndex() { return currentQuestionIndex; }
+	void SetCurrentQuestionIndex(const int& index) { currentQuestionIndex = index; }
+	const int GetCurrentQuestionIndex() { return currentQuestionIndex; }
 	QuizRunQuestion* GetCurrentQuestion();
 	bool IsAnswered();
 };
