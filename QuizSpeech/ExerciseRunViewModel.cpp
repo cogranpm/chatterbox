@@ -20,7 +20,7 @@ void ExerciseRunViewModel::CreateRunQuestions()
 {
 	if (header.GetQuizRunHeaderId() > 0)
 	{
-
+		/* is there anything to do? */
 	}
 	else
 	{
@@ -36,7 +36,7 @@ void ExerciseRunViewModel::CreateRunQuestions()
 
 QuizRunQuestion* ExerciseRunViewModel::GetCurrentQuestion()
 {
-	return &runQuestions.at(currentQuestionIndex);
+	return &runQuestions.at(currentQuestionIndex - 1);
 }
 
 bool ExerciseRunViewModel::IsAnswered()

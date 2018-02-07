@@ -145,9 +145,9 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 
 	if (viewModel.GetRunQuestions().size() > 0)
 	{
-		viewModel.SetCurrentQuestionIndex(0);
-		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
-		SetQuestion(viewModel.GetRunQuestions().at(viewModel.GetCurrentQuestionIndex()));
+		viewModel.SetCurrentQuestionIndex(1);
+		lstQuestions->SelectRow(0);
+		SetQuestion(viewModel.GetRunQuestions().at(0));
 		PlayQuestion();
 	}
 
@@ -204,7 +204,6 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 	size_t total = viewModel.GetRunQuestions().size();
 	std::wstring sTotal = boost::lexical_cast<std::wstring>(total);
 	this->lblStatus->SetLabelText(wxString::Format(L"Question %d of %s", index, sTotal));
-	btnRecord->Disable();
 	btnPlayAnswer->Disable();
 	btnPlayCorrectAnswer->Disable();
 	btnNext->Disable();
@@ -297,7 +296,7 @@ void ExerciseRunDialogImp::HideComplete()
 
 bool ExerciseRunDialogImp::MoreQuestions()
 {
-	return (viewModel.GetCurrentQuestionIndex() + 1) < viewModel.GetRunQuestions().size();
+	return (viewModel.GetCurrentQuestionIndex()) < viewModel.GetRunQuestions().size();
 }
 
 
