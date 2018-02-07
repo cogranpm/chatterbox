@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -80,6 +80,7 @@ class ExerciseRunDialog : public wxDialog
 		virtual void PlayCorrectAnswerOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EvaluationOnRadioBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void NextOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void QuestionsSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void CloseOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

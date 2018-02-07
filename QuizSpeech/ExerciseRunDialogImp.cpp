@@ -91,6 +91,22 @@ void ExerciseRunDialogImp::NextOnButtonClick(wxCommandEvent& event)
 	}
 }
 
+void ExerciseRunDialogImp::QuestionsSelectionChanged(wxDataViewEvent& event)
+{
+	wxDataViewItem item = event.GetItem();
+	if (item == nullptr)
+	{
+		return;
+	}
+	QuizRunQuestion* question = (QuizRunQuestion*)this->lstQuestions->GetItemData(item);
+
+	viewModel.SetCurrentQuestionIndex(event.GetSelection());
+	this->lblStatus->SetLabelText(wxString::Format(L"Question %i of %i", viewModel.GetCurrentQuestionIndex(), viewModel.GetRunQuestions().size()));
+	PlayQuestion();
+	SetQuestion(*question);
+	HideComplete();
+}
+
 
 void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 {
@@ -267,6 +283,13 @@ void ExerciseRunDialogImp::ShowComplete()
 {
 	pnlEntries->Show(false);
 	pnlComplete->Show(true);
+}
+
+
+void ExerciseRunDialogImp::HideComplete()
+{
+	pnlEntries->Show(true);
+	pnlComplete->Show(false);
 }
 
 bool ExerciseRunDialogImp::MoreQuestions()

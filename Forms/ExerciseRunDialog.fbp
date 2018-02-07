@@ -2148,7 +2148,7 @@
                                                             <event name="OnDataViewListCtrlItemExpanding"></event>
                                                             <event name="OnDataViewListCtrlItemStartEditing"></event>
                                                             <event name="OnDataViewListCtrlItemValueChanged"></event>
-                                                            <event name="OnDataViewListCtrlSelectionChanged"></event>
+                                                            <event name="OnDataViewListCtrlSelectionChanged">QuestionsSelectionChanged</event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnKeyDown"></event>

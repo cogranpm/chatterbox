@@ -539,9 +539,9 @@ void SqlIteQuizProvider::GetQuizRunQuestionsByQuiz(unsigned long quizId, unsigne
 	{
 		wxString sql(L"select question.questionid, question.createddate, question.bodyfile, question.body, ");
 		sql.Append(L"quizrunquestion.isanswered, quizrunquestion.iscorrect, quizrunquestion.answerfile, ");
-		sql.Append(L"quizrunquestion.answertext from question left join quizrunquestion ");
+		sql.Append(L"quizrunquestion.answertext, quizrunquestion.QuizRunHeaderId, quizrunquestion.QuizRunQuestionId from question left join quizrunquestion ");
 		sql.Append(L"on question.questionid = quizrunquestion.questionid where question.quizid = ? ");
-		sql.Append(L" and (quizrunquestion.QuizRunHeaderId = ? or quizrunquestion.QuizRunHeaderId is null; ");
+		sql.Append(L" and (quizrunquestion.QuizRunHeaderId = ? or quizrunquestion.QuizRunHeaderId is null); ");
 		wxSQLite3Statement stmt = db->PrepareStatement(sql);
 		stmt.Bind(1, wxLongLong(quizId));
 		stmt.Bind(2, wxLongLong(quizRunHeaderId));

@@ -36,6 +36,7 @@ class ExerciseRunDialogImp : public ExerciseRunDialog, AudioPlayerWrapperClient
 	bool IsFirstQuestion();
 	void RenderComplete();
 	void ShowComplete();
+	void HideComplete();
 	void PlayQuestion();
 	void Init();
 	protected:
@@ -49,7 +50,7 @@ class ExerciseRunDialogImp : public ExerciseRunDialog, AudioPlayerWrapperClient
 		void EvaluationOnRadioBox(wxCommandEvent& event);
 		void NextOnButtonClick(wxCommandEvent& event);
 		void PlayAnswerOnButtonClick(wxCommandEvent& event);
-
+		void QuestionsSelectionChanged(wxDataViewEvent& event);
 	public:
 		/** Constructor */
 		ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader);
