@@ -37,9 +37,9 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	pnlQuestion = new wxPanel( listSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	szInput = new wxBoxSizer( wxVERTICAL );
 	
-	pnlEntries = new wxPanel( pnlQuestion, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer17;
-	bSizer17 = new wxBoxSizer( wxVERTICAL );
+	mainDisplayBook = new wxSimplebook( pnlQuestion, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	pnlEntries = new wxPanel( mainDisplayBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	szEntries = new wxBoxSizer( wxVERTICAL );
 	
 	szQuestion = new wxBoxSizer( wxVERTICAL );
 	
@@ -66,8 +66,13 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	szQuestion->Add( txtQuestion, 1, wxALL|wxEXPAND, 5 );
 	
+	szPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer17->Add( szQuestion, 1, wxEXPAND, 5 );
+	
+	szQuestion->Add( szPlayer, 1, wxEXPAND, 5 );
+	
+	
+	szEntries->Add( szQuestion, 1, wxEXPAND, 5 );
 	
 	szAnswer = new wxBoxSizer( wxVERTICAL );
 	
@@ -97,7 +102,7 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	szAnswer->Add( txtAnswer, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer17->Add( szAnswer, 0, wxALL|wxEXPAND, 5 );
+	szEntries->Add( szAnswer, 0, wxALL|wxEXPAND, 5 );
 	
 	szEvaluate = new wxBoxSizer( wxVERTICAL );
 	
@@ -137,13 +142,31 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	szEvaluate->Add( txtCorrectAnswer, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer17->Add( szEvaluate, 0, wxALL|wxEXPAND, 5 );
+	szEntries->Add( szEvaluate, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	pnlEntries->SetSizer( bSizer17 );
+	pnlEntries->SetSizer( szEntries );
 	pnlEntries->Layout();
-	bSizer17->Fit( pnlEntries );
-	szInput->Add( pnlEntries, 0, wxALL|wxEXPAND, 5 );
+	szEntries->Fit( pnlEntries );
+	mainDisplayBook->AddPage( pnlEntries, wxT("a page"), false );
+	pnlComplete = new wxPanel( mainDisplayBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	szComplete = new wxBoxSizer( wxVERTICAL );
+	
+	lblFinished = new wxStaticText( pnlComplete, wxID_ANY, wxT("Finished"), wxDefaultPosition, wxDefaultSize, 0 );
+	lblFinished->Wrap( -1 );
+	szComplete->Add( lblFinished, 0, wxALL|wxEXPAND, 5 );
+	
+	lblScore = new wxStaticText( pnlComplete, wxID_ANY, wxT("score"), wxDefaultPosition, wxDefaultSize, 0 );
+	lblScore->Wrap( -1 );
+	szComplete->Add( lblScore, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	pnlComplete->SetSizer( szComplete );
+	pnlComplete->Layout();
+	szComplete->Fit( pnlComplete );
+	mainDisplayBook->AddPage( pnlComplete, wxT("a page"), false );
+	
+	szInput->Add( mainDisplayBook, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* szStatus;
 	szStatus = new wxBoxSizer( wxVERTICAL );
@@ -154,26 +177,6 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	
 	szInput->Add( szStatus, 1, wxEXPAND, 5 );
-	
-	pnlComplete = new wxPanel( pnlQuestion, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	pnlComplete->Hide();
-	
-	wxBoxSizer* bSizer20;
-	bSizer20 = new wxBoxSizer( wxVERTICAL );
-	
-	lblFinished = new wxStaticText( pnlComplete, wxID_ANY, wxT("Finished"), wxDefaultPosition, wxDefaultSize, 0 );
-	lblFinished->Wrap( -1 );
-	bSizer20->Add( lblFinished, 0, wxALL|wxEXPAND, 5 );
-	
-	lblScore = new wxStaticText( pnlComplete, wxID_ANY, wxT("score"), wxDefaultPosition, wxDefaultSize, 0 );
-	lblScore->Wrap( -1 );
-	bSizer20->Add( lblScore, 0, wxALL|wxEXPAND, 5 );
-	
-	
-	pnlComplete->SetSizer( bSizer20 );
-	pnlComplete->Layout();
-	bSizer20->Fit( pnlComplete );
-	szInput->Add( pnlComplete, 1, wxEXPAND | wxALL, 5 );
 	
 	
 	pnlQuestion->SetSizer( szInput );

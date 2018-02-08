@@ -11,13 +11,13 @@ bool IsCorrect(QuizRunQuestion& question) {
 
 ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId)
 :
-ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L"")), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
+ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L""), szPlayer, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
 	Init();
 }
 
 ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader) :
-	ExerciseRunDialog(parent), viewModel(quizRunHeader), questionPlayer(this, std::wstring(L"")), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
+	ExerciseRunDialog(parent), viewModel(quizRunHeader), questionPlayer(this, std::wstring(L""), szPlayer, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
 	Init();
 }
@@ -119,7 +119,6 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	taskCompleteIcon.CopyFromBitmap(*wxGetApp().GetImages().taskcomplete_icon);
 	taskRejectIcon.CopyFromBitmap(*wxGetApp().GetImages().taskreject_icon);
 
-
 	btnRecord->SetBitmap(*wxGetApp().GetImages().record_icon);
 	btnNext->SetBitmap(*wxGetApp().GetImages().next_icon);
 	btnAudioPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
@@ -127,6 +126,7 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	btnPlayCorrectAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
 	btnSkip->SetBitmap(*wxGetApp().GetImages().next_icon);
 
+	questionPlayer.RenderPanel();
 	/* load the data */
 	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
 	{
@@ -293,7 +293,7 @@ void ExerciseRunDialogImp::RenderComplete()
 	score.Append(wxString::Format(wxT("%i"), total));
 	double percent = (((double)correctCount / (double)total)) * 100.0;
 	score.Append(L" ");
-	score.Append(wxString::Format(wxT("%f"), percent));
+	score.Append(wxString::Format(wxT("%.2f"), percent));
 	score.Append(L"%");
 	lblScore->SetLabelText(score);
 	ShowComplete();
@@ -301,15 +301,13 @@ void ExerciseRunDialogImp::RenderComplete()
 
 void ExerciseRunDialogImp::ShowComplete()
 {
-	pnlEntries->Show(false);
-	pnlComplete->Show(true);
+	mainDisplayBook->ChangeSelection(1);
 }
 
 
 void ExerciseRunDialogImp::HideComplete()
 {
-	pnlEntries->Show(true);
-	pnlComplete->Show(false);
+	mainDisplayBook->ChangeSelection(0);
 }
 
 bool ExerciseRunDialogImp::MoreQuestions()

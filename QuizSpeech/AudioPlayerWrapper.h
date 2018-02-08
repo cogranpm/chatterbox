@@ -2,6 +2,19 @@
 #include "AudioPlayer.h"
 #include "stdafx.h"
 #include "AudioPlayerWrapperClient.h"
+#include "AudioPlayerPanelTimer.h"
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
+#include <wx/string.h>
+#include <wx/button.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
+#include <wx/colour.h>
+#include <wx/settings.h>
+#include <wx/gauge.h>
+#include <wx/stattext.h>
+#include <wx/sizer.h>
+#include <wx/panel.h>
 
 class NoteAudioPlayer;
 
@@ -17,13 +30,21 @@ class AudioPlayerWrapper
 	void OnAudioURL();
 	void OnAudioEnd();
 	void OnClearURL();
+	wxWindow* parent;
+	wxSizer* targetSizer;
+	AudioPlayerPanelTimer timer;
+	wxGauge* m_gauge2;
+	wxStaticText* txtDuration;
+	wxButton* btnPlay;
 
 public:
 	AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url);
+	AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url, wxSizer* targetSizer, wxWindow* parent);
 	~AudioPlayerWrapper();
 	void Play();
 	void Stop();
 	AudioPlayer& GetAudioPlayer() { return audioPlayer; }
 	void SetURL(std::wstring url);
+	void RenderPanel();
 };
 
