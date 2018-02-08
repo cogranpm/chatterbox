@@ -42,6 +42,12 @@ QuizRunQuestion* ExerciseRunViewModel::GetCurrentQuestion()
 bool ExerciseRunViewModel::IsAnswered()
 {
 	QuizRunQuestion* question = GetCurrentQuestion();
-	return (question->GetQuizRunQuestionId() > 0 || 
+	return IsAnswered(question);
+}
+
+bool ExerciseRunViewModel::IsAnswered(QuizRunQuestion* question)
+{
+	return (question->GetQuizRunQuestionId() > 0 ||
 		(!question->GetAnswerFile().empty()) || (!question->GetAnswerText().empty()));
+
 }

@@ -27,5 +27,6 @@ public:
 	const int GetCurrentQuestionIndex() { return currentQuestionIndex; }
 	QuizRunQuestion* GetCurrentQuestion();
 	bool IsAnswered();
+	bool IsAnswered(QuizRunQuestion* question);
 };
 

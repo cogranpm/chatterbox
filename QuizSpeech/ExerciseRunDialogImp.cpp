@@ -172,7 +172,7 @@ void ExerciseRunDialogImp::RenderQuestions()
 		data.push_back(wxVariant(boost::lexical_cast<std::wstring>(i)));
 		data.push_back(wxVariant(question.GetQuestion().GetLimitedQuestionText()));
 		//answered
-		if (viewModel.IsAnswered())
+		if (viewModel.IsAnswered(&question))
 		{
 			data.push_back(wxVariant(wxDataViewIconText(L"Yes", taskCompleteIcon)));
 		}
