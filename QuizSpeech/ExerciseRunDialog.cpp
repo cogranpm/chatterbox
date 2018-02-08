@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -163,7 +163,11 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	lblFinished = new wxStaticText( pnlComplete, wxID_ANY, wxT("Finished"), wxDefaultPosition, wxDefaultSize, 0 );
 	lblFinished->Wrap( -1 );
-	bSizer20->Add( lblFinished, 0, wxALL, 5 );
+	bSizer20->Add( lblFinished, 0, wxALL|wxEXPAND, 5 );
+	
+	lblScore = new wxStaticText( pnlComplete, wxID_ANY, wxT("score"), wxDefaultPosition, wxDefaultSize, 0 );
+	lblScore->Wrap( -1 );
+	bSizer20->Add( lblScore, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	pnlComplete->SetSizer( bSizer20 );

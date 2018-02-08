@@ -5,6 +5,10 @@
 #include "DictationOverlayClientHelper.h"
 
 
+bool IsCorrect(QuizRunQuestion& question) {
+	return question.GetIsCorrect();
+}
+
 ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId)
 :
 ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L"")), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
@@ -207,6 +211,7 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 	btnPlayAnswer->Disable();
 	btnPlayCorrectAnswer->Disable();
 	btnNext->Disable();
+	rdoEvaluation->Select(0);
 }
 
 void ExerciseRunDialogImp::PlayCompleted()
@@ -258,7 +263,7 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		int nextQuestionIndex = viewModel.GetCurrentQuestionIndex() + 1;
 		viewModel.SetCurrentQuestionIndex(nextQuestionIndex);
 		RenderQuestions();
-		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex());
+		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex() - 1);
 		SetQuestion(*viewModel.GetCurrentQuestion());
 		PlayQuestion();
 	}
@@ -278,6 +283,19 @@ void ExerciseRunDialogImp::RenderComplete()
 	/* if none have been skipped then save the header */
 	viewModel.GetHeader().SetIsComplete(true);
 	wxGetApp().GetProvider()->GetQuizProvider().Update(viewModel.GetHeader());
+	
+	int correctCount = std::count_if(viewModel.GetRunQuestions().begin(), viewModel.GetRunQuestions().end(), IsCorrect);
+	
+	wxString score(L"Score: ");
+	score.Append(wxString::Format(wxT("%i"), correctCount));
+	score.Append(L" / ");
+	int total = boost::lexical_cast<int>(viewModel.GetRunQuestions().size());
+	score.Append(wxString::Format(wxT("%i"), total));
+	double percent = (((double)correctCount / (double)total)) * 100.0;
+	score.Append(L" ");
+	score.Append(wxString::Format(wxT("%f"), percent));
+	score.Append(L"%");
+	lblScore->SetLabelText(score);
 	ShowComplete();
 }
 

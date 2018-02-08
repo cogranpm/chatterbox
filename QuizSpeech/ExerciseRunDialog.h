@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -62,6 +62,7 @@ class ExerciseRunDialog : public wxDialog
 		wxStaticText* lblStatus;
 		wxPanel* pnlComplete;
 		wxStaticText* lblFinished;
+		wxStaticText* lblScore;
 		wxPanel* pnlList;
 		wxStaticText* m_staticText2;
 		wxDataViewListCtrl* lstQuestions;
