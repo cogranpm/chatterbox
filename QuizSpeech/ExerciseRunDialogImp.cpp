@@ -11,13 +11,13 @@ bool IsCorrect(QuizRunQuestion& question) {
 
 ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId)
 :
-ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L""), szPlayer, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
+ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L""), playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
 	Init();
 }
 
 ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader) :
-	ExerciseRunDialog(parent), viewModel(quizRunHeader), questionPlayer(this, std::wstring(L""), szPlayer, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
+	ExerciseRunDialog(parent), viewModel(quizRunHeader), questionPlayer(this, std::wstring(L""), playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
 	Init();
 }
@@ -127,6 +127,7 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	btnSkip->SetBitmap(*wxGetApp().GetImages().next_icon);
 
 	questionPlayer.RenderPanel();
+	
 	/* load the data */
 	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
 	{

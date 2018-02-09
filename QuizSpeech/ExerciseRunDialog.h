@@ -19,8 +19,8 @@
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/textctrl.h>
-#include <wx/radiobox.h>
 #include <wx/panel.h>
+#include <wx/radiobox.h>
 #include <wx/simplebook.h>
 #include <wx/dataview.h>
 #include <wx/splitter.h>
@@ -52,6 +52,9 @@ class ExerciseRunDialog : public wxDialog
 		wxButton* btnSkip;
 		wxTextCtrl* txtQuestion;
 		wxBoxSizer* szPlayer;
+		wxPanel* playPanel;
+		wxBoxSizer* szPlayPanel;
+		wxButton* btnDummy;
 		wxBoxSizer* szAnswer;
 		wxStaticText* lblAnswer;
 		wxButton* btnRecord;

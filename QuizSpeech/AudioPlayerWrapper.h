@@ -15,10 +15,11 @@
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/event.h>
 
 class NoteAudioPlayer;
 
-class AudioPlayerWrapper
+class AudioPlayerWrapper : public wxEvtHandler
 {
 	AudioPlayerWrapperClient* callingInstance;
 	std::wstring url;
@@ -31,15 +32,16 @@ class AudioPlayerWrapper
 	void OnAudioEnd();
 	void OnClearURL();
 	wxWindow* parent;
-	wxSizer* targetSizer;
+	wxPanel* targetPanel;
 	AudioPlayerPanelTimer timer;
 	wxGauge* m_gauge2;
 	wxStaticText* txtDuration;
 	wxButton* btnPlay;
+	void PlayOnButtonClick(wxCommandEvent& event);
 
 public:
 	AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url);
-	AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url, wxSizer* targetSizer, wxWindow* parent);
+	AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url, wxPanel* targetPanel, wxWindow* parent);
 	~AudioPlayerWrapper();
 	void Play();
 	void Stop();

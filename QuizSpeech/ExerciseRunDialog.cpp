@@ -68,6 +68,18 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	szPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
+	playPanel = new wxPanel( pnlEntries, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	szPlayPanel = new wxBoxSizer( wxHORIZONTAL );
+	
+	btnDummy = new wxButton( playPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
+	szPlayPanel->Add( btnDummy, 0, wxALL, 5 );
+	
+	
+	playPanel->SetSizer( szPlayPanel );
+	playPanel->Layout();
+	szPlayPanel->Fit( playPanel );
+	szPlayer->Add( playPanel, 1, wxEXPAND | wxALL, 5 );
+	
 	
 	szQuestion->Add( szPlayer, 1, wxEXPAND, 5 );
 	
