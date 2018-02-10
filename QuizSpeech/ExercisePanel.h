@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  8 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __EXERCISEPANEL_H__
@@ -59,6 +59,7 @@ class ExercisePanel : public wxPanel
 		wxStaticText* lblQuestion;
 		wxButton* btnRecordQuestion;
 		wxButton* btnClearQuestion;
+		wxPanel* pnlQuestionAudioPlayer;
 		wxBoxSizer* szQuestionAudioPlayer;
 		wxInfoBar* questionMessage;
 		wxTextCtrl* questionText;
@@ -66,6 +67,7 @@ class ExercisePanel : public wxPanel
 		wxStaticText* lblAnswer;
 		wxButton* btnRecordAnswer;
 		wxButton* btnClearAnswer;
+		wxPanel* pnlAnswerAudioPlayer;
 		wxBoxSizer* szAnswerAudioPlayer;
 		wxInfoBar* answerMessage;
 		wxTextCtrl* answerText;

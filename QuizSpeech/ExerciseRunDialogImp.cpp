@@ -21,6 +21,7 @@ struct findQuizRunQuestionByQuestionId
 	}
 };
 
+/*
 ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId)
 :
 ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
@@ -33,6 +34,26 @@ ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quiz
 {
 	Init();
 }
+*/
+
+
+ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, unsigned long quizId)
+	:
+	ExerciseRunDialog(parent), viewModel(quizId),
+	playerAnswer(), playerCorrectAnswer(), playerPanelAnswer(nullptr), playerPanelCorrectAnswer(nullptr),
+	playerQuestion(), playerPanelQuestion(nullptr)
+{
+	Init();
+}
+
+ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader) :
+	ExerciseRunDialog(parent), viewModel(quizRunHeader), 
+	playerAnswer(), playerCorrectAnswer(), playerPanelAnswer(nullptr), playerPanelCorrectAnswer(nullptr),
+	playerQuestion(), playerPanelQuestion(nullptr)
+{
+	Init();
+}
+
 
 void ExerciseRunDialogImp::Init()
 {
@@ -56,24 +77,13 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 		currentQuestion->SetAnswerText(txtAnswer->GetValue().ToStdWstring());
 		rdoEvaluation->Enable();
 		btnNext->Enable();
-		btnPlayAnswer->Enable();
-		btnPlayCorrectAnswer->Enable();
+		playerPanelAnswer->Show(true);
+		playerPanelCorrectAnswer->Show(true);
+		playerAnswer.SetURL(currentQuestion->GetAnswerFile());
+		playerCorrectAnswer.SetURL(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile());
 	}
 }
 
-void ExerciseRunDialogImp::AudioPlayOnButtonClick(wxCommandEvent& event)
-{
-	/* get rid of this handler */
-	/* play the question audio */
-	PlayQuestion();
-}
-
-void ExerciseRunDialogImp::PlayAnswerOnButtonClick(wxCommandEvent& event)
-{
-	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
-	answerPlayer.SetURL(currentQuestion->GetAnswerFile());
-	answerPlayer.Play();
-}
 
 void ExerciseRunDialogImp::SkipOnButtonClick(wxCommandEvent& event)
 {
@@ -83,12 +93,6 @@ void ExerciseRunDialogImp::SkipOnButtonClick(wxCommandEvent& event)
 	GoNextQuestion();
 }
 
-void ExerciseRunDialogImp::PlayCorrectAnswerOnButtonClick(wxCommandEvent& event)
-{
-	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
-	correctAnswerPlayer.SetURL(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile());
-	correctAnswerPlayer.Play();
-}
 
 void ExerciseRunDialogImp::EvaluationOnRadioBox(wxCommandEvent& event)
 {
@@ -153,12 +157,19 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 
 	btnRecord->SetBitmap(*wxGetApp().GetImages().record_icon);
 	btnNext->SetBitmap(*wxGetApp().GetImages().next_icon);
-	btnAudioPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
-	btnPlayAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
-	btnPlayCorrectAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
+//	btnAudioPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
+	//btnPlayAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
+	//btnPlayCorrectAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
 	btnSkip->SetBitmap(*wxGetApp().GetImages().next_icon);
 
-	questionPlayer.RenderPanel();
+	
+	playerPanelQuestion = new AudioPlayerPanelImp(pnlPlayer, &playerQuestion);
+	playerPanelCorrectAnswer = new AudioPlayerPanelImp(pnlCorrectAnswerPlayer, &playerCorrectAnswer);
+	playerPanelAnswer = new AudioPlayerPanelImp(pnlAnswerPlayer, &playerAnswer);
+	wxSizerItem* panelQ = this->szCorrectAnswerPlayer->Add(playerPanelCorrectAnswer, 1, wxALL | wxEXPAND, 0);
+	wxSizerItem* panelA = this->szAnswerPlayer->Add(playerPanelAnswer, 1, wxALL | wxEXPAND, 0);
+	wxSizerItem* panelB = this->szPlayer->Add(playerPanelQuestion, 1, wxALL | wxEXPAND, 0);
+
 	
 	/* load the data */
 	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
@@ -188,12 +199,14 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 		PlayQuestion();
 	}
 
+	this->Layout();
 }
 
 void ExerciseRunDialogImp::PlayQuestion()
 {
 	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
-	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
+	playerQuestion.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
+//	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
 //	questionPlayer.Play();
 }
 
@@ -245,8 +258,8 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 	{
 		/* reviewing */
 		btnRecord->Disable();
-		btnPlayAnswer->Enable();
-		btnPlayCorrectAnswer->Enable();
+		playerPanelAnswer->Show(true);
+		playerPanelCorrectAnswer->Show(true);
 		btnNext->Enable();
 		if (question.GetIsCorrect())
 		{
@@ -261,17 +274,20 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 	else
 	{
 		btnRecord->Enable();
-		btnPlayAnswer->Disable();
-		btnPlayCorrectAnswer->Disable();
+		//btnPlayAnswer->Disable();
+		//btnPlayCorrectAnswer->Disable();
+
+		playerPanelAnswer->Show(false);
+		playerPanelCorrectAnswer->Show(false);
 		btnNext->Disable();
 		rdoEvaluation->Select(0);
 	}
 }
 
-void ExerciseRunDialogImp::PlayCompleted()
-{
-
-}
+//void ExerciseRunDialogImp::PlayCompleted()
+//{
+//
+//}
 
 bool ExerciseRunDialogImp::Save()
 {

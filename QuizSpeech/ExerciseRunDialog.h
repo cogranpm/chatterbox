@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -17,9 +17,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/sizer.h>
+#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/textctrl.h>
-#include <wx/panel.h>
 #include <wx/radiobox.h>
 #include <wx/simplebook.h>
 #include <wx/dataview.h>
@@ -48,21 +48,20 @@ class ExerciseRunDialog : public wxDialog
 		wxBoxSizer* szQuestion;
 		wxBoxSizer* szQuestionTool;
 		wxStaticText* lblQuestion;
-		wxButton* btnAudioPlay;
+		wxPanel* pnlPlayer;
+		wxBoxSizer* szPlayer;
 		wxButton* btnSkip;
 		wxTextCtrl* txtQuestion;
-		wxBoxSizer* szPlayer;
-		wxPanel* playPanel;
-		wxBoxSizer* szPlayPanel;
-		wxButton* btnDummy;
 		wxBoxSizer* szAnswer;
 		wxStaticText* lblAnswer;
 		wxButton* btnRecord;
-		wxButton* btnPlayAnswer;
+		wxPanel* pnlAnswerPlayer;
+		wxBoxSizer* szAnswerPlayer;
 		wxTextCtrl* txtAnswer;
 		wxBoxSizer* szEvaluate;
 		wxStaticText* m_staticText6;
-		wxButton* btnPlayCorrectAnswer;
+		wxPanel* pnlCorrectAnswerPlayer;
+		wxBoxSizer* szCorrectAnswerPlayer;
 		wxRadioBox* rdoEvaluation;
 		wxButton* btnNext;
 		wxTextCtrl* txtCorrectAnswer;
@@ -82,11 +81,8 @@ class ExerciseRunDialog : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
-		virtual void AudioPlayOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SkipOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RecordOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void PlayAnswerOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void PlayCorrectAnswerOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EvaluationOnRadioBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void NextOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void QuestionsSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }

@@ -1,4 +1,8 @@
-/* a self contained class that plays audio and shows 
+/*
+NOTE: this is at this stage experimental and not required
+it was found out how to fix the AudioPlayerPanelImp class instead which is superior
+because it allows the ui to be altered in a gui bilder and is more self contained.
+a self contained class that plays audio and shows 
 a panel of user controls for the user to control playback
 client must provide the panel in which to draw the controls 
 so as to avoid sizing issues

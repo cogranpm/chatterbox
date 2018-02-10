@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  8 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "ExercisePanel.h"
@@ -145,16 +145,14 @@ ExercisePanel::ExercisePanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	
 	sizerQuestionHeader->Add( btnClearQuestion, 0, 0, 5 );
 	
-	wxBoxSizer* bSizer22;
-	bSizer22 = new wxBoxSizer( wxVERTICAL );
-	
+	pnlQuestionAudioPlayer = new wxPanel( pnlEdit, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	szQuestionAudioPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
 	
-	bSizer22->Add( szQuestionAudioPlayer, 0, 0, 5 );
-	
-	
-	sizerQuestionHeader->Add( bSizer22, 1, wxEXPAND, 5 );
+	pnlQuestionAudioPlayer->SetSizer( szQuestionAudioPlayer );
+	pnlQuestionAudioPlayer->Layout();
+	szQuestionAudioPlayer->Fit( pnlQuestionAudioPlayer );
+	sizerQuestionHeader->Add( pnlQuestionAudioPlayer, 0, 0, 5 );
 	
 	
 	sizerEdit->Add( sizerQuestionHeader, 0, wxEXPAND, 5 );
@@ -195,10 +193,14 @@ ExercisePanel::ExercisePanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	
 	sizerAnswerHeader->Add( btnClearAnswer, 0, 0, 5 );
 	
+	pnlAnswerAudioPlayer = new wxPanel( pnlEdit, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	szAnswerAudioPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
 	
-	sizerAnswerHeader->Add( szAnswerAudioPlayer, 0, 0, 5 );
+	pnlAnswerAudioPlayer->SetSizer( szAnswerAudioPlayer );
+	pnlAnswerAudioPlayer->Layout();
+	szAnswerAudioPlayer->Fit( pnlAnswerAudioPlayer );
+	sizerAnswerHeader->Add( pnlAnswerAudioPlayer, 1, 0, 5 );
 	
 	
 	sizerEdit->Add( sizerAnswerHeader, 0, wxEXPAND, 5 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -49,8 +49,14 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	lblQuestion->Wrap( -1 );
 	szQuestionTool->Add( lblQuestion, 0, wxALIGN_BOTTOM|wxALL, 5 );
 	
-	btnAudioPlay = new wxButton( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
-	szQuestionTool->Add( btnAudioPlay, 0, wxALIGN_CENTER, 5 );
+	pnlPlayer = new wxPanel( pnlEntries, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	szPlayer = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	pnlPlayer->SetSizer( szPlayer );
+	pnlPlayer->Layout();
+	szPlayer->Fit( pnlPlayer );
+	szQuestionTool->Add( pnlPlayer, 1, wxEXPAND | wxALL, 5 );
 	
 	btnSkip = new wxButton( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnSkip->SetToolTip( wxT("Skip") );
@@ -58,30 +64,13 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	szQuestionTool->Add( btnSkip, 0, wxALIGN_CENTER, 5 );
 	
 	
-	szQuestion->Add( szQuestionTool, 0, wxEXPAND, 5 );
+	szQuestion->Add( szQuestionTool, 1, wxALL|wxEXPAND, 5 );
 	
 	txtQuestion = new wxTextCtrl( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtQuestion->Enable( false );
 	txtQuestion->Hide();
 	
 	szQuestion->Add( txtQuestion, 1, wxALL|wxEXPAND, 5 );
-	
-	szPlayer = new wxBoxSizer( wxHORIZONTAL );
-	
-	playPanel = new wxPanel( pnlEntries, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	szPlayPanel = new wxBoxSizer( wxHORIZONTAL );
-	
-	btnDummy = new wxButton( playPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
-	szPlayPanel->Add( btnDummy, 0, wxALL, 5 );
-	
-	
-	playPanel->SetSizer( szPlayPanel );
-	playPanel->Layout();
-	szPlayPanel->Fit( playPanel );
-	szPlayer->Add( playPanel, 1, wxEXPAND | wxALL, 5 );
-	
-	
-	szQuestion->Add( szPlayer, 1, wxEXPAND, 5 );
 	
 	
 	szEntries->Add( szQuestion, 1, wxEXPAND, 5 );
@@ -98,14 +87,17 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	btnRecord = new wxButton( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	szAnswerTool->Add( btnRecord, 0, wxALIGN_CENTER, 5 );
 	
-	btnPlayAnswer = new wxButton( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
-	btnPlayAnswer->Enable( false );
-	btnPlayAnswer->SetToolTip( wxT("Play Answer") );
-	
-	szAnswerTool->Add( btnPlayAnswer, 0, wxALIGN_CENTER, 5 );
+	pnlAnswerPlayer = new wxPanel( pnlEntries, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	szAnswerPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
 	
-	szAnswer->Add( szAnswerTool, 0, wxEXPAND, 5 );
+	pnlAnswerPlayer->SetSizer( szAnswerPlayer );
+	pnlAnswerPlayer->Layout();
+	szAnswerPlayer->Fit( pnlAnswerPlayer );
+	szAnswerTool->Add( pnlAnswerPlayer, 1, wxEXPAND|wxLEFT, 5 );
+	
+	
+	szAnswer->Add( szAnswerTool, 1, wxEXPAND, 5 );
 	
 	txtAnswer = new wxTextCtrl( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtAnswer->Enable( false );
@@ -125,11 +117,14 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	m_staticText6->Wrap( -1 );
 	szEvaluateTool->Add( m_staticText6, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	btnPlayCorrectAnswer = new wxButton( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
-	btnPlayCorrectAnswer->Enable( false );
-	btnPlayCorrectAnswer->SetToolTip( wxT("Play Correct Answer") );
+	pnlCorrectAnswerPlayer = new wxPanel( pnlEntries, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	szCorrectAnswerPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
-	szEvaluateTool->Add( btnPlayCorrectAnswer, 0, wxALIGN_CENTER, 5 );
+	
+	pnlCorrectAnswerPlayer->SetSizer( szCorrectAnswerPlayer );
+	pnlCorrectAnswerPlayer->Layout();
+	szCorrectAnswerPlayer->Fit( pnlCorrectAnswerPlayer );
+	szEvaluateTool->Add( pnlCorrectAnswerPlayer, 1, wxEXPAND | wxALL, 5 );
 	
 	wxString rdoEvaluationChoices[] = { wxT("Correct"), wxT("Incorrect") };
 	int rdoEvaluationNChoices = sizeof( rdoEvaluationChoices ) / sizeof( wxString );
@@ -248,11 +243,8 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	// Connect Events
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( ExerciseRunDialog::OnInitDialog ) );
-	btnAudioPlay->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::AudioPlayOnButtonClick ), NULL, this );
 	btnSkip->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::SkipOnButtonClick ), NULL, this );
 	btnRecord->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::RecordOnButtonClick ), NULL, this );
-	btnPlayAnswer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::PlayAnswerOnButtonClick ), NULL, this );
-	btnPlayCorrectAnswer->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::PlayCorrectAnswerOnButtonClick ), NULL, this );
 	rdoEvaluation->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( ExerciseRunDialog::EvaluationOnRadioBox ), NULL, this );
 	btnNext->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::NextOnButtonClick ), NULL, this );
 	lstQuestions->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ExerciseRunDialog::QuestionsSelectionChanged ), NULL, this );
@@ -263,11 +255,8 @@ ExerciseRunDialog::~ExerciseRunDialog()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( ExerciseRunDialog::OnInitDialog ) );
-	btnAudioPlay->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::AudioPlayOnButtonClick ), NULL, this );
 	btnSkip->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::SkipOnButtonClick ), NULL, this );
 	btnRecord->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::RecordOnButtonClick ), NULL, this );
-	btnPlayAnswer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::PlayAnswerOnButtonClick ), NULL, this );
-	btnPlayCorrectAnswer->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::PlayCorrectAnswerOnButtonClick ), NULL, this );
 	rdoEvaluation->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( ExerciseRunDialog::EvaluationOnRadioBox ), NULL, this );
 	btnNext->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( ExerciseRunDialog::NextOnButtonClick ), NULL, this );
 	lstQuestions->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( ExerciseRunDialog::QuestionsSelectionChanged ), NULL, this );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -26,7 +26,7 @@ pnlPlayer::pnlPlayer( wxWindow* parent, wxWindowID id, const wxPoint& pos, const
 	
 	txtDuration = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	txtDuration->Wrap( -1 );
-	szPanelPlayer->Add( txtDuration, 1, wxEXPAND, 5 );
+	szPanelPlayer->Add( txtDuration, 1, wxEXPAND|wxLEFT, 5 );
 	
 	
 	this->SetSizer( szPanelPlayer );

@@ -290,16 +290,17 @@ void ExercisePanelImp::ExercisePanelOnInitDialog( wxInitDialogEvent& event )
 	btnClearQuestion->SetBitmap(*wxGetApp().GetImages().delete_icon);
 	btnRecordAnswer->SetBitmap(*wxGetApp().GetImages().record_icon);
 	/* init the audio player and record modals for question and answer audio */
-	playerPanelQuestion = new AudioPlayerPanelImp(this, &playerQuestion);
-	playerPanelAnswer = new AudioPlayerPanelImp(this, &playerAnswer);
+	playerPanelQuestion = new AudioPlayerPanelImp(pnlQuestionAudioPlayer, &playerQuestion);
+	playerPanelAnswer = new AudioPlayerPanelImp(pnlAnswerAudioPlayer, &playerAnswer);
 	wxSizerItem* panelQ = this->szQuestionAudioPlayer->Add(playerPanelQuestion, 1, wxALL | wxEXPAND, 0);
 	wxSizerItem* panelA = this->szAnswerAudioPlayer->Add(playerPanelAnswer, 1, wxALL | wxEXPAND, 0);
+	/*
 	szAnswerAudioPlayer->Layout();
 	szQuestionAudioPlayer->Layout();
 	sizerAnswerHeader->Layout();
 	sizerQuestionHeader->Layout();
 	sizerEdit->Layout();
-
+	*/
 
 	if (!viewModel.GetQuiz().IsNew())
 	{
