@@ -9,6 +9,18 @@ bool IsCorrect(QuizRunQuestion& question) {
 	return question.GetIsCorrect();
 }
 
+
+struct findQuizRunQuestionByQuestionId
+{
+	findQuizRunQuestionByQuestionId(unsigned long id) : _id(id) {};
+	const unsigned long _id;
+
+	bool operator () (QuizRunQuestion& arg) const
+	{
+		return (_id == arg.GetQuestion().GetQuestionId());
+	}
+};
+
 ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId)
 :
 ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L""), playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
@@ -97,17 +109,36 @@ void ExerciseRunDialogImp::NextOnButtonClick(wxCommandEvent& event)
 
 void ExerciseRunDialogImp::QuestionsSelectionChanged(wxDataViewEvent& event)
 {
-	wxDataViewItem item = event.GetItem();
-	if (item == nullptr)
+	wxDataViewItem item = lstQuestions->GetSelection();
+	if (item.IsOk())
 	{
-		return;
+		wxUIntPtr data = lstQuestions->GetItemData(item);
+		QuizRunQuestion* foundItem = FindSelectedQuizRunQuestion(data);
+		if (foundItem != nullptr)
+		{
+			int indexSelected = lstQuestions->GetSelectedRow();
+			viewModel.SetCurrentQuestionIndex(indexSelected + 1);
+			SetQuestion(*foundItem);
+			HideComplete();
+		}
 	}
-	QuizRunQuestion* question = (QuizRunQuestion*)this->lstQuestions->GetItemData(item);
+}
 
-	viewModel.SetCurrentQuestionIndex(event.GetSelection());
-	this->lblStatus->SetLabelText(wxString::Format(L"Question %i of %i", viewModel.GetCurrentQuestionIndex(), viewModel.GetRunQuestions().size()));
-	SetQuestion(*question);
-	HideComplete();
+QuizRunQuestion* ExerciseRunDialogImp::FindSelectedQuizRunQuestion(long questionId)
+{
+	boost::ptr_vector<QuizRunQuestion>::iterator it = std::find_if(viewModel.GetRunQuestions().begin(),
+		viewModel.GetRunQuestions().end(),
+		findQuizRunQuestionByQuestionId(questionId));
+
+	if (it != viewModel.GetRunQuestions().end())
+	{
+		size_t index = std::distance(viewModel.GetRunQuestions().begin(), it);
+		return &viewModel.GetRunQuestions().at(index);
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 
@@ -188,13 +219,13 @@ void ExerciseRunDialogImp::RenderQuestions()
 		//result
 		if (question.GetIsCorrect())
 		{
-			data.push_back(wxVariant(wxDataViewIconText(L"Yes", taskCompleteIcon)));
+			data.push_back(wxVariant(wxDataViewIconText(L"Correct", taskCompleteIcon)));
 		}
 		else
 		{
-			data.push_back(wxVariant(wxDataViewIconText(L"No", taskRejectIcon)));
+			data.push_back(wxVariant(wxDataViewIconText(L"Incorrect", taskRejectIcon)));
 		}
-		lstQuestions->AppendItem(data, wxUIntPtr(&question));
+		lstQuestions->AppendItem(data, question.GetQuestion().GetQuestionId());
 		data.clear();
 	}
 }
@@ -209,10 +240,30 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 	size_t total = viewModel.GetRunQuestions().size();
 	std::wstring sTotal = boost::lexical_cast<std::wstring>(total);
 	this->lblStatus->SetLabelText(wxString::Format(L"Question %d of %s", index, sTotal));
-	btnPlayAnswer->Disable();
-	btnPlayCorrectAnswer->Disable();
-	btnNext->Disable();
-	rdoEvaluation->Select(0);
+	if (question.GetIsAnswered())
+	{
+		/* reviewing */
+		btnRecord->Disable();
+		btnPlayAnswer->Enable();
+		btnPlayCorrectAnswer->Enable();
+		btnNext->Enable();
+		if (question.GetIsCorrect())
+		{
+			rdoEvaluation->Select(0);
+		}
+		else
+		{
+			rdoEvaluation->Select(1);
+		}
+	}
+	else
+	{
+		btnRecord->Enable();
+		btnPlayAnswer->Disable();
+		btnPlayCorrectAnswer->Disable();
+		btnNext->Disable();
+		rdoEvaluation->Select(0);
+	}
 }
 
 void ExerciseRunDialogImp::PlayCompleted()
@@ -237,7 +288,8 @@ bool ExerciseRunDialogImp::Save()
 	question->SetQuizRunHeaderId(viewModel.GetHeader().GetQuizRunHeaderId());
 	if (question->GetQuizRunQuestionId() > 0)
 	{
-		wxGetApp().GetProvider()->GetQuizProvider().Update(*question);
+		//no updates of questions allowed
+		//wxGetApp().GetProvider()->GetQuizProvider().Update(*question);
 	}
 	else
 	{

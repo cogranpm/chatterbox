@@ -11,7 +11,7 @@ AudioPlayerWrapper::AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance
 }
 
 AudioPlayerWrapper::AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url, wxPanel* targetPanel, wxWindow* parent)
-	: callingInstance(callingInstance), url(url), targetPanel(targetPanel), parent(parent), timer()
+	: callingInstance(callingInstance), url(url), targetPanel(targetPanel), parent(parent), timer(), btnPlay(nullptr)
 {
 	onUrlConnection = audioPlayer.OnAudioUrl(boost::bind(&AudioPlayerWrapper::OnAudioURL, this));
 	onAudioEndConnection = audioPlayer.OnAudioEnd(boost::bind(&AudioPlayerWrapper::OnAudioEnd, this));

@@ -39,7 +39,7 @@ class ExerciseRunDialogImp : public ExerciseRunDialog, AudioPlayerWrapperClient
 	void HideComplete();
 	void PlayQuestion();
 	void Init();
-
+	QuizRunQuestion* FindSelectedQuizRunQuestion(long questionId);
 
 	protected:
 		// Handlers for ExerciseRunDialog events.
