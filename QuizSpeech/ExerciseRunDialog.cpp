@@ -68,12 +68,11 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	txtQuestion = new wxTextCtrl( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtQuestion->Enable( false );
-	txtQuestion->Hide();
 	
 	szQuestion->Add( txtQuestion, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	szEntries->Add( szQuestion, 1, wxEXPAND, 5 );
+	szEntries->Add( szQuestion, 0, wxEXPAND, 5 );
 	
 	szAnswer = new wxBoxSizer( wxVERTICAL );
 	
@@ -101,40 +100,62 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	txtAnswer = new wxTextCtrl( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtAnswer->Enable( false );
-	txtAnswer->Hide();
 	
 	szAnswer->Add( txtAnswer, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	szEntries->Add( szAnswer, 0, wxALL|wxEXPAND, 5 );
 	
-	szEvaluate = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizer24;
+	bSizer24 = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* szEvaluateTool;
-	szEvaluateTool = new wxBoxSizer( wxHORIZONTAL );
+	wxStaticBoxSizer* sbSizer1;
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( pnlEntries, wxID_ANY, wxT("Evaluation") ), wxVERTICAL );
 	
-	m_staticText6 = new wxStaticText( pnlEntries, wxID_ANY, wxT("Evaluate"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->Wrap( -1 );
-	szEvaluateTool->Add( m_staticText6, 0, wxALIGN_CENTER|wxALL, 5 );
+	wxBoxSizer* szCorrectAnswer;
+	szCorrectAnswer = new wxBoxSizer( wxVERTICAL );
 	
-	pnlCorrectAnswerPlayer = new wxPanel( pnlEntries, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer25;
+	bSizer25 = new wxBoxSizer( wxHORIZONTAL );
+	
+	lblCorrectAnswer = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Correct Answer"), wxDefaultPosition, wxDefaultSize, 0 );
+	lblCorrectAnswer->Wrap( -1 );
+	bSizer25->Add( lblCorrectAnswer, 0, wxALL, 5 );
+	
+	pnlCorrectAnswerPlayer = new wxPanel( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	szCorrectAnswerPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
 	
 	pnlCorrectAnswerPlayer->SetSizer( szCorrectAnswerPlayer );
 	pnlCorrectAnswerPlayer->Layout();
 	szCorrectAnswerPlayer->Fit( pnlCorrectAnswerPlayer );
-	szEvaluateTool->Add( pnlCorrectAnswerPlayer, 1, wxEXPAND | wxALL, 5 );
+	bSizer25->Add( pnlCorrectAnswerPlayer, 1, wxEXPAND | wxALL, 5 );
+	
+	
+	szCorrectAnswer->Add( bSizer25, 1, wxEXPAND, 5 );
+	
+	txtCorrectAnswer = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	txtCorrectAnswer->Enable( false );
+	
+	szCorrectAnswer->Add( txtCorrectAnswer, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	sbSizer1->Add( szCorrectAnswer, 1, wxEXPAND, 5 );
+	
+	szEvaluate = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* szEvaluateTool;
+	szEvaluateTool = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxString rdoEvaluationChoices[] = { wxT("Correct"), wxT("Incorrect") };
 	int rdoEvaluationNChoices = sizeof( rdoEvaluationChoices ) / sizeof( wxString );
-	rdoEvaluation = new wxRadioBox( pnlEntries, wxID_ANY, wxT("Evaluate"), wxDefaultPosition, wxDefaultSize, rdoEvaluationNChoices, rdoEvaluationChoices, 1, wxRA_SPECIFY_COLS );
+	rdoEvaluation = new wxRadioBox( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Evaluate"), wxDefaultPosition, wxDefaultSize, rdoEvaluationNChoices, rdoEvaluationChoices, 1, wxRA_SPECIFY_COLS );
 	rdoEvaluation->SetSelection( 0 );
 	rdoEvaluation->Enable( false );
 	
 	szEvaluateTool->Add( rdoEvaluation, 0, wxALIGN_CENTER|wxALL, 5 );
 	
-	btnNext = new wxButton( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
+	btnNext = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnNext->Enable( false );
 	
 	szEvaluateTool->Add( btnNext, 0, wxALIGN_CENTER, 5 );
@@ -142,14 +163,14 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	szEvaluate->Add( szEvaluateTool, 0, wxEXPAND, 5 );
 	
-	txtCorrectAnswer = new wxTextCtrl( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	txtCorrectAnswer->Enable( false );
-	txtCorrectAnswer->Hide();
 	
-	szEvaluate->Add( txtCorrectAnswer, 1, wxALL|wxEXPAND, 5 );
+	sbSizer1->Add( szEvaluate, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	szEntries->Add( szEvaluate, 0, wxALL|wxEXPAND, 5 );
+	bSizer24->Add( sbSizer1, 1, wxEXPAND, 5 );
+	
+	
+	szEntries->Add( bSizer24, 1, wxEXPAND, 5 );
 	
 	
 	pnlEntries->SetSizer( szEntries );

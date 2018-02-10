@@ -31,7 +31,11 @@ AudioPlayerPanelImp::~AudioPlayerPanelImp()
 
 void AudioPlayerPanelImp::PlayOnButtonClick(wxCommandEvent& event)
 { 
+	Play();
+}
 
+void AudioPlayerPanelImp::Play()
+{
 	if (player->GetPlayState() == AudioPlayer::AudioState::loaded)
 	{
 		player->Play();

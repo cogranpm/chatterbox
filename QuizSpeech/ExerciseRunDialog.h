@@ -21,6 +21,7 @@
 #include <wx/button.h>
 #include <wx/textctrl.h>
 #include <wx/radiobox.h>
+#include <wx/statbox.h>
 #include <wx/simplebook.h>
 #include <wx/dataview.h>
 #include <wx/splitter.h>
@@ -58,13 +59,13 @@ class ExerciseRunDialog : public wxDialog
 		wxPanel* pnlAnswerPlayer;
 		wxBoxSizer* szAnswerPlayer;
 		wxTextCtrl* txtAnswer;
-		wxBoxSizer* szEvaluate;
-		wxStaticText* m_staticText6;
+		wxStaticText* lblCorrectAnswer;
 		wxPanel* pnlCorrectAnswerPlayer;
 		wxBoxSizer* szCorrectAnswerPlayer;
+		wxTextCtrl* txtCorrectAnswer;
+		wxBoxSizer* szEvaluate;
 		wxRadioBox* rdoEvaluation;
 		wxButton* btnNext;
-		wxTextCtrl* txtCorrectAnswer;
 		wxPanel* pnlComplete;
 		wxBoxSizer* szComplete;
 		wxStaticText* lblFinished;

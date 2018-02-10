@@ -77,10 +77,12 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 		currentQuestion->SetAnswerText(txtAnswer->GetValue().ToStdWstring());
 		rdoEvaluation->Enable();
 		btnNext->Enable();
-		playerPanelAnswer->Show(true);
-		playerPanelCorrectAnswer->Show(true);
+		//playerPanelAnswer->Show(true);
+		playerPanelAnswer->Enable(true);
+		playerPanelCorrectAnswer->Enable(true);
 		playerAnswer.SetURL(currentQuestion->GetAnswerFile());
 		playerCorrectAnswer.SetURL(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile());
+		txtCorrectAnswer->SetValue(currentQuestion->GetQuestion().GetAnswer()->GetAnswerText());
 	}
 }
 
@@ -205,7 +207,8 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 void ExerciseRunDialogImp::PlayQuestion()
 {
 	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
-	playerQuestion.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
+	playerQuestion.SetURLAsync(currentQuestion->GetQuestion().GetQuestionFile());
+	//playerQuestion.Play();
 //	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
 //	questionPlayer.Play();
 }
@@ -258,8 +261,9 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 	{
 		/* reviewing */
 		btnRecord->Disable();
-		playerPanelAnswer->Show(true);
-		playerPanelCorrectAnswer->Show(true);
+		//playerPanelAnswer->Show(true);
+		playerPanelAnswer->Enable(true);
+		playerPanelCorrectAnswer->Enable(true);
 		btnNext->Enable();
 		if (question.GetIsCorrect())
 		{
@@ -274,11 +278,9 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 	else
 	{
 		btnRecord->Enable();
-		//btnPlayAnswer->Disable();
-		//btnPlayCorrectAnswer->Disable();
-
-		playerPanelAnswer->Show(false);
-		playerPanelCorrectAnswer->Show(false);
+		//playerPanelAnswer->Show(false);
+		playerPanelAnswer->Disable();
+		playerPanelCorrectAnswer->Disable();
 		btnNext->Disable();
 		rdoEvaluation->Select(0);
 	}

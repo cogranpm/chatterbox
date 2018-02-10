@@ -33,7 +33,7 @@ protected:
 		AudioPlayerPanelImp( wxWindow* parent, AudioPlayer* player);
 		~AudioPlayerPanelImp();
 	//// end generated class members
-
+		void Play();
 
 	
 };
