@@ -23,13 +23,13 @@ struct findQuizRunQuestionByQuestionId
 
 ExerciseRunDialogImp::ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId)
 :
-ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(this, std::wstring(L""), playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
+ExerciseRunDialog( parent ), viewModel(quizId), questionPlayer(playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
 	Init();
 }
 
 ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader) :
-	ExerciseRunDialog(parent), viewModel(quizRunHeader), questionPlayer(this, std::wstring(L""), playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
+	ExerciseRunDialog(parent), viewModel(quizRunHeader), questionPlayer(playPanel, this), answerPlayer(this, std::wstring(L"")), correctAnswerPlayer(this, std::wstring(L""))
 {
 	Init();
 }
@@ -63,6 +63,7 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 
 void ExerciseRunDialogImp::AudioPlayOnButtonClick(wxCommandEvent& event)
 {
+	/* get rid of this handler */
 	/* play the question audio */
 	PlayQuestion();
 }
@@ -193,7 +194,7 @@ void ExerciseRunDialogImp::PlayQuestion()
 {
 	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
-	questionPlayer.Play();
+//	questionPlayer.Play();
 }
 
 void ExerciseRunDialogImp::RenderQuestions()

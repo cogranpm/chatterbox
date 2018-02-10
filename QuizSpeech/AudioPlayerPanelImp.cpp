@@ -59,7 +59,7 @@ void AudioPlayerPanelImp::OnAudioURL()
 	//int minute;
 	//int Seconds_To_Convert = player->GetDuration();
 	//::Convert(Seconds_To_Convert, hour, minute, seconds);
-	wformat formattedDuration = wformat(L"%f seconds");
+	wformat formattedDuration = wformat(L"%.2f seconds");
 	double duration = player->GetDuration();
 	int milliSecondsDuration = duration * ::ONE_MSEC;
 	this->m_gauge2->SetRange(milliSecondsDuration);

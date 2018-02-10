@@ -1,7 +1,11 @@
+/* a self contained class that plays audio and shows 
+a panel of user controls for the user to control playback
+client must provide the panel in which to draw the controls 
+so as to avoid sizing issues
+*/
 #pragma once
-#include "AudioPlayer.h"
+
 #include "stdafx.h"
-#include "AudioPlayerWrapperClient.h"
 #include "AudioPlayerPanelTimer.h"
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -16,28 +20,31 @@
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/event.h>
+#include "AudioPlayer.h"
 
-class NoteAudioPlayer;
 
-class AudioPlayerWrapper : public wxEvtHandler
+class AudioPlayerPanelHelper : public wxEvtHandler
 {
-	AudioPlayerWrapperClient* callingInstance;
-	std::wstring url;
 	AudioPlayer audioPlayer;
-	std::queue<std::wstring> audiofiles;
 	boost::signals2::connection onUrlConnection;
 	boost::signals2::connection onAudioEndConnection;
 	boost::signals2::connection onClearUrlConnection;
 	void OnAudioURL();
 	void OnAudioEnd();
 	void OnClearURL();
-
-public:
-	AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url);
-	~AudioPlayerWrapper();
+	wxWindow* parent;
+	wxPanel* targetPanel;
+	AudioPlayerPanelTimer timer;
+	wxGauge* m_gauge2;
+	wxStaticText* txtDuration;
+	wxButton* btnPlay;
+	void PlayOnButtonClick(wxCommandEvent& event);
 	void Play();
-	void Stop();
+public:
+	AudioPlayerPanelHelper(wxPanel* targetPanel, wxWindow* parent);
+	~AudioPlayerPanelHelper();
 	AudioPlayer& GetAudioPlayer() { return audioPlayer; }
 	void SetURL(std::wstring url);
+	void RenderPanel();
 };
 

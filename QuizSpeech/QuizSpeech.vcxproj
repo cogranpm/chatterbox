@@ -157,6 +157,7 @@ COPY "$(ProjectDir)rules.xml" "$(TargetDir)" /Y</Command>
     <ClCompile Include="ApplicationImages.cpp" />
     <ClCompile Include="AudioPlayer.cpp" />
     <ClCompile Include="AudioPlayerPanel.cpp" />
+    <ClCompile Include="AudioPlayerPanelHelper.cpp" />
     <ClCompile Include="AudioPlayerPanelImp.cpp" />
     <ClCompile Include="AudioPlayerPanelTimer.cpp" />
     <ClCompile Include="AudioPlayerWrapper.cpp" />
@@ -241,6 +242,7 @@ COPY "$(ProjectDir)rules.xml" "$(TargetDir)" /Y</Command>
     <ClInclude Include="ApplicationImages.h" />
     <ClInclude Include="AudioPlayer.h" />
     <ClInclude Include="AudioPlayerPanel.h" />
+    <ClInclude Include="AudioPlayerPanelHelper.h" />
     <ClInclude Include="AudioPlayerPanelImp.h" />
     <ClInclude Include="AudioPlayerPanelTimer.h" />
     <ClInclude Include="AudioPlayerWrapper.h" />
