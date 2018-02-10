@@ -623,7 +623,9 @@ void PublicationPanelImp::RunQuizOnButtonClick(wxCommandEvent& event)
 {
 	ExerciseRunDialogImp runDialog(this, _viewModel->GetExercise()->GetQuizId());
 	runDialog.ShowModal();
-
+	this->_viewModel->GetQuizRunHeaderList()->clear();
+	wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
+	this->RenderQuizRuns();
 }
 
 void PublicationPanelImp::RunQuizOnUpdateUI(wxUpdateUIEvent& event)
@@ -644,8 +646,10 @@ void PublicationPanelImp::Refresh()
 	this->_viewModel->GetQuizList()->clear();
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
 	this->RenderExercises(nullptr);
-	wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
-	this->RenderQuizRuns();
+
+	//this->_viewModel->GetQuizRunHeaderList()->clear();
+	//wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
+	//this->RenderQuizRuns();
 }
 
 

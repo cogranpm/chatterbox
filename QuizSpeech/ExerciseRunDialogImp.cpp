@@ -255,6 +255,7 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 		{
 			rdoEvaluation->Select(1);
 		}
+		rdoEvaluation->Disable();
 	}
 	else
 	{
@@ -318,11 +319,13 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		RenderQuestions();
 		lstQuestions->SelectRow(viewModel.GetCurrentQuestionIndex() - 1);
 		SetQuestion(*viewModel.GetCurrentQuestion());
-		PlayQuestion();
+		if (!viewModel.GetCurrentQuestion()->GetIsAnswered())
+		{
+			PlayQuestion();
+		}
 	}
 	else
 	{
-		
 		RenderComplete();
 	}
 }

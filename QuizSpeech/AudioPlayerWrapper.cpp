@@ -2,7 +2,7 @@
 #include "NoteAudioPlayer.h"
 #include <wx/sizer.h>
 #include "MyApp.h"
-
+using boost::wformat;
 
 AudioPlayerWrapper::AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance, std::wstring& url) :
 	AudioPlayerWrapper(callingInstance, url, nullptr, nullptr)
@@ -20,6 +20,18 @@ AudioPlayerWrapper::AudioPlayerWrapper(AudioPlayerWrapperClient* callingInstance
 
 AudioPlayerWrapper::~AudioPlayerWrapper()
 {
+	if (onUrlConnection.connected())
+	{
+		onUrlConnection.disconnect();
+	}
+	if (onAudioEndConnection.connected())
+	{
+		onAudioEndConnection.disconnect();
+	}
+	if (onClearUrlConnection.connected())
+	{
+		onClearUrlConnection.disconnect();
+	}
 }
 
 void AudioPlayerWrapper::SetURL(std::wstring url)
@@ -27,7 +39,7 @@ void AudioPlayerWrapper::SetURL(std::wstring url)
 	this->url = url;
 	if (btnPlay != nullptr)
 	{
-		this->btnPlay->Enable();
+		audioPlayer.SetURL(url);
 	}
 }
 
@@ -37,8 +49,6 @@ void AudioPlayerWrapper::RenderPanel()
 	{
 		return;
 	}
-
-	
 
 	btnPlay = new wxButton(targetPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(20, 20), 0);
 	btnPlay->Enable(false);
@@ -73,30 +83,38 @@ void AudioPlayerWrapper::PlayOnButtonClick(wxCommandEvent& event)
 { 
 //	audioPlayer.SetURLAsync(url);
 
-	if (audioPlayer.GetPlayState() == AudioPlayer::AudioState::loaded)
-	{
-		audioPlayer.Play();
-		this->btnPlay->SetBitmap(*wxGetApp().GetImages().pause_icon);
-		timer.Start(AudioPlayerPanelTimer::INTERVAL);
-	}
-	else if (audioPlayer.GetPlayState() == AudioPlayer::AudioState::playing)
-	{
-		this->audioPlayer.Pause();
-		timer.Stop();
-		btnPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
-	}
-	else if (audioPlayer.GetPlayState() == AudioPlayer::AudioState::paused)
-	{
-		audioPlayer.Resume();
-		btnPlay->SetBitmap(*wxGetApp().GetImages().pause_icon);
-		timer.Start();
-	}
+	Play();
 }
 
 void AudioPlayerWrapper::Play()
 {
 	//audioPlayer.SetURL(url);
-	audioPlayer.SetURLAsync(url);
+	if (btnPlay != nullptr)
+	{
+		if (audioPlayer.GetPlayState() == AudioPlayer::AudioState::loaded)
+		{
+			audioPlayer.Play();
+			this->btnPlay->SetBitmap(*wxGetApp().GetImages().pause_icon);
+			timer.Start(AudioPlayerPanelTimer::INTERVAL);
+		}
+		else if (audioPlayer.GetPlayState() == AudioPlayer::AudioState::playing)
+		{
+			this->audioPlayer.Pause();
+			timer.Stop();
+			btnPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
+		}
+		else if (audioPlayer.GetPlayState() == AudioPlayer::AudioState::paused)
+		{
+			audioPlayer.Resume();
+			btnPlay->SetBitmap(*wxGetApp().GetImages().pause_icon);
+			timer.Start();
+		}
+	}
+	else
+	{
+		audioPlayer.SetURLAsync(url);
+	}
+	
 }
 
 void AudioPlayerWrapper::Stop()
@@ -107,12 +125,38 @@ void AudioPlayerWrapper::Stop()
 
 void AudioPlayerWrapper::OnAudioURL()
 {
-	audioPlayer.Play();
+	if (btnPlay != nullptr)
+	{
+		wformat formattedDuration = wformat(L"%f seconds");
+		double duration = audioPlayer.GetDuration();
+		int milliSecondsDuration = duration * ::ONE_MSEC;
+		this->m_gauge2->SetRange(milliSecondsDuration);
+		std::wstring durationDisplay((formattedDuration % duration).str());
+		this->txtDuration->SetLabel(durationDisplay);
+		this->btnPlay->Enable();
+	}
+	else
+	{
+		audioPlayer.Play();
+	}
 }
 
 void AudioPlayerWrapper::OnAudioEnd()
 {
-	callingInstance->PlayCompleted();
+	if (btnPlay != nullptr)
+	{
+		this->m_gauge2->SetValue(0);
+		timer.Stop();
+		if (audioPlayer.GetPlayState() == AudioPlayer::AudioState::loaded)
+		{
+			this->btnPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
+		}
+	}
+	else
+	{
+		callingInstance->PlayCompleted();
+	}
+	
 }
 
 
