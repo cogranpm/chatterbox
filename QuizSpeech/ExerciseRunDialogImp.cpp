@@ -274,10 +274,14 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 			rdoEvaluation->Select(1);
 		}
 		rdoEvaluation->Disable();
+		txtAnswer->SetValue(question.GetAnswerText());
+		txtCorrectAnswer->SetValue(question.GetQuestion().GetAnswer()->GetAnswerText());
 	}
 	else
 	{
 		btnRecord->Enable();
+		txtAnswer->SetValue(L"");
+		txtCorrectAnswer->SetValue(L"");
 		//playerPanelAnswer->Show(false);
 		playerPanelAnswer->Disable();
 		playerPanelCorrectAnswer->Disable();

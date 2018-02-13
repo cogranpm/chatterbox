@@ -63,12 +63,31 @@ bool MyApp::OnInit()
 		//initialize the database provider
 		dataProvider = std::make_unique<SqliteProvider>();
 
-		wxString databaseName = wxGetCwd() + "/" + MyApp::DATABASE_FILE_NAME;
+		wxString databaseName;
+#ifdef _DEBUG
+		databaseName = wxGetCwd() + "/" + MyApp::DATABASE_FILE_NAME;
+#endif // _DEBUG
+
+#ifndef _DEBUG
+		databaseName = wxGetApp().GetUserDataDirectory() + "/" + MyApp::DATABASE_FILE_NAME;
+#endif // !_DEBUG
+
+
 		this->dataProvider->initDB(databaseName);
 		
 		//set up the current path in the FileHandler instance.
 		//note currentPath is set when MakeDirectory is called
-		std::wstring userDir = wxGetApp().GetUserDataDirectory();
+		std::wstring userDir;
+#ifdef _DEBUG
+		userDir = wxGetCwd();
+#endif // _DEBUG
+
+#ifndef _DEBUG
+		userDir = wxGetApp().GetUserDataDirectory();
+#endif // !_DEBUG
+
+		
+		
 		wxGetApp().GetFileHandler().SetCurrentPath(userDir);
 		//pass empty folder and it will make the current directory
 		wxGetApp().GetFileHandler().MakeDirectory(std::wstring(L""));
