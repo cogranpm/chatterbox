@@ -28,12 +28,14 @@ public:
 
 	bool FileExists(const std::wstring& path);
 	bool FileExists(const std::string& path);
-	
+	std::wstring& GetAudioPath() { return audioPath; }
+	void SetAudioPath(const std::wstring& path) { audioPath = path; }
 protected:
 
 
 private:
 	boost::filesystem::path m_currentPath;
+	std::wstring audioPath;
 };
 
 #endif GTKMM_TEST001_FILEHANDLER_H__

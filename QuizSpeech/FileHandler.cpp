@@ -7,11 +7,11 @@ using namespace boost::posix_time;
 using namespace boost::filesystem;
 
 
-FileHandler::FileHandler(void)
+FileHandler::FileHandler(void) : audioPath()
 {
 }
 
-FileHandler::FileHandler(const std::wstring& initialPath) : m_currentPath(initialPath)
+FileHandler::FileHandler(const std::wstring& initialPath) : m_currentPath(initialPath), audioPath()
 {
 	
 }

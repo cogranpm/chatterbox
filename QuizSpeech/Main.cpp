@@ -94,6 +94,7 @@ bool MyApp::OnInit()
 		std::wstring audioDirectory = userDir + L"\\Audio\\";
 		wxGetApp().GetFileHandler().MakeDirectory(L"Audio");
 		wxGetApp().GetFileHandler().SetCurrentPath(audioDirectory);
+		wxGetApp().GetFileHandler().SetAudioPath(audioDirectory);
 
 		//sp.setStopWord(L"orange");
 		sp.InitSpeech();
