@@ -30,6 +30,8 @@ public:
 	bool FileExists(const std::string& path);
 	std::wstring& GetAudioPath() { return audioPath; }
 	void SetAudioPath(const std::wstring& path) { audioPath = path; }
+	std::wstring GetFullAudioPathToFile(const std::wstring& fileName);
+	std::wstring GetNewAudioFileName();
 protected:
 
 

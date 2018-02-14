@@ -103,7 +103,7 @@ void DictationOverlayDialogImp::StopOnButtonClick( wxCommandEvent& event )
 		{
 			wxGetApp().GetFileHandler().DeleteFile(fileName);
 		}
-		fileName = wxGetApp().GetFileHandler().GetCurrentPath() + wxGetApp().GetFileHandler().GetFileNameByTime(L"wav");
+		fileName = wxGetApp().GetFileHandler().GetFullAudioPathToFile(wxGetApp().GetFileHandler().GetNewAudioFileName());
 		wxGetApp().GetSpeechListener().StartDictation(fileName);
 	}
 }

@@ -295,3 +295,15 @@ bool FileHandler::FileExists(const std::string& path)
 	return exists(filePath);
 
 }
+
+std::wstring FileHandler::GetFullAudioPathToFile(const std::wstring& fileName)
+{
+	std::wstring fullPath(GetAudioPath());
+	fullPath = fullPath + fileName;
+	return fullPath;
+}
+
+std::wstring FileHandler::GetNewAudioFileName()
+{
+	return GetFileNameByTime(L"wav");
+}
