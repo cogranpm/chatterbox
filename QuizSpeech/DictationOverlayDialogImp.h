@@ -25,6 +25,7 @@ class DictationOverlayDialogImp : public OverlayDialog
 	DictationOverlayUpdateTimer timer;
 	DictationOverlayDialogHypothesisTimer hypothesisTimer;
 	std::wstring fileName;
+	std::wstring fullAudioPath;
 	std::wstring recognizedText;
 	//AudioPlayer* audioPlayer;
 	AudioPlayer player;
@@ -38,7 +39,8 @@ class DictationOverlayDialogImp : public OverlayDialog
 	void OnHypothesisRecognized(const std::wstring& text);
 	void OnSoundStart();
 	void OnSoundEnd();
-	
+	std::wstring& GetFullAudioPath() { return fullAudioPath; }
+	void SetFileName(std::wstring& newFileName);
 
 	protected:
 		// Handlers for OverlayDialog events.

@@ -19,18 +19,18 @@ class DictationOverlayClientHelper
 public:
 	DictationOverlayClientHelper();
 	~DictationOverlayClientHelper();
-	static const int ShowDictationDialog(const std::wstring& audioFilePath,
+	static const int ShowDictationDialog(const std::wstring& audioFileName,
 		wxWindow* parent,
 		wxTextCtrl* txtBox,
 		AudioPlayer* player,
 		std::wstring* filePathBuffer);
 
-	static const int ShowDictationDialog(const std::wstring& audioFilePath,
+	static const int ShowDictationDialog(const std::wstring& audioFileName,
 		wxWindow* parent,
 		std::wstring* textBuffer,
 		AudioPlayer* player,
 		std::wstring* filePathBuffer);
 
-	static const void ClearAudio(const std::wstring& audioFilePath, wxWindow* parent, wxTextCtrl* txtBox, AudioPlayer* player);
+	static const void ClearAudio(const std::wstring& audioFileName, wxWindow* parent, wxTextCtrl* txtBox, AudioPlayer* player);
 };
 

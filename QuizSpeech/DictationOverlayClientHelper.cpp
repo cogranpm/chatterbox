@@ -16,7 +16,7 @@ DictationOverlayClientHelper::~DictationOverlayClientHelper()
 
 
 const int DictationOverlayClientHelper::ShowDictationDialog(
-	const std::wstring& audioFilePath,
+	const std::wstring& audioFileName,
 	wxWindow* parent,
 	std::wstring* textBuffer,
 	AudioPlayer* player,
@@ -27,7 +27,7 @@ const int DictationOverlayClientHelper::ShowDictationDialog(
 	try
 	{
 		//show a warning before recording over what is currently saved????
-		if (!audioFilePath.empty())
+		if (!audioFileName.empty())
 		{
 			SpeechMessageDialog confirmDlg(parent, L"You will overwrite current audio, continue?", L"Confirm", wxOK | wxCANCEL | wxCENTRE, wxDefaultPosition);
 			if (confirmDlg.ShowModal() != wxID_OK)
@@ -37,7 +37,7 @@ const int DictationOverlayClientHelper::ShowDictationDialog(
 		}
 
 		bool fileNameChanged = false;
-		*filePathBuffer = wxGetApp().GetFileHandler().GetCurrentPath() + wxGetApp().GetFileHandler().GetFileNameByTime(L"wav");
+		*filePathBuffer = wxGetApp().GetFileHandler().GetNewAudioFileName();
 
 		/* show an overlay when dictating so the user can totally focus on speaking */
 		{
@@ -57,9 +57,10 @@ const int DictationOverlayClientHelper::ShowDictationDialog(
 					textBuffer->assign(recognizedText);
 				}
 				/* if player currently has a valid audio file, delete it before applying the new */
-				if (wxGetApp().GetFileHandler().FileExists(audioFilePath))
+				std::wstring fullAudioPath = wxGetApp().GetFileHandler().GetFullAudioPathToFile(*filePathBuffer);
+				if (wxGetApp().GetFileHandler().FileExists(fullAudioPath))
 				{
-					wxGetApp().GetFileHandler().DeleteFile(audioFilePath);
+					wxGetApp().GetFileHandler().DeleteFile(fullAudioPath);
 				}
 				//this->_viewModel->GetNote()->SetTitleAudioFile(fileName);
 				fileNameChanged = true;
@@ -79,32 +80,32 @@ const int DictationOverlayClientHelper::ShowDictationDialog(
 
 }
 
-const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& audioFilePath,
+const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& audioFileName,
 	wxWindow* parent,
 	std::wstring* textBuffer,
 	AudioPlayer* player,
 	std::wstring* filePathBuffer)
 {
-	return DictationOverlayClientHelper::ShowDictationDialog(audioFilePath, parent, textBuffer, player, filePathBuffer, nullptr);
+	return DictationOverlayClientHelper::ShowDictationDialog(audioFileName, parent, textBuffer, player, filePathBuffer, nullptr);
 }
 
-const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& audioFilePath,
+const int DictationOverlayClientHelper::ShowDictationDialog(const std::wstring& audioFileName,
 	wxWindow* parent,
 	wxTextCtrl* txtBox,
 	AudioPlayer* player,
 	std::wstring* filePathBuffer
 	)
 {
-	return DictationOverlayClientHelper::ShowDictationDialog(audioFilePath, parent, nullptr, player, filePathBuffer, txtBox);
+	return DictationOverlayClientHelper::ShowDictationDialog(audioFileName, parent, nullptr, player, filePathBuffer, txtBox);
 }
 
 
-const void DictationOverlayClientHelper::ClearAudio(const std::wstring& audioFilePath, wxWindow* parent, wxTextCtrl* txtBox, AudioPlayer* player)
+const void DictationOverlayClientHelper::ClearAudio(const std::wstring& audioFileName, wxWindow* parent, wxTextCtrl* txtBox, AudioPlayer* player)
 {
 	txtBox->Clear();
-	if (wxGetApp().GetFileHandler().FileExists(audioFilePath))
+	if (wxGetApp().GetFileHandler().FileExists(audioFileName))
 	{
-		wxGetApp().GetFileHandler().DeleteFile(audioFilePath);
+		wxGetApp().GetFileHandler().DeleteFile(audioFileName);
 	}
 	player->Clear();
 }

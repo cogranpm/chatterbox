@@ -19,7 +19,7 @@ DictationOverlayDialogImp::DictationOverlayDialogImp(wxWindow* parent, const std
 	:
 	OverlayDialog(parent), fileName(fileName), recognitionReceived(false), recordingState(RecordingState::recording)
 {
-	
+	fullAudioPath = wxGetApp().GetFileHandler().GetFullAudioPathToFile(fileName);
 }
 
 DictationOverlayDialogImp::~DictationOverlayDialogImp()
@@ -56,7 +56,7 @@ void DictationOverlayDialogImp::OnInitDialog(wxInitDialogEvent& event)
 	this->hypothesisReceivedConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onHypothesisRecognized(boost::bind(&DictationOverlayDialogImp::OnHypothesisRecognized, this, _1));
 	this->soundStartConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onSoundStart(boost::bind(&DictationOverlayDialogImp::OnSoundStart, this));
 	this->soundEndConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onSoundStart(boost::bind(&DictationOverlayDialogImp::OnSoundEnd, this));
-	wxGetApp().GetSpeechListener().StartDictation(fileName);
+	wxGetApp().GetSpeechListener().StartDictation(fullAudioPath);
 }
 
 void DictationOverlayDialogImp::OnSpeechRecognized(const std::wstring& text)
@@ -86,12 +86,13 @@ void DictationOverlayDialogImp::OnSoundEnd()
 
 void DictationOverlayDialogImp::StopOnButtonClick( wxCommandEvent& event )
 {
+	
 	if (recordingState == RecordingState::recording)
 	{
 		recordingState = RecordingState::recorded;
 		wxGetApp().GetSpeechListener().StopDictation();
 		this->btnStop->SetBitmap(*wxGetApp().GetImages().record_icon);
-		player.SetURL(fileName);
+		player.SetURL(fullAudioPath);
 	}
 	else
 	{
@@ -99,12 +100,12 @@ void DictationOverlayDialogImp::StopOnButtonClick( wxCommandEvent& event )
 		this->txtPhrase->Clear();
 		recordingState = RecordingState::recording;
 		this->btnStop->SetBitmap(*wxGetApp().GetImages().stop_icon);
-		if (wxGetApp().GetFileHandler().FileExists(fileName))
+		if (wxGetApp().GetFileHandler().FileExists(fullAudioPath))
 		{
-			wxGetApp().GetFileHandler().DeleteFile(fileName);
+			wxGetApp().GetFileHandler().DeleteFile(fullAudioPath);
 		}
-		fileName = wxGetApp().GetFileHandler().GetFullAudioPathToFile(wxGetApp().GetFileHandler().GetNewAudioFileName());
-		wxGetApp().GetSpeechListener().StartDictation(fileName);
+		SetFileName(wxGetApp().GetFileHandler().GetNewAudioFileName());
+		wxGetApp().GetSpeechListener().StartDictation(fullAudioPath);
 	}
 }
 
@@ -127,4 +128,10 @@ void DictationOverlayDialogImp::OnCancelButtonClick(wxCommandEvent& event)
 void DictationOverlayDialogImp::GetRecognizedText(std::wstring& buffer)
 {
 	buffer = std::wstring(txtPhrase->GetValue());
+}
+
+void DictationOverlayDialogImp::SetFileName(std::wstring& newFileName)
+{ 
+	fileName = newFileName; 
+	fullAudioPath = wxGetApp().GetFileHandler().GetFullAudioPathToFile(fileName);
 }
