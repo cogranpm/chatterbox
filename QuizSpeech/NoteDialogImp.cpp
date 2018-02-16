@@ -317,11 +317,11 @@ void NoteDialogImp::RenderNote(void)
 
 	if (!viewModel.GetNote()->GetTitleAudioFile().empty())
 	{
-		titlePlayer.SetURL(viewModel.GetNote()->GetTitleAudioFile());
+		titlePlayer.SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(viewModel.GetNote()->GetTitleAudioFile()));
 	}
 	if (!viewModel.GetNote()->GetDescriptionAudioFile().empty())
 	{
-		player.SetURL(viewModel.GetNote()->GetDescriptionAudioFile());
+		player.SetURL( wxGetApp().GetFileHandler().GetFullAudioPathToFile(viewModel.GetNote()->GetDescriptionAudioFile()));
 	}
 
 
