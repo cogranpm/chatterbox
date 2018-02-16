@@ -57,19 +57,18 @@ const int DictationOverlayClientHelper::ShowDictationDialog(
 					textBuffer->assign(recognizedText);
 				}
 				/* if player currently has a valid audio file, delete it before applying the new */
-				std::wstring fullAudioPath = wxGetApp().GetFileHandler().GetFullAudioPathToFile(*filePathBuffer);
+				std::wstring fullAudioPath = wxGetApp().GetFileHandler().GetFullAudioPathToFile(audioFileName);
 				if (wxGetApp().GetFileHandler().FileExists(fullAudioPath))
 				{
 					wxGetApp().GetFileHandler().DeleteFile(fullAudioPath);
 				}
-				//this->_viewModel->GetNote()->SetTitleAudioFile(fileName);
 				fileNameChanged = true;
 			}
 		}
 		if (fileNameChanged && (player != nullptr))
 		{
 			//set this outside of dialog scope
-			player->SetURL(*filePathBuffer);
+			player->SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(*filePathBuffer));
 		}
 	}
 	catch (std::exception& e)

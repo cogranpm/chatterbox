@@ -173,11 +173,11 @@ void ExercisePanelImp::RenderCurrentQuestion()
 	EnableQuestion();
 	if (!viewModel.GetCurrentQuestion()->GetQuestionFile().empty())
 	{
-		playerQuestion.SetURL(viewModel.GetCurrentQuestion()->GetQuestionFile());
+		playerQuestion.SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(viewModel.GetCurrentQuestion()->GetQuestionFile()));
 	}
 	if (!viewModel.GetCurrentQuestion()->GetAnswer()->GetAnswerFile().empty())
 	{
-		playerAnswer.SetURL(viewModel.GetCurrentQuestion()->GetAnswer()->GetAnswerFile());
+		playerAnswer.SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(viewModel.GetCurrentQuestion()->GetAnswer()->GetAnswerFile()));
 	}
 
 	/* puts the values in the storage variables for question gui fields */
