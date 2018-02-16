@@ -1,4 +1,7 @@
 #include "SqlIteQuizProvider.h"
+#include "MyApp.h"
+#include <wx/app.h> 
+#include <wx/log.h> 
 
 
 
@@ -79,6 +82,14 @@ void SqlIteQuizProvider::Update(Quiz* entity)
 
 void SqlIteQuizProvider::Delete(Quiz* entity)
 {
+	/* make sure all the question audio files are deleted also */
+	boost::ptr_vector<Question> questionList;
+	GetQuestionsByQuiz(entity, &questionList);
+	for (int i = 0; i < questionList.size(); i++)
+	{
+		Delete(&questionList.at(i));
+	}
+
 	wxSQLite3Statement stmt = db->PrepareStatement("delete from Quiz where QuizId = ?;");
 	stmt.Bind(1, wxLongLong(entity->GetQuizId()));
 	stmt.ExecuteUpdate();
@@ -189,6 +200,14 @@ void SqlIteQuizProvider::Update(Question* entity)
 
 void SqlIteQuizProvider::Delete(Question* entity)
 {
+	if (!entity->GetQuestionFile().empty())
+	{
+		if (wxGetApp().GetFileHandler().FileExists(wxGetApp().GetFileHandler().GetFullAudioPathToFile(entity->GetQuestionFile())))
+		{
+			wxGetApp().GetFileHandler().DeleteFile(wxGetApp().GetFileHandler().GetFullAudioPathToFile(entity->GetQuestionFile()));
+		}
+	}
+
 	wxSQLite3Statement stmt = db->PrepareStatement("delete from Question where QuestionId = ?;");
 	stmt.Bind(1, wxLongLong(entity->GetQuestionId()));
 	stmt.ExecuteUpdate();
@@ -310,6 +329,13 @@ void SqlIteQuizProvider::Update(Answer* entity)
 
 void SqlIteQuizProvider::Delete(Answer* entity)
 {
+	if (!entity->GetAnswerFile().empty())
+	{
+		if (wxGetApp().GetFileHandler().FileExists(wxGetApp().GetFileHandler().GetFullAudioPathToFile(entity->GetAnswerFile())))
+		{
+			wxGetApp().GetFileHandler().DeleteFile(wxGetApp().GetFileHandler().GetFullAudioPathToFile(entity->GetAnswerFile()));
+		}
+	}
 	wxSQLite3Statement stmt = db->PrepareStatement("delete from Answer where AnswerId = ?;");
 	stmt.Bind(1, wxLongLong(entity->GetAnswerId()));
 	stmt.ExecuteUpdate();
@@ -438,6 +464,14 @@ void SqlIteQuizProvider::Update(QuizRunQuestion& entity)
 
 void SqlIteQuizProvider::Delete(QuizRunHeader& entity)
 {
+	/* make sure all the question audio files are deleted also */
+	boost::ptr_vector<QuizRunQuestion> questionList;
+	GetQuizRunQuestionsByQuiz(entity.GetQuiz().GetQuizId(), entity.GetQuizRunHeaderId(),  &questionList);
+	for (int i = 0; i < questionList.size(); i++)
+	{
+		Delete(questionList.at(i));
+	}
+
 	wxSQLite3Statement stmt = db->PrepareStatement("delete from QuizRunHeader where QuizRunHeaderId = ?;");
 	stmt.Bind(1, wxLongLong(entity.GetQuizRunHeaderId()));
 	stmt.ExecuteUpdate();
@@ -445,6 +479,14 @@ void SqlIteQuizProvider::Delete(QuizRunHeader& entity)
 
 void SqlIteQuizProvider::Delete(QuizRunQuestion& entity)
 {
+	if (!entity.GetAnswerFile().empty())
+	{
+		if (wxGetApp().GetFileHandler().FileExists(wxGetApp().GetFileHandler().GetFullAudioPathToFile(entity.GetAnswerFile())))
+		{
+			wxGetApp().GetFileHandler().DeleteFile(wxGetApp().GetFileHandler().GetFullAudioPathToFile(entity.GetAnswerFile()));
+		}
+	}
+
 	wxSQLite3Statement stmt = db->PrepareStatement("delete from QuizRunQuestion where QuizRunQuestionId = ?;");
 	stmt.Bind(1, wxLongLong(entity.GetQuizRunQuestionId()));
 	stmt.ExecuteUpdate();

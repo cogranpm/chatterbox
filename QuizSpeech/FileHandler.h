@@ -38,6 +38,7 @@ protected:
 private:
 	boost::filesystem::path m_currentPath;
 	std::wstring audioPath;
+	bool FileExists(const boost::filesystem::path& path);
 };
 
 #endif GTKMM_TEST001_FILEHANDLER_H__

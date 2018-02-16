@@ -350,12 +350,20 @@ void ExercisePanelImp::AddQuestionOnButtonClick( wxCommandEvent& event )
 
 void ExercisePanelImp::DeleteQuestionOnButtonClick( wxCommandEvent& event )
 {
-
+	viewModel.SetCurrentQuestion(nullptr);
+	wxGetApp().GetProvider()->GetQuizProvider().Delete(viewModel.GetCurrentQuestion());
 }
 
 void ExercisePanelImp::DeleteQuestionOnUpdateUI( wxUpdateUIEvent& event )
 {
-
+	if (viewModel.GetCurrentQuestion() != nullptr)
+	{
+		btnDeleteQuestion->Enable();
+	}
+	else
+	{
+		btnDeleteQuestion->Disable();
+	}
 }
 
 void ExercisePanelImp::QuestionsSelectionChanged( wxDataViewEvent& event )

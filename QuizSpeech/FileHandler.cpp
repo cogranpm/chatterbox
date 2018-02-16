@@ -285,15 +285,22 @@ void FileHandler::loadFileNamesByExtension(std::list<std::wstring>& lst, const s
 bool FileHandler::FileExists(const std::wstring& path)
 {	
 	boost::filesystem::path filePath(path);
-	return exists(filePath);
-
+	return FileExists(filePath);
 }
 
 bool FileHandler::FileExists(const std::string& path)
 {	
 	boost::filesystem::path filePath(path);
-	return exists(filePath);
+	return FileExists(filePath);
+}
 
+bool FileHandler::FileExists(const boost::filesystem::path& path)
+{
+	if (boost::filesystem::is_directory(path))
+	{
+		return false;
+	}
+	return exists(path);
 }
 
 std::wstring FileHandler::GetFullAudioPathToFile(const std::wstring& fileName)

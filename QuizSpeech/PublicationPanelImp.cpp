@@ -573,8 +573,17 @@ void PublicationPanelImp::OnSelectExercise(Quiz* quiz)
 	_viewModel->SetExercise(quiz);
 }
 
-void PublicationPanelImp::AddQuizOnUpdateUI(wxUpdateUIEvent& event) { event.Skip(); }
-void PublicationPanelImp::DeleteQuizOnButtonClick(wxCommandEvent& event) { event.Skip(); }
+void PublicationPanelImp::AddQuizOnUpdateUI(wxUpdateUIEvent& event) 
+{ 
+	event.Skip(); 
+}
+
+void PublicationPanelImp::DeleteQuizOnButtonClick(wxCommandEvent& event) 
+{ 
+	_viewModel->SetExercise(nullptr);
+	wxGetApp().GetProvider()->GetQuizProvider().Delete(_viewModel->GetExercise());
+}
+
 void PublicationPanelImp::DeleteQuizOnUpdateUI(wxUpdateUIEvent& event) 
 {
 	if (_viewModel->GetExercise() != nullptr)
@@ -712,7 +721,12 @@ void PublicationPanelImp::ViewQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 }
 void PublicationPanelImp::DeleteQuizRunOnButtonClick(wxCommandEvent& event)
 {
-
+	if (lstQuizRun->GetSelectedRow() != wxNOT_FOUND)
+	{
+		QuizRunHeader header = _viewModel->GetQuizRunHeaderList()->at(lstQuizRun->GetSelectedRow());
+		wxGetApp().GetProvider()->GetQuizProvider().Delete(header);
+		RenderQuizRuns();
+	}
 }
 void PublicationPanelImp::DeleteQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 {
@@ -729,6 +743,7 @@ void PublicationPanelImp::QuizRunOnItemActivated(wxDataViewEvent& event)
 {
 	ViewQuizRun();
 }
+
 void PublicationPanelImp::QuizRunOnSelectionChanged(wxDataViewEvent& event)
 {
 
