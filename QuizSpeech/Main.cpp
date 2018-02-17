@@ -8,6 +8,7 @@ wxIMPLEMENT_APP(MyApp);
 const size_t MyApp::HOME_PAGE_INDEX = 0;
 const std::string MyApp::DATABASE_FILE_NAME = "data.db";
 const std::wstring MyApp::RULE_FILE_NAME = L"rules.xml";
+const std::wstring MyApp::RULE_FILE_NAME_DICATIONCC = L"rulescc.xml";
 const std::wstring MyApp::RULE_FILE_MENU = L"FILE_MENU";
 const std::wstring MyApp::RULE_HOME_SCREEN = L"HOME_SCREEN";
 const std::wstring MyApp::RULE_SHELF_DIALOG = L"SHELF_DIALOG";

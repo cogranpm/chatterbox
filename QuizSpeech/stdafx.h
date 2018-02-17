@@ -58,6 +58,9 @@
 #include <memory> 
 #include <stdexcept>
 #include <queue>
+#include <algorithm>
+#include <random>
+#include <chrono>
 
 //BOOST
 #include <boost/filesystem.hpp>

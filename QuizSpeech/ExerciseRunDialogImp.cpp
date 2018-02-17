@@ -178,6 +178,11 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	{
 		wxGetApp().GetProvider()->GetQuizProvider().GetQuestionsByQuizId(viewModel.GetHeader().GetQuizId(), &viewModel.GetQuestions());
 		viewModel.CreateRunQuestions();
+		/* shuffle the questions */
+		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+		auto rng = std::default_random_engine(seed);
+
+		std::shuffle(std::begin(viewModel.GetRunQuestions()), std::end(viewModel.GetRunQuestions()), rng);
 	}
 	size_t siz = viewModel.GetQuestions().size();
 	RenderQuestions();

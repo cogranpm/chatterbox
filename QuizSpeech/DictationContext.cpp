@@ -6,6 +6,7 @@
 DictationContext::DictationContext() : 
 	context(nullptr), 
 	grammar(nullptr), 
+	ccgrammar(nullptr),
 	voice(nullptr), 
 	waveFormat(nullptr),
 	callbackInterface(new DictationCallback(this)),
@@ -29,12 +30,20 @@ DictationContext::~DictationContext()
 	if (audioStream != nullptr)
 	{
 		audioStream.Release();
+		audioStream = nullptr;
 	}
 
 	if (this->grammar != nullptr)
 	{
 		grammar->UnloadDictation();
 		grammar.Release();
+		grammar = nullptr;
+	}
+
+	if (this->ccgrammar != nullptr)
+	{
+		ccgrammar.Release();
+		ccgrammar = nullptr;
 	}
 
 	if (this->voice != nullptr)
@@ -115,6 +124,37 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 		::PrintError(L"Call to LoadDictation failed", hr);
 		throw std::runtime_error(message);
 	}
+
+	//load command and control grammar for dictation
+	this->ccgrammar.Release();
+	hr = this->context->CreateGrammar(::GID_DICTATIONCC, &this->ccgrammar);
+	if (FAILED(hr))
+	{
+		this->ccgrammar.Release();
+		const std::string message("Call to CreateGrammar failed");
+		::PrintError(L"Call to CreateGrammar failed", hr);
+		throw std::runtime_error(message);
+	}
+
+	hr = this->ccgrammar->SetGrammarState(SPGS_DISABLED);
+	if (FAILED(hr))
+	{
+		this->ccgrammar.Release();
+		const std::string message("Call to SetGrammarState failed");
+		::PrintError(L"Call to SetGrammarState failed", hr);
+		throw std::runtime_error(message);
+	}
+
+	hr = this->ccgrammar->LoadCmdFromFile(MyApp::RULE_FILE_NAME_DICATIONCC.c_str(), SPLO_STATIC);
+	if (FAILED(hr))
+	{
+		this->ccgrammar.Release();
+		const std::string message("Call to LoadCmdFromFile failed");
+		::PrintError(L"Call to LoadCmdFromFile failed", hr);
+		throw std::runtime_error(message);
+	}
+
+
 	this->Disable();
 }
 
@@ -157,6 +197,7 @@ void DictationContext::InnerEnable()
 
 	this->ChangeGrammarEnabledState(SPGS_ENABLED);
 	this->grammar->SetDictationState(SPRS_ACTIVE);
+	this->ccgrammar->SetDictationState(SPRS_ACTIVE);
 }
 
 void DictationContext::EnableDictation()
@@ -183,6 +224,7 @@ void DictationContext::Disable()
 	}
 	this->ChangeGrammarEnabledState(SPGS_DISABLED);
 	this->grammar->SetDictationState(SPRS_INACTIVE);
+	this->ccgrammar->SetDictationState(SPRS_INACTIVE);
 
 	hr = this->context->SetAudioOptions(SPAO_NONE, NULL, NULL);
 	if (FAILED(hr))
@@ -210,6 +252,15 @@ void DictationContext::ChangeGrammarEnabledState(SPGRAMMARSTATE stateFlag)
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
+		const std::string message("Call to ChangeGrammarEnabledState failed");
+		::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
+		throw std::runtime_error(message);
+	}
+
+	hr = this->ccgrammar->SetGrammarState(stateFlag);
+	if (FAILED(hr))
+	{
+		this->ccgrammar.Release();
 		const std::string message("Call to ChangeGrammarEnabledState failed");
 		::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
 		throw std::runtime_error(message);

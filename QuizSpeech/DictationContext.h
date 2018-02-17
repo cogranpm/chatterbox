@@ -50,6 +50,7 @@ private:
 	bool writingAudio;
 	CComPtr<ISpRecoContext> context;
 	CComPtr<ISpRecoGrammar> grammar;
+	CComPtr<ISpRecoGrammar> ccgrammar;
 	CComPtr<ISpVoice>   voice;
 	CComPtr<ISpStream> audioStream;
 	DictationCallback* callbackInterface;

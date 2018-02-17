@@ -79,6 +79,17 @@ void DictationRecognitionResult::Process()
 			}
 			SPPHRASE* pPhrase = NULL;
 			HRESULT hr = pResult->GetPhrase(&pPhrase);
+
+			switch (pPhrase->ullGrammarID)
+			{
+				case GID_DICTATION:
+					break;
+				case GID_DICTATIONCC:
+					/* we need to stop dicating */
+					int i = 0;
+					break;
+			}
+
 			SPRECORESULTTIMES times;
 			pResult->GetResultTimes(&times);
 			//maybe not be useful, times has length in 100 nanoseconds

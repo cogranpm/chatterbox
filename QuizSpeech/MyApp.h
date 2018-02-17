@@ -39,6 +39,7 @@ public:
 	static const size_t HOME_PAGE_INDEX;
 	static const std::string DATABASE_FILE_NAME;
 	static const std::wstring RULE_FILE_NAME;
+	static const std::wstring RULE_FILE_NAME_DICATIONCC;
 	static const std::wstring RULE_FILE_MENU;
 	static const std::wstring RULE_HOME_SCREEN;
 	static const std::wstring RULE_SHELF_DIALOG;
