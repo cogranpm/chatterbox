@@ -321,14 +321,25 @@ void DictationContext::WriteAudio(ISpRecoResult* pResult)
 				// request 1000 bytes of data from the input stream
 				hr = cpStreamFormat->Read(bBuffer, 1000, &cbRead);
 				// if data was returned??
+
 				if (SUCCEEDED(hr) && cbRead > 0)
 				{
 					hr = this->audioStream->Write(bBuffer, cbRead, &cbWritten);
+					if (FAILED(hr))
+					{
+						::PrintError(L"Error in writeToWavFile", hr);
+					}
 				}
-				else
-				{
-					::PrintError(L"Error in writeToWavFile", hr);
-				}
+				
+
+				//if (SUCCEEDED(hr) && cbRead > 0)
+				//{
+				//	hr = this->audioStream->Write(bBuffer, cbRead, &cbWritten);
+				//}
+				//else
+				//{
+				//	::PrintError(L"Error in writeToWavFile", hr);
+				//}
 				if (cbRead < 1000)
 				{
 					break;

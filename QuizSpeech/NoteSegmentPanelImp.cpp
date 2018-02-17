@@ -23,7 +23,7 @@ NoteSegmentPanel( parent ), noteViewModel(noteViewModel), noteSegment(noteSegmen
 	this->szAudioPlayer->Layout();
 	if (!this->noteSegment->GetBodyFile().empty())
 	{
-		player.SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(this->noteSegment->GetBodyFile()));
+		player.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(this->noteSegment->GetBodyFile()));
 	}
 
 

@@ -80,8 +80,8 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 		//playerPanelAnswer->Show(true);
 		playerPanelAnswer->Enable(true);
 		playerPanelCorrectAnswer->Enable(true);
-		playerAnswer.SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(currentQuestion->GetAnswerFile()));
-		playerCorrectAnswer.SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile()));
+		playerAnswer.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(currentQuestion->GetAnswerFile()));
+		playerCorrectAnswer.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile()));
 		txtCorrectAnswer->SetValue(currentQuestion->GetQuestion().GetAnswer()->GetAnswerText());
 	}
 }

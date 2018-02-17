@@ -68,7 +68,7 @@ const int DictationOverlayClientHelper::ShowDictationDialog(
 		if (fileNameChanged && (player != nullptr))
 		{
 			//set this outside of dialog scope
-			player->SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(*filePathBuffer));
+			player->SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(*filePathBuffer));
 		}
 	}
 	catch (std::exception& e)
