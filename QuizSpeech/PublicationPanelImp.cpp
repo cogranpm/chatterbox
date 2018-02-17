@@ -580,8 +580,9 @@ void PublicationPanelImp::AddQuizOnUpdateUI(wxUpdateUIEvent& event)
 
 void PublicationPanelImp::DeleteQuizOnButtonClick(wxCommandEvent& event) 
 { 
-	_viewModel->SetExercise(nullptr);
 	wxGetApp().GetProvider()->GetQuizProvider().Delete(_viewModel->GetExercise());
+	_viewModel->SetExercise(nullptr);
+	RenderExercises(nullptr);
 }
 
 void PublicationPanelImp::DeleteQuizOnUpdateUI(wxUpdateUIEvent& event) 
