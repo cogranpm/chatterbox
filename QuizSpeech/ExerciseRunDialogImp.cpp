@@ -267,6 +267,9 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 		rdoEvaluation->Disable();
 		txtAnswer->SetValue(question.GetAnswerText());
 		txtCorrectAnswer->SetValue(question.GetQuestion().GetAnswer()->GetAnswerText());
+		playerQuestion.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(question.GetQuestion().GetQuestionFile()));
+		playerAnswer.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(question.GetAnswerFile()));
+		playerCorrectAnswer.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(question.GetQuestion().GetAnswer()->GetAnswerFile()));
 	}
 	else
 	{

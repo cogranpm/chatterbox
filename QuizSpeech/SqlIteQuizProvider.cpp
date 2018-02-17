@@ -260,7 +260,7 @@ void SqlIteQuizProvider::GetQuestionsByQuiz(Quiz* quiz, boost::ptr_vector<Questi
 
 void SqlIteQuizProvider::GetQuestionsByQuizId(unsigned long quizId, boost::ptr_vector<Question>* list)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM Question WHERE QuizId = ? ORDER BY CreatedDate DESC;");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM Question WHERE QuizId = ? ORDER BY CreatedDate ASC;");
 	stmt.Bind(1, wxLongLong(quizId));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while (set.NextRow())
@@ -583,7 +583,7 @@ void SqlIteQuizProvider::GetQuizRunQuestionsByQuiz(unsigned long quizId, unsigne
 		sql.Append(L"quizrunquestion.isanswered, quizrunquestion.iscorrect, quizrunquestion.answerfile, ");
 		sql.Append(L"quizrunquestion.answertext, quizrunquestion.QuizRunHeaderId, quizrunquestion.QuizRunQuestionId from question left join quizrunquestion ");
 		sql.Append(L"on question.questionid = quizrunquestion.questionid where question.quizid = ? ");
-		sql.Append(L" and (quizrunquestion.QuizRunHeaderId = ? or quizrunquestion.QuizRunHeaderId is null); ");
+		sql.Append(L" and (quizrunquestion.QuizRunHeaderId = ? or quizrunquestion.QuizRunHeaderId is null) order by quizrunquestion.createddate ASC; ");
 		wxSQLite3Statement stmt = db->PrepareStatement(sql);
 		stmt.Bind(1, wxLongLong(quizId));
 		stmt.Bind(2, wxLongLong(quizRunHeaderId));
