@@ -43,6 +43,7 @@ class ExerciseRunDialogImp : public ExerciseRunDialog//, AudioPlayerWrapperClien
 	bool MoreQuestions();
 	bool IsFirstQuestion();
 	void RenderComplete();
+	void RenderScore();
 	void ShowComplete();
 	void HideComplete();
 	void PlayQuestion();

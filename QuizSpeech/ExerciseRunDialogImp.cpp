@@ -159,11 +159,7 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 
 	btnRecord->SetBitmap(*wxGetApp().GetImages().record_icon);
 	btnNext->SetBitmap(*wxGetApp().GetImages().next_icon);
-//	btnAudioPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
-	//btnPlayAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
-	//btnPlayCorrectAnswer->SetBitmap(*wxGetApp().GetImages().start_icon);
 	btnSkip->SetBitmap(*wxGetApp().GetImages().next_icon);
-
 	
 	playerPanelQuestion = new AudioPlayerPanelImp(pnlPlayer, &playerQuestion);
 	playerPanelCorrectAnswer = new AudioPlayerPanelImp(pnlCorrectAnswerPlayer, &playerCorrectAnswer);
@@ -171,7 +167,6 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	wxSizerItem* panelQ = this->szCorrectAnswerPlayer->Add(playerPanelCorrectAnswer, 1, wxALL | wxEXPAND, 0);
 	wxSizerItem* panelA = this->szAnswerPlayer->Add(playerPanelAnswer, 1, wxALL | wxEXPAND, 0);
 	wxSizerItem* panelB = this->szPlayer->Add(playerPanelQuestion, 1, wxALL | wxEXPAND, 0);
-
 	
 	/* load the data */
 	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
@@ -189,11 +184,10 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 
 	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
 	{
+		RenderScore();
 		ShowComplete();
-		return;
 	}
-
-	if (viewModel.GetRunQuestions().size() > 0)
+	else if(viewModel.GetRunQuestions().size() > 0)
 	{
 		viewModel.SetCurrentQuestionIndex(1);
 		lstQuestions->SelectRow(0);
@@ -208,9 +202,6 @@ void ExerciseRunDialogImp::PlayQuestion()
 {
 	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	playerQuestion.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(currentQuestion->GetQuestion().GetQuestionFile()));
-	//playerQuestion.Play();
-//	questionPlayer.SetURL(currentQuestion->GetQuestion().GetQuestionFile());
-//	questionPlayer.Play();
 }
 
 void ExerciseRunDialogImp::RenderQuestions()
@@ -282,7 +273,6 @@ void ExerciseRunDialogImp::SetQuestion(QuizRunQuestion& question)
 		btnRecord->Enable();
 		txtAnswer->SetValue(L"");
 		txtCorrectAnswer->SetValue(L"");
-		//playerPanelAnswer->Show(false);
 		playerPanelAnswer->Disable();
 		playerPanelCorrectAnswer->Disable();
 		btnNext->Disable();
@@ -362,9 +352,14 @@ void ExerciseRunDialogImp::RenderComplete()
 	/* if none have been skipped then save the header */
 	viewModel.GetHeader().SetIsComplete(true);
 	wxGetApp().GetProvider()->GetQuizProvider().Update(viewModel.GetHeader());
-	
+	RenderScore();
+	ShowComplete();
+}
+
+void ExerciseRunDialogImp::RenderScore()
+{
 	int correctCount = std::count_if(viewModel.GetRunQuestions().begin(), viewModel.GetRunQuestions().end(), IsCorrect);
-	
+
 	wxString score(L"Score: ");
 	score.Append(wxString::Format(wxT("%i"), correctCount));
 	score.Append(L" / ");
@@ -375,7 +370,6 @@ void ExerciseRunDialogImp::RenderComplete()
 	score.Append(wxString::Format(wxT("%.2f"), percent));
 	score.Append(L"%");
 	lblScore->SetLabelText(score);
-	ShowComplete();
 }
 
 void ExerciseRunDialogImp::ShowComplete()
