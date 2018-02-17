@@ -30,11 +30,34 @@ void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstrin
 	case GID_DICTATION:
 		break;
 	case GID_DICTATIONCC:
-		/* we need to stop dicating */
-		hypothesisReceived = false;
-		recognitionReceived = false;
-		stopReceived = true;
-		return;
+
+		
+		std::wstring ruleName(pPhrase->Rule.pszName);
+		const SPPHRASEPROPERTY* pProp = pPhrase->pProperties;
+		while (pProp != NULL)
+		{
+			std::wstring phraseValue(L"");
+			std::wstring phraseProperty(L"");
+
+			if (pProp->pszValue != NULL)
+			{
+				phraseValue = std::wstring(pProp->pszValue);
+			}
+			if (pProp->pszName != NULL)
+			{
+				phraseProperty = std::wstring(pProp->pszName);
+			}
+			if (phraseProperty == L"action" && phraseValue == L"stopdictation")
+			{
+				/* user has told us to stop dictating based on diction command and control rules */
+				stopReceived = true;
+				hypothesisReceived = false;
+				recognitionReceived = false;
+				return;
+			}
+			pProp = pProp->pNextSibling;
+		}
+	
 	}
 
 	SPRECORESULTTIMES times;

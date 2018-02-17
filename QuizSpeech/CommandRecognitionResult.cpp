@@ -26,7 +26,7 @@ void CommandRecognitionResult::FreePhrase(SPPHRASE* phrase)
 void CommandRecognitionResult::Process()
 {
 	HRESULT hr = S_OK;
-	CSpStreamFormat Fmt(SPEECH_AUDIO_FORMAT, &hr);
+//	CSpStreamFormat Fmt(SPEECH_AUDIO_FORMAT, &hr);
 	hr = this->recognitionEvent.GetFrom(context->GetContext());
 	if (FAILED(hr))
 	{
