@@ -558,6 +558,7 @@ AudioPlayer::SourceCallback::~SourceCallback()
 
 HRESULT AudioPlayer::SourceCallback::Invoke(IMFAsyncResult* pAsyncResult)
 {
+	/* this fires when the url is set and loaded into memory */
 	MF_OBJECT_TYPE ObjectType = MF_OBJECT_INVALID;
 	player->sourceResolver->EndCreateObjectFromURL(pAsyncResult, &ObjectType, &player->mediaSourceObject);
 	HRESULT hr = player->mediaSourceObject->QueryInterface(IID_PPV_ARGS(&player->mediaSource));
@@ -636,7 +637,17 @@ HRESULT AudioPlayer::EventCallback::Invoke(IMFAsyncResult* pAsyncResult)
 
 
 	/* there may be another event */
-	if (meType != MESessionClosed && meType != MEEndOfPresentation)
+	/* could this be the multiple play issue? */
+	//if (meType != MESessionClosed && meType != MEEndOfPresentation)
+	//{
+	//	hr = player->session->BeginGetEvent(this, NULL);
+	//	if (FAILED(hr))
+	//	{
+	//		goto done;
+	//	}
+	//}
+
+	if (meType != MESessionClosed )
 	{
 		hr = player->session->BeginGetEvent(this, NULL);
 		if (FAILED(hr))
@@ -644,6 +655,7 @@ HRESULT AudioPlayer::EventCallback::Invoke(IMFAsyncResult* pAsyncResult)
 			goto done;
 		}
 	}
+
 
 done:
 	SafeRelease(&pEvent);
