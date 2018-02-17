@@ -34,11 +34,14 @@ class DictationOverlayDialogImp : public OverlayDialog
 	boost::signals2::connection  hypothesisReceivedConnection;
 	boost::signals2::connection  soundStartConnection;
 	boost::signals2::connection  soundEndConnection;
+	boost::signals2::connection  dictationStoppedConnection;
 
 	void OnSpeechRecognized(const std::wstring& text);
 	void OnHypothesisRecognized(const std::wstring& text);
 	void OnSoundStart();
 	void OnSoundEnd();
+	void OnDictationStopped();
+	void EndDication();
 	std::wstring& GetFullAudioPath() { return fullAudioPath; }
 	void SetFileName(std::wstring& newFileName);
 

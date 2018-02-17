@@ -97,7 +97,7 @@ void DictationRecognitionResult::Process()
 	ISpRecoResult* pResult;
 	bool recognitionReceived = false;
 	bool hypothesisReceived = false;
-	bool stopReceived = true;
+	bool stopReceived = false;
 	while (event.GetFrom(context->GetContext()) == S_OK)
 	{
 		//DUMP_EVENT_NAME(event.eEventId);
@@ -161,6 +161,11 @@ void DictationRecognitionResult::Process()
 	}
 
 	/* let the context object broadcast this out to listeners */
+	if (stopReceived)
+	{
+		this->context->DictationStopped();
+	}
+
 	if (!hypothesisText.empty() && hypothesisReceived)
 	{
 		this->context->HypothesisReceived(hypothesisText);

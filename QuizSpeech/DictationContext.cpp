@@ -20,6 +20,7 @@ DictationContext::~DictationContext()
 {
 	this->m_speech_recognized.disconnect_all_slots();
 	this->m_speech_hypothesis.disconnect_all_slots();
+	m_dictation_stopped.disconnect_all_slots();
 
 	if(this->waveFormat != nullptr)
 	{
@@ -350,9 +351,19 @@ void DictationContext::SoundEnd()
 	m_soundEnd();
 }
 
+void DictationContext::DictationStopped()
+{
+	m_dictation_stopped();
+}
+
 boost::signals2::connection DictationContext::onSpeechRecognized(type_speechrecognized::slot_function_type subscriber)
 {
 	return m_speech_recognized.connect(subscriber);
+}
+
+boost::signals2::connection DictationContext::onDictationStopped(type_dictationstopped::slot_function_type subscriber)
+{
+	return m_dictation_stopped.connect(subscriber);
 }
 
 boost::signals2::connection DictationContext::onHypothesisRecognized(type_speechhypothesis::slot_function_type subscriber)

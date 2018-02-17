@@ -21,6 +21,7 @@ public:
 	void WriteAudio(ISpRecoResult* pResult);
 	void RecognitionReceived(const std::wstring& text);
 	void HypothesisReceived(const std::wstring& hypothesisText);
+	void DictationStopped();
 	void SoundStart();
 	void SoundEnd();
 	//void FalseRecognitionReceived();
@@ -31,7 +32,11 @@ public:
 	//signals and slots for dictation events
 	typedef boost::signals2::signal<void(const std::wstring&)>  type_speechrecognized;
 	boost::signals2::connection onSpeechRecognized(type_speechrecognized::slot_function_type subscriber);
-	
+
+	typedef boost::signals2::signal<void()>  type_dictationstopped;
+	boost::signals2::connection onDictationStopped(type_dictationstopped::slot_function_type subscriber);
+
+
 	typedef boost::signals2::signal<void(const std::wstring&)>  type_speechhypothesis;
 	boost::signals2::connection onHypothesisRecognized(type_speechhypothesis::slot_function_type subscriber);
 	
@@ -60,5 +65,6 @@ private:
 	type_sound_start m_soundStart;
 	type_speechrecognized m_speech_recognized;
 	type_speechhypothesis m_speech_hypothesis;
+	type_dictationstopped m_dictation_stopped;
 };
 

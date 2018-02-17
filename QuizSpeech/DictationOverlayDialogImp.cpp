@@ -40,6 +40,11 @@ DictationOverlayDialogImp::~DictationOverlayDialogImp()
 	{
 		soundStartConnection.disconnect();
 	}
+
+	if (dictationStoppedConnection.connected())
+	{
+		dictationStoppedConnection.disconnect();
+	}
 }
 
 void DictationOverlayDialogImp::OnInitDialog(wxInitDialogEvent& event) 
@@ -56,6 +61,7 @@ void DictationOverlayDialogImp::OnInitDialog(wxInitDialogEvent& event)
 	this->hypothesisReceivedConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onHypothesisRecognized(boost::bind(&DictationOverlayDialogImp::OnHypothesisRecognized, this, _1));
 	this->soundStartConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onSoundStart(boost::bind(&DictationOverlayDialogImp::OnSoundStart, this));
 	this->soundEndConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onSoundStart(boost::bind(&DictationOverlayDialogImp::OnSoundEnd, this));
+	this->dictationStoppedConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onDictationStopped(boost::bind(&DictationOverlayDialogImp::OnDictationStopped, this));
 	wxGetApp().GetSpeechListener().StartDictation(fullAudioPath);
 }
 
@@ -82,17 +88,28 @@ void DictationOverlayDialogImp::OnSoundEnd()
 	timer.Start(1000);
 }
 
+void DictationOverlayDialogImp::OnDictationStopped()
+{
+	if (recordingState == RecordingState::recording)
+	{
+		EndDication();
+	}
+}
 
+void DictationOverlayDialogImp::EndDication()
+{
+	recordingState = RecordingState::recorded;
+	wxGetApp().GetSpeechListener().StopDictation();
+	this->btnStop->SetBitmap(*wxGetApp().GetImages().record_icon);
+	player.SetURLAsync(fullAudioPath);
+}
 
 void DictationOverlayDialogImp::StopOnButtonClick( wxCommandEvent& event )
 {
 	
 	if (recordingState == RecordingState::recording)
 	{
-		recordingState = RecordingState::recorded;
-		wxGetApp().GetSpeechListener().StopDictation();
-		this->btnStop->SetBitmap(*wxGetApp().GetImages().record_icon);
-		player.SetURLAsync(fullAudioPath);
+		EndDication();
 	}
 	else
 	{
