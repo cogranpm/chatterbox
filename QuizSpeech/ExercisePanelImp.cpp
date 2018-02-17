@@ -174,6 +174,7 @@ void ExercisePanelImp::RenderCurrentQuestion()
 	if (!viewModel.GetCurrentQuestion()->GetQuestionFile().empty())
 	{
 		playerQuestion.SetURL(wxGetApp().GetFileHandler().GetFullAudioPathToFile(viewModel.GetCurrentQuestion()->GetQuestionFile()));
+		//playerQuestion.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(viewModel.GetCurrentQuestion()->GetQuestionFile()));
 	}
 	if (!viewModel.GetCurrentQuestion()->GetAnswer()->GetAnswerFile().empty())
 	{

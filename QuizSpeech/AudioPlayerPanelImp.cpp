@@ -76,10 +76,13 @@ void AudioPlayerPanelImp::OnAudioEnd()
 {
 	this->m_gauge2->SetValue(0);
 	timer.Stop();
-	if (player->GetPlayState() == AudioPlayer::AudioState::loaded)
+	//temporary fix - reload the url and get ready for playing again
+	player->SetURL(player->GetURL());
+
+	/*if (player->GetPlayState() == AudioPlayer::AudioState::loaded)
 	{
 		this->btnPlay->SetBitmap(*wxGetApp().GetImages().start_icon);
-	}
+	}*/
 }
 
 void AudioPlayerPanelImp::OnClearURL()

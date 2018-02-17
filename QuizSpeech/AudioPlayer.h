@@ -156,6 +156,7 @@ public:
 	void Stop();
 	void SetURL(const std::wstring& url);
 	void SetURLAsync(const std::wstring& url);
+	std::wstring& GetURL();
 	void Clear();
 	AudioState GetPlayState() { return playState; }
 

@@ -292,6 +292,11 @@ void AudioPlayer::SetURLAsync(const std::wstring& url)
 
 }
 
+std::wstring& AudioPlayer::GetURL()
+{
+	return path;
+}
+
 double AudioPlayer::GetDuration()
 {
 	MFTIME pDuration = 0;
