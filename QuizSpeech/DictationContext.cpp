@@ -196,8 +196,20 @@ void DictationContext::InnerEnable()
 	}
 
 	this->ChangeGrammarEnabledState(SPGS_ENABLED);
-	this->grammar->SetDictationState(SPRS_ACTIVE);
-	this->ccgrammar->SetDictationState(SPRS_ACTIVE);
+	hr = this->grammar->SetDictationState(SPRS_ACTIVE);
+	if (FAILED(hr))
+	{
+		const std::string message("Call to SetDictationState failed");
+		::PrintError(L"Call to SetDictationState failed", hr);
+		throw std::runtime_error(message);
+	}
+	hr = this->ccgrammar->SetRuleState(NULL, NULL, SPRS_ACTIVE);
+	if (FAILED(hr))
+	{
+		const std::string message("Call to SetRuleState failed");
+		::PrintError(L"Call to SetRuleState failed", hr);
+		throw std::runtime_error(message);
+	}
 }
 
 void DictationContext::EnableDictation()
@@ -223,9 +235,22 @@ void DictationContext::Disable()
 		throw std::runtime_error(message);
 	}
 	this->ChangeGrammarEnabledState(SPGS_DISABLED);
-	this->grammar->SetDictationState(SPRS_INACTIVE);
-	this->ccgrammar->SetDictationState(SPRS_INACTIVE);
-
+	hr = this->grammar->SetDictationState(SPRS_INACTIVE);
+	if (FAILED(hr))
+	{
+		const std::string message("Call to SetDictationState failed");
+		::PrintError(L"Call to SetDictationState failed", hr);
+		writingAudio = false;
+		throw std::runtime_error(message);
+	}
+	hr = this->ccgrammar->SetRuleState(NULL, NULL, SPRS_INACTIVE);
+	if (FAILED(hr))
+	{
+		const std::string message("Call to SetRuleState failed");
+		::PrintError(L"Call to SetRuleState failed", hr);
+		writingAudio = false;
+		throw std::runtime_error(message);
+	}
 	hr = this->context->SetAudioOptions(SPAO_NONE, NULL, NULL);
 	if (FAILED(hr))
 	{

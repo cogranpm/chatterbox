@@ -1,5 +1,4 @@
 #include "DictationRecognitionResult.h"
-#include "stdafx.h"
 #include "DictationContext.h"
 #include "GlobalConstants.h"
 
@@ -12,6 +11,84 @@ DictationRecognitionResult::~DictationRecognitionResult()
 {
 }
 
+bool recognitionReceived = false;
+bool hypothesisReceived = false;
+
+void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstring& recognizedText, std::wstring& hypothesisText, bool& recognitionReceived, bool& hypothesisReceived, bool& stopReceived)
+{
+	ISpRecoResult* pResult = event.RecoResult();
+	if (!pResult)
+	{
+		// We expect these events to come with reco results
+		return;
+	}
+	SPPHRASE* pPhrase = NULL;
+	HRESULT hr = pResult->GetPhrase(&pPhrase);
+
+	switch (pPhrase->ullGrammarID)
+	{
+	case GID_DICTATION:
+		break;
+	case GID_DICTATIONCC:
+		/* we need to stop dicating */
+		hypothesisReceived = false;
+		recognitionReceived = false;
+		stopReceived = true;
+		return;
+	}
+
+	SPRECORESULTTIMES times;
+	pResult->GetResultTimes(&times);
+	//maybe not be useful, times has length in 100 nanoseconds
+
+	CSpDynamicString dstrText;
+	BYTE dwAttributes;
+	hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
+	if (FAILED(hr))
+	{
+		//maybe need to do something here, not sure
+		return;
+	}
+
+	if (dwAttributes & SPAF_ONE_TRAILING_SPACE)
+	{
+		dstrText.Append(L" ");
+	}
+	else if (dwAttributes & SPAF_TWO_TRAILING_SPACES)
+	{
+		dstrText.Append(L"  ");
+	}
+	else if ((dwAttributes & SPAF_CONSUME_LEADING_SPACES))
+	{
+		dstrText.Append(L"  ");
+	}
+
+	//probably just for atl stuff- here just for reference
+	//BSTR bstrText = ::SysAllocString(dstrText);
+	//if (!bstrText)
+	//{
+	//	return;
+	//}
+	//::SysFreeString(bstrText);
+	WCHAR* text = dstrText.Copy();
+	if (text != NULL)
+	{
+
+		if (event.eEventId == SPEI_HYPOTHESIS)
+		{
+			hypothesisText.append(text);
+			hypothesisReceived = true;
+		}
+		else
+		{
+			recognizedText.append(text);
+			recognitionReceived = true;
+			this->context->WriteAudio(pResult);
+		}
+	}
+
+}
+
 void DictationRecognitionResult::Process()
 {
 	CSpEvent event;
@@ -20,6 +97,7 @@ void DictationRecognitionResult::Process()
 	ISpRecoResult* pResult;
 	bool recognitionReceived = false;
 	bool hypothesisReceived = false;
+	bool stopReceived = true;
 	while (event.GetFrom(context->GetContext()) == S_OK)
 	{
 		//DUMP_EVENT_NAME(event.eEventId);
@@ -71,74 +149,7 @@ void DictationRecognitionResult::Process()
 		}
 		case SPEI_RECOGNITION:
 		{
-			pResult = event.RecoResult();
-			if (!pResult)
-			{
-				// We expect these events to come with reco results
-				return;
-			}
-			SPPHRASE* pPhrase = NULL;
-			HRESULT hr = pResult->GetPhrase(&pPhrase);
-
-			switch (pPhrase->ullGrammarID)
-			{
-				case GID_DICTATION:
-					break;
-				case GID_DICTATIONCC:
-					/* we need to stop dicating */
-					int i = 0;
-					break;
-			}
-
-			SPRECORESULTTIMES times;
-			pResult->GetResultTimes(&times);
-			//maybe not be useful, times has length in 100 nanoseconds
-
-			CSpDynamicString dstrText;
-			BYTE dwAttributes;
-			hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE,&dstrText, &dwAttributes);
-			if (FAILED(hr))
-			{
-				//maybe need to do something here, not sure
-				return;
-			}
-
-			if (dwAttributes & SPAF_ONE_TRAILING_SPACE)
-			{
-				dstrText.Append(L" ");
-			}
-			else if (dwAttributes & SPAF_TWO_TRAILING_SPACES)
-			{
-				dstrText.Append(L"  ");
-			}
-			else if ((dwAttributes & SPAF_CONSUME_LEADING_SPACES))
-			{
-				dstrText.Append(L"  ");
-			}
-
-			//probably just for atl stuff- here just for reference
-			//BSTR bstrText = ::SysAllocString(dstrText);
-			//if (!bstrText)
-			//{
-			//	return;
-			//}
-			//::SysFreeString(bstrText);
-			WCHAR* text = dstrText.Copy();
-			if (text != NULL)
-			{
-
-				if (event.eEventId == SPEI_HYPOTHESIS)
-				{
-					hypothesisText.append(text);
-					hypothesisReceived = true;
-				}
-				else
-				{
-					recognizedText.append(text);
-					recognitionReceived = true;
-					this->context->WriteAudio(pResult);
-				}
-			}
+			ProcessRecognition(event, recognizedText, hypothesisText, recognitionReceived, hypothesisReceived, stopReceived);
 			break;
 		}
 		case SPEI_INTERFERENCE:
