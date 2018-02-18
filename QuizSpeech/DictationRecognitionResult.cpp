@@ -1,6 +1,8 @@
 #include "DictationRecognitionResult.h"
 #include "DictationContext.h"
 #include "GlobalConstants.h"
+#include "CommandProperty.h"
+#include "ActionCommandParser.h"
 
 DictationRecognitionResult::DictationRecognitionResult(DictationContext* context) : context(context)
 {
@@ -34,6 +36,8 @@ void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstrin
 		
 		std::wstring ruleName(pPhrase->Rule.pszName);
 		const SPPHRASEPROPERTY* pProp = pPhrase->pProperties;
+		std::vector<CommandProperty> commandPropertyList;
+
 		while (pProp != NULL)
 		{
 			std::wstring phraseValue(L"");
@@ -47,17 +51,36 @@ void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstrin
 			{
 				phraseProperty = std::wstring(pProp->pszName);
 			}
-			if (phraseProperty == L"action" && phraseValue == L"stopdictation")
-			{
-				/* user has told us to stop dictating based on diction command and control rules */
-				stopReceived = true;
-				hypothesisReceived = false;
-				recognitionReceived = false;
-				return;
-			}
+			CommandProperty commandProperty(phraseProperty, phraseValue, ruleName);
+			commandPropertyList.push_back(commandProperty);
 			pProp = pProp->pNextSibling;
 		}
-	
+		//ActionCommandParser parser;
+		//std::wstring actionName;
+		//std::wstring ruleNamea;
+		//std::wstring targetName;
+		//std::wstring targetValue;
+		//parser.Parse(commandPropertyList, actionName, targetName, targetValue, ruleNamea);
+		//if (actionName == L"stop" && targetName == L"recording")
+		//{
+		//	/* user has told us to stop dictating based on diction command and control rules */
+		//	stopReceived = true;
+		//	hypothesisReceived = false;
+		//	recognitionReceived = false;
+		//	return;
+		//}
+		CSpDynamicString dstrText;
+		BYTE dwAttributes;
+		hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
+		WCHAR* text = dstrText.Copy();
+		if (text == L"stop recording")
+		{
+			/* user has told us to stop dictating based on diction command and control rules */
+			stopReceived = true;
+			hypothesisReceived = false;
+			recognitionReceived = false;
+			return;
+		}
 	}
 
 	SPRECORESULTTIMES times;
