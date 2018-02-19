@@ -549,6 +549,12 @@ void MainFrameImp::RenderPublications(Publication* publication)
 			this->lstPublication->SelectRow(i);
 		}
 	}	
+	if ((lstPublication->GetSelectedRow() == wxNOT_FOUND) && lstPublication->GetItemCount() > 0)
+	{
+		lstPublication->SelectRow(0);
+		SetCurrentPublication(&itemsList->at(0));
+		lstPublication->SetFocus();
+	}
 }
 
 
