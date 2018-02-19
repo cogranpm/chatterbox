@@ -145,6 +145,7 @@ void SpeechRecognitionContext::EnableRules(std::vector<std::wstring>& ruleNames)
 			throw std::runtime_error(message);
 		}
 	}
+	this->ChangeGrammarEnabledState(SPGS_ENABLED);
 }
 
 CComPtr<ISpRecoContext> SpeechRecognitionContext::GetContext()

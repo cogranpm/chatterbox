@@ -41,6 +41,7 @@ class ExercisePanelImp : public ExercisePanel
 	void DeleteQuestion();
 	void SetupSpeechHandlers();
 	void OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList);
+	void CloseMe();
 
 	protected:
 		// Handlers for ExercisePanel events.

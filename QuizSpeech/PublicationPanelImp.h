@@ -50,6 +50,7 @@ class PublicationPanelImp : public pnlMain
 		void DeleteQuiz();
 		void DeleteQuizRun();
 		void OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList);
+		void CloseMe();
 
 	protected:
 		void OnInitDialog( wxInitDialogEvent& event );

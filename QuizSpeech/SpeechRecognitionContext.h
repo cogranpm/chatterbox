@@ -17,6 +17,7 @@ public:
 	void Disable();
 	void EnableRules(std::vector<std::wstring>& ruleNames);
 	void CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList);
+	void ChangeGrammarEnabledState(SPGRAMMARSTATE);
 
 	//getters
 	CComPtr<ISpRecoContext> GetContext();
@@ -39,8 +40,6 @@ protected:
 
 
 private:
-
-	void ChangeGrammarEnabledState(SPGRAMMARSTATE);
 
 	CComPtr<ISpRecoContext> context;
 	//CComPtr<ISpVoice>   voice;

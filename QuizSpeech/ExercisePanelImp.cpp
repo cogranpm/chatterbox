@@ -48,7 +48,7 @@ void ExercisePanelImp::OnCommandRecognized(std::wstring& phrase, const std::vect
 
 	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
-		this->Close();
+		CloseMe();
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
@@ -68,6 +68,20 @@ void ExercisePanelImp::OnCommandRecognized(std::wstring& phrase, const std::vect
 	{
 		DeleteQuestion();
 		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"close"))
+	{
+		CloseMe();
+		return;
+	}
+}
+
+void ExercisePanelImp::CloseMe()
+{
+	int index = wxGetApp().GetMainFrame()->GetShelfNotebook()->GetPageIndex(this);
+	if (index != wxNOT_FOUND)
+	{
+		wxGetApp().GetMainFrame()->GetShelfNotebook()->DeletePage(index);
 	}
 }
 

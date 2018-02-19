@@ -130,6 +130,7 @@ void PublicationPanelImp::SetupSpeechHandlers()
 	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
 	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&PublicationPanelImp::OnCommandRecognized, this, _1, _2));
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->ChangeGrammarEnabledState(SPGS_ENABLED);
 }
 
 
@@ -149,7 +150,7 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 	}
 	else if (boost::algorithm::equals(actionName, L"addnote"))
 	{
-		AddQuiz();
+		AddNote();
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, L"deletequiz"))
@@ -166,6 +167,21 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 	{
 		DeleteQuizRun();
 		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"close") || boost::algorithm::equals(actionName, L"cancel"))
+	{
+		CloseMe();
+		return;
+	}
+}
+
+
+void PublicationPanelImp::CloseMe()
+{
+	int index = wxGetApp().GetMainFrame()->GetShelfNotebook()->GetPageIndex(this);
+	if (index != wxNOT_FOUND)
+	{
+		wxGetApp().GetMainFrame()->GetShelfNotebook()->DeletePage(index);
 	}
 }
 
