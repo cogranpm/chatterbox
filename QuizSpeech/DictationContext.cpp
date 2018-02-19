@@ -388,10 +388,17 @@ void DictationContext::WriteAudio(ISpRecoResult* pResult)
 		if (this->writingAudio)
 		{
 			CComPtr<ISpStreamFormat> cpStreamFormat;
+			//if(pResult.get
 			HRESULT hr = pResult->GetAudio(0, 0, &cpStreamFormat);
 			if (FAILED(hr))
 			{
 				::PrintError(L"Error in GetAudio", hr);
+				return;
+			}
+
+			if (SPERR_NO_AUDIO_DATA == hr)
+			{
+				//no audio to process
 				return;
 			}
 

@@ -101,6 +101,7 @@ void DictationOverlayDialogImp::EndDication()
 	recordingState = RecordingState::recorded;
 	wxGetApp().GetSpeechListener().StopDictation();
 	this->btnStop->SetBitmap(*wxGetApp().GetImages().record_icon);
+	/* need to make sure the path exists and size greater than 0 */
 	player.SetURLAsync(fullAudioPath);
 }
 

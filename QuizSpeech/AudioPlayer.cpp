@@ -1,8 +1,9 @@
 #include "AudioPlayer.h"
 #include "GlobalConstants.h"
 #include <wx/log.h>
-
-
+#include "MyApp.h"
+#include <wx/app.h> 
+#include "FileHandler.h"
 
 AudioPlayer::AudioPlayer() :
 	playState(AudioState::unloaded),
@@ -247,9 +248,30 @@ void AudioPlayer::SetURL(const std::wstring& url)
 
 }
 
+
+bool AudioPlayer::ValidatePath()
+{
+	FileHandler& fh = wxGetApp().GetFileHandler();
+	if (!fh.FileExists(path))
+	{
+		return false;
+	}
+	if (fh.IsFileEmpty(path))
+	{
+		return false;
+	}
+	return true;
+}
+
 void AudioPlayer::SetURLAsync(const std::wstring& url)
 {
+
 	path = url;
+	/* validate the path */
+	if (!ValidatePath())
+	{
+		return;
+	}
 	HRESULT hr = S_OK;
 	hr = MFCreateMediaSession(NULL, &session);
 	if (FAILED(hr))
@@ -561,6 +583,11 @@ HRESULT AudioPlayer::SourceCallback::Invoke(IMFAsyncResult* pAsyncResult)
 	/* this fires when the url is set and loaded into memory */
 	MF_OBJECT_TYPE ObjectType = MF_OBJECT_INVALID;
 	player->sourceResolver->EndCreateObjectFromURL(pAsyncResult, &ObjectType, &player->mediaSourceObject);
+	if (player->mediaSourceObject == NULL)
+	{
+		player->playState = AudioState::invalidfile;
+		return S_OK;
+	}
 	HRESULT hr = player->mediaSourceObject->QueryInterface(IID_PPV_ARGS(&player->mediaSource));
 	if (FAILED(hr))
 	{

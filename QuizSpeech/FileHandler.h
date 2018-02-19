@@ -32,6 +32,7 @@ public:
 	void SetAudioPath(const std::wstring& path) { audioPath = path; }
 	std::wstring GetFullAudioPathToFile(const std::wstring& fileName);
 	std::wstring GetNewAudioFileName();
+	bool IsFileEmpty(const std::wstring& path);
 protected:
 
 

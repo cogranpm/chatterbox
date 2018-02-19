@@ -13,6 +13,7 @@ public:
 
 private:
 	DictationContext* context;
-	void ProcessRecognition(CSpEvent& event, std::wstring& recognizedText, std::wstring& hypothesisText, bool& recognitionReceived, bool& hypothesisReceived, bool& stopReceived);
+	void ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, bool& stopReceived);
+	void ProcessHypothesis(ISpRecoResult* pResult, std::wstring& hypothesisText);
 };
 

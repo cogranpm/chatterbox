@@ -137,10 +137,10 @@ class AudioPlayer
 	HRESULT AddSourceNode(IMFTopology *pTopology,  IMFStreamDescriptor *pSD, IMFTopologyNode **ppNode);
 	HRESULT AddOutputNode(IMFTopology *pTopology, IMFActivate *pActivate, DWORD dwId, IMFTopologyNode **ppNode);
 	
-	
+	bool ValidatePath();
 
 public:
-	enum class AudioState { unloaded, loaded, playing, paused, stopped };
+	enum class AudioState { unloaded, loaded, playing, paused, stopped, invalidfile };
 	AudioPlayer();
 	~AudioPlayer();
 	//AudioPlayer(const AudioPlayer& copy);

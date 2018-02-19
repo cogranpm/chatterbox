@@ -13,12 +13,54 @@ DictationRecognitionResult::~DictationRecognitionResult()
 {
 }
 
-bool recognitionReceived = false;
-bool hypothesisReceived = false;
 
-void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstring& recognizedText, std::wstring& hypothesisText, bool& recognitionReceived, bool& hypothesisReceived, bool& stopReceived)
+
+void DictationRecognitionResult::ProcessHypothesis(ISpRecoResult* pResult, std::wstring& hypothesisText)
 {
-	ISpRecoResult* pResult = event.RecoResult();
+	//ISpRecoResult* pResult = event.RecoResult();
+	if (!pResult)
+	{
+		// We expect these events to come with reco results
+		return;
+	}
+	SPPHRASE* pPhrase = NULL;
+	HRESULT hr = pResult->GetPhrase(&pPhrase);
+
+	CSpDynamicString dstrText;
+	BYTE dwAttributes;
+	hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
+	if (FAILED(hr))
+	{
+		//maybe need to do something here, not sure
+		return;
+	}
+
+	if (dwAttributes & SPAF_ONE_TRAILING_SPACE)
+	{
+		dstrText.Append(L" ");
+	}
+	else if (dwAttributes & SPAF_TWO_TRAILING_SPACES)
+	{
+		dstrText.Append(L"  ");
+	}
+	else if ((dwAttributes & SPAF_CONSUME_LEADING_SPACES))
+	{
+		dstrText.Append(L"  ");
+	}
+
+	WCHAR* text = dstrText.Copy();
+	if (text != NULL)
+	{
+		hypothesisText.append(text);
+	}
+	hypothesisText.append(text);
+	
+}
+
+void DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, bool& stopReceived)
+{
+	//ISpRecoResult* pResult = event.RecoResult();
+	stopReceived = false;
 	if (!pResult)
 	{
 		// We expect these events to come with reco results
@@ -33,9 +75,19 @@ void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstrin
 		break;
 	case GID_DICTATIONCC:
 
-		
-		std::wstring ruleName(pPhrase->Rule.pszName);
-		const SPPHRASEPROPERTY* pProp = pPhrase->pProperties;
+		CSpDynamicString dstrText;
+		BYTE dwAttributes;
+		hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
+		std::wstring commandText(dstrText.Copy());
+		if (commandText == L"stop recording")
+		{
+			/* user has told us to stop dictating based on diction command and control rules */
+			stopReceived = true;
+			recognitionReceived = false;
+			return;
+		}
+		//std::wstring ruleName(pPhrase->Rule.pszName);
+		/*const SPPHRASEPROPERTY* pProp = pPhrase->pProperties;
 		std::vector<CommandProperty> commandPropertyList;
 
 		while (pProp != NULL)
@@ -54,7 +106,7 @@ void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstrin
 			CommandProperty commandProperty(phraseProperty, phraseValue, ruleName);
 			commandPropertyList.push_back(commandProperty);
 			pProp = pProp->pNextSibling;
-		}
+		}*/
 		//ActionCommandParser parser;
 		//std::wstring actionName;
 		//std::wstring ruleNamea;
@@ -69,18 +121,7 @@ void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstrin
 		//	recognitionReceived = false;
 		//	return;
 		//}
-		CSpDynamicString dstrText;
-		BYTE dwAttributes;
-		hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
-		WCHAR* text = dstrText.Copy();
-		if (text == L"stop recording")
-		{
-			/* user has told us to stop dictating based on diction command and control rules */
-			stopReceived = true;
-			hypothesisReceived = false;
-			recognitionReceived = false;
-			return;
-		}
+
 	}
 
 	SPRECORESULTTIMES times;
@@ -120,18 +161,19 @@ void DictationRecognitionResult::ProcessRecognition(CSpEvent& event, std::wstrin
 	if (text != NULL)
 	{
 
-		if (event.eEventId == SPEI_HYPOTHESIS)
-		{
-			hypothesisText.append(text);
-			hypothesisReceived = true;
-		}
-		else
-		{
+		//if (event.eEventId == SPEI_HYPOTHESIS)
+		//{
+		//	hypothesisText.append(text);
+		//	hypothesisReceived = true;
+		//}
+		//else
+		//{
 			recognizedText.append(text);
 			recognitionReceived = true;
-			this->context->WriteAudio(pResult);
-		}
+			
+		//}
 	}
+	//this->context->WriteAudio(pResult);
 
 }
 
@@ -140,14 +182,16 @@ void DictationRecognitionResult::Process()
 	CSpEvent event;
 	std::wstring recognizedText;
 	std::wstring hypothesisText;
-	ISpRecoResult* pResult;
+	ISpRecoResult* pResult = nullptr;
 	bool recognitionReceived = false;
 	bool hypothesisReceived = false;
 	bool stopReceived = false;
+	
 	while (event.GetFrom(context->GetContext()) == S_OK)
 	{
+		
 		//DUMP_EVENT_NAME(event.eEventId);
-
+		
 		switch (event.eEventId)
 		{
 		case SPEI_SOUND_START:
@@ -177,12 +221,10 @@ void DictationRecognitionResult::Process()
 		case SPEI_FALSE_RECOGNITION:
 		{
 			::PrintError(std::wstring(L"false recognition"), S_OK);
-			pResult = event.RecoResult();
-			//event.RetainedAudioStream.
-			if (pResult)
-			{
-				this->context->WriteAudio(pResult);
-			}
+			//if (pResult)
+			//{
+			//	//this->context->WriteAudio(pResult);
+			//}
 			break;
 		}
 		case SPEI_RECO_OTHER_CONTEXT:
@@ -192,10 +234,19 @@ void DictationRecognitionResult::Process()
 		case SPEI_HYPOTHESIS:
 		{
 			::PrintError(std::wstring(L"hypothesis"), S_OK);
+			hypothesisReceived = true;
+			pResult = event.RecoResult();
+			ProcessHypothesis(pResult, hypothesisText);
+			break;
 		}
 		case SPEI_RECOGNITION:
 		{
-			ProcessRecognition(event, recognizedText, hypothesisText, recognitionReceived, hypothesisReceived, stopReceived);
+			pResult = event.RecoResult();
+			ProcessRecognition(pResult, recognizedText, recognitionReceived, stopReceived);
+			if (!stopReceived)
+			{
+				this->context->WriteAudio(pResult);
+			}
 			break;
 		}
 		case SPEI_INTERFERENCE:
@@ -211,15 +262,23 @@ void DictationRecognitionResult::Process()
 	{
 		this->context->DictationStopped();
 	}
+	else
+	{
+		if (!hypothesisText.empty() && hypothesisReceived)
+		{
+			this->context->HypothesisReceived(hypothesisText);
+		}
 
-	if (!hypothesisText.empty() && hypothesisReceived)
-	{
-		this->context->HypothesisReceived(hypothesisText);
-	}
-	
-	if (!recognizedText.empty() && recognitionReceived)
-	{
-		this->context->RecognitionReceived(recognizedText);
+		if (!recognizedText.empty() && recognitionReceived)
+		{
+			this->context->RecognitionReceived(recognizedText);
+			//this->context->WriteAudio(pResult);
+		}
+
+		//if (pResult != NULL)
+		//{
+		//	this->context->WriteAudio(pResult);
+		//}
 	}
 
 	event.Clear();

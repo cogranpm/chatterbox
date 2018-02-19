@@ -303,6 +303,13 @@ bool FileHandler::FileExists(const boost::filesystem::path& path)
 	return exists(path);
 }
 
+bool FileHandler::IsFileEmpty(const std::wstring& path)
+{
+	boost::filesystem::path filePath(path);
+	uintmax_t size = file_size(filePath);
+	return (size == -1);
+}
+
 std::wstring FileHandler::GetFullAudioPathToFile(const std::wstring& fileName)
 {
 	std::wstring fullPath(GetAudioPath());
