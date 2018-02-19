@@ -17,7 +17,8 @@ PublicationDialog( parent )
 
 PublicationDialogImp::~PublicationDialogImp()
 {
-
+	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
 }
 
 void PublicationDialogImp::OnInitDialog( wxInitDialogEvent& event )

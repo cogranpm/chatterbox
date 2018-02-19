@@ -50,6 +50,14 @@ public:
 	static const std::wstring RULE_DIALOG_ACTIONS;
 	static const std::wstring RULE_DICTATION_ENTRY;
 
+	/* publication panel */
+	static const std::wstring RULE_PUBLICATION_PANEL;
+	static const std::wstring RULE_PUBLICATION_PANEL_CONTROLS;
+	/* exercise panel */
+	static const std::wstring RULE_EXERCISE_DIALOG;
+	static const std::wstring RULE_EXERCISE_CONTROLS;
+
+
 	static const std::wstring COMMAND_FILE;
 	static const std::wstring COMMAND_FILE_MENU_QUIT;
 	static const std::wstring COMMAND_ACTION;

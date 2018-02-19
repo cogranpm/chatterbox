@@ -12,7 +12,9 @@ class Question : public BaseEntity
 		Question(const unsigned long quizId); 
 		Question();
 		virtual ~Question(){}
-		std::wstring GetQuestionText(){ return questionText;}
+		bool operator==(const Question  &entity);
+
+		const std::wstring GetQuestionText() const { return questionText;}
 		std::wstring GetLimitedQuestionText()
 		{ 
 			if(questionText.size() > 0 )
@@ -34,13 +36,13 @@ class Question : public BaseEntity
 		}
 		void SetQuestionText(const std::wstring& questionText);
 		
-		std::wstring GetQuestionFile(){ return questionFile;}
+		const std::wstring GetQuestionFile() const { return questionFile;}
 		void SetQuestionFile(const std::wstring& audioFile);
 
-		const unsigned long GetQuestionId() {return questionId;}
+		unsigned long GetQuestionId() const {return questionId;}
 		void SetQuestionId(const unsigned long id) {questionId = id;}
 		
-		const unsigned long GetQuizId() {return quizId;}
+		const unsigned long GetQuizId() const {return quizId;}
 		void SetQuizId(const unsigned long id) {quizId = id;}
 
 		Answer* GetAnswer() { return &answer; }

@@ -10,7 +10,9 @@ public:
 	QuizRunHeader();
 	QuizRunHeader(unsigned long quizId);
 	virtual ~QuizRunHeader(void);
-	const unsigned long GetQuizRunHeaderId() {return _quizRunHeaderId;} const
+	bool operator==(const QuizRunHeader  &entity) { return _quizRunHeaderId == entity.GetQuizRunHeaderId(); }
+
+	unsigned long GetQuizRunHeaderId() const {return _quizRunHeaderId;}
 	void SetQuizRunHeaderId(const unsigned long quizRunHeaderId) {_quizRunHeaderId = quizRunHeaderId;}
 	const unsigned long GetQuizId() {return _quizId;} const
 	void SetQuizId(const unsigned long quizId) {_quizId = quizId;}

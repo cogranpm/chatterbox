@@ -7,6 +7,8 @@
 #include "NoteViewModel.h"
 #include "ExercisePanelImp.h"
 #include "ExerciseRunDialogImp.h"
+#include "SAConfirmDialogImp.h"
+#include "ActionCommandParser.h"
 
 PublicationPanelImp::PublicationPanelImp( wxWindow* parent, Publication* publication)
 :
@@ -58,6 +60,9 @@ PublicationPanelImp::~PublicationPanelImp()
 		this->quizRunModel = nullptr;
 		delete this->quizRunModel;
 	}
+
+	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
 }
 
 void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
@@ -109,11 +114,59 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	this->RenderTopics(nullptr);
 	this->RenderExercises(nullptr);
 	this->RenderQuizRuns();
+
+	SetupSpeechHandlers();
 }
 
 void PublicationPanelImp::SetupSpeechHandlers()
 {
 	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+
+	std::vector<std::wstring> ruleNames;
+	ruleNames.push_back(MyApp::RULE_PUBLICATION_PANEL);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+
+	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&PublicationPanelImp::OnCommandRecognized, this, _1, _2));
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+}
+
+
+void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)
+{
+	std::wstring actionName;
+	std::wstring actionTarget;
+	std::wstring targetValue;
+	std::wstring ruleName;
+	ActionCommandParser actionParser;
+	actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
+
+	if (boost::algorithm::equals(actionName, L"addquiz"))
+	{
+		AddQuiz();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"addnote"))
+	{
+		AddQuiz();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"deletequiz"))
+	{
+		DeleteQuiz();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"deletenote"))
+	{
+		DeleteNote();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"deletequizrun"))
+	{
+		DeleteQuizRun();
+		return;
+	}
 }
 
 void PublicationPanelImp::BindModel()
@@ -353,14 +406,20 @@ void PublicationPanelImp::OnSelectNote(Note* note)
 	this->_viewModel->SetNote(note);
 }
 
-void PublicationPanelImp::AddNoteOnButtonClick( wxCommandEvent& event ) 
-{ 
+
+void PublicationPanelImp::AddNote()
+{
 	Note* note = new Note(this->_viewModel->GetTopic()->getTopicId());
 	NoteDialogImp dialog(this, note);
-	if(dialog.ShowModal() == wxID_OK)
+	if (dialog.ShowModal() == wxID_OK)
 	{
 		this->OnAfterNoteDialogClosed(dialog, note);
 	}
+}
+
+void PublicationPanelImp::AddNoteOnButtonClick( wxCommandEvent& event ) 
+{ 
+	AddNote();
 }
 
 
@@ -376,16 +435,17 @@ void PublicationPanelImp::AddNoteOnUpdateUI( wxUpdateUIEvent& event )
 	}
 }
 
-
-void PublicationPanelImp::DeleteNoteOnButtonClick( wxCommandEvent& event ) 
-{ 
+void PublicationPanelImp::DeleteNote()
+{
 	Note* note = this->_viewModel->GetNote();
-	if(note == nullptr)
+	if (note == nullptr)
 	{
 		return;
 	}
-	
-	if(wxMessageBox("Delete, are you sure?", "Confirm Delete", wxYES_NO | wxCANCEL, this) == wxYES)
+
+	//SpeechMessageDialog dialog(this, L"Delete, are you sure?", L"Confirm Delete");
+	SAConfirmDialogImp confirmDlg(this);
+	if (confirmDlg.ShowModal() == wxYES)
 	{
 		boost::ptr_vector<Note>* list = this->_viewModel->GetNoteList();
 		wxGetApp().GetProvider()->Delete(note);
@@ -393,6 +453,12 @@ void PublicationPanelImp::DeleteNoteOnButtonClick( wxCommandEvent& event )
 		this->RenderNotes(nullptr);
 		this->OnSelectNote(nullptr);
 	}
+	SetupSpeechHandlers();
+}
+
+void PublicationPanelImp::DeleteNoteOnButtonClick( wxCommandEvent& event ) 
+{ 
+	DeleteNote();
 }
 
 void PublicationPanelImp::DeleteNoteOnUpdateUI( wxUpdateUIEvent& event ) 
@@ -448,6 +514,7 @@ void PublicationPanelImp::OnEditNote()
 	{
 		this->OnAfterNoteDialogClosed(dialog, this->_viewModel->GetNote());
 	}
+	SetupSpeechHandlers();
 }
 
 void PublicationPanelImp::OnAfterNoteDialogClosed(NoteDialogImp& dialog, Note* note)
@@ -533,14 +600,17 @@ void PublicationPanelImp::PlayOnUpdateUI(wxUpdateUIEvent& event)
 
 
 /* excercise stuff */
-void PublicationPanelImp::AddQuizOnButtonClick(wxCommandEvent& event)
-{ 
 
+void PublicationPanelImp::AddQuiz()
+{
 	ExercisePanelImp* pnlExercise = new ExercisePanelImp(wxGetApp().GetMainFrame()->GetShelfNotebook(), _viewModel->GetPublication());
 	pnlExercise->InitDialog();
 	wxGetApp().GetMainFrame()->GetShelfNotebook()->AddPage(pnlExercise, "Exercise - ", true);
-//	wxPanel* pnlNewPublication = new PublicationPanelImp(this->m_auiShelf, this->GetCurrentPublication());
+}
 
+void PublicationPanelImp::AddQuizOnButtonClick(wxCommandEvent& event)
+{ 
+	AddQuiz();
 }
 
 void PublicationPanelImp::RenderExercises(Quiz* quiz)
@@ -578,11 +648,44 @@ void PublicationPanelImp::AddQuizOnUpdateUI(wxUpdateUIEvent& event)
 	event.Skip(); 
 }
 
+void PublicationPanelImp::DeleteQuizRun()
+{
+	if (lstQuizRun->GetSelectedRow() != wxNOT_FOUND)
+	{
+		SAConfirmDialogImp confirmDlg(this);
+		if (confirmDlg.ShowModal() == wxYES)
+		{
+			QuizRunHeader header = _viewModel->GetQuizRunHeaderList()->at(lstQuizRun->GetSelectedRow());
+			wxGetApp().GetProvider()->GetQuizProvider().Delete(header);
+			boost::ptr_vector<QuizRunHeader>* list = this->_viewModel->GetQuizRunHeaderList();
+			list->erase(std::find(list->begin(), list->end(), header));
+			RenderQuizRuns();
+		}
+		SetupSpeechHandlers();
+	}
+}
+
+
+void PublicationPanelImp::DeleteQuiz()
+{
+	if (_viewModel->GetExercise() == nullptr)
+	{
+		return;
+	}
+
+	SAConfirmDialogImp confirmDlg(this);
+	if (confirmDlg.ShowModal() == wxYES)
+	{
+		wxGetApp().GetProvider()->GetQuizProvider().Delete(_viewModel->GetExercise());
+		_viewModel->SetExercise(nullptr);
+		RenderExercises(nullptr);
+	}
+	SetupSpeechHandlers();
+}
+
 void PublicationPanelImp::DeleteQuizOnButtonClick(wxCommandEvent& event) 
 { 
-	wxGetApp().GetProvider()->GetQuizProvider().Delete(_viewModel->GetExercise());
-	_viewModel->SetExercise(nullptr);
-	RenderExercises(nullptr);
+	DeleteQuiz();
 }
 
 void PublicationPanelImp::DeleteQuizOnUpdateUI(wxUpdateUIEvent& event) 
@@ -656,7 +759,7 @@ void PublicationPanelImp::Refresh()
 	this->_viewModel->GetQuizList()->clear();
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
 	this->RenderExercises(nullptr);
-
+	SetupSpeechHandlers();
 	//this->_viewModel->GetQuizRunHeaderList()->clear();
 	//wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
 	//this->RenderQuizRuns();
@@ -701,6 +804,7 @@ void PublicationPanelImp::ViewQuizRun()
 		QuizRunHeader header = _viewModel->GetQuizRunHeaderList()->at(lstQuizRun->GetSelectedRow());
 		ExerciseRunDialogImp runDialog(this, header);
 		runDialog.ShowModal();
+		SetupSpeechHandlers();
 	}
 	
 }
@@ -722,12 +826,7 @@ void PublicationPanelImp::ViewQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 }
 void PublicationPanelImp::DeleteQuizRunOnButtonClick(wxCommandEvent& event)
 {
-	if (lstQuizRun->GetSelectedRow() != wxNOT_FOUND)
-	{
-		QuizRunHeader header = _viewModel->GetQuizRunHeaderList()->at(lstQuizRun->GetSelectedRow());
-		wxGetApp().GetProvider()->GetQuizProvider().Delete(header);
-		RenderQuizRuns();
-	}
+	DeleteQuizRun();
 }
 void PublicationPanelImp::DeleteQuizRunOnUpdateUI(wxUpdateUIEvent& event)
 {

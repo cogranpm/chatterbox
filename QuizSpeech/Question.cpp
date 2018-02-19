@@ -13,6 +13,20 @@ Question::Question() : Question(0)
 
 }
 
+bool Question::operator==(const Question  &entity)
+{
+	if (entity.GetQuestionId() > 0)
+	{
+		return questionId == entity.GetQuestionId();
+	}
+	else
+	{
+		return (entity.GetQuestionText() == GetQuestionText())
+			&&(entity.GetQuizId() == GetQuizId())
+			&& (entity.GetQuestionFile() == GetQuestionFile());
+	}
+}
+
 void Question::SetQuestionText(const std::wstring& questionText) 
 { 
 	std::wstring oldValue = this->questionText;

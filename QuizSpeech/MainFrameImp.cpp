@@ -380,8 +380,8 @@ void MainFrameImp::DeleteSubject()
 		return;
 	}
 
-	/* need to replace this with speech enabled version */
-	if (wxMessageBox("Delete, are you sure?", "Confirm Delete", wxYES_NO | wxCANCEL, this) == wxYES)
+	SAConfirmDialogImp confirmDlg(this);
+	if (confirmDlg.ShowModal() == wxYES)
 	{
 		boost::ptr_vector<Subject>* subjectList = wxGetApp().GetMainFrameViewModel()->getSubjectList();
 		wxGetApp().GetProvider()->Delete(currentSubject);
@@ -577,8 +577,8 @@ void MainFrameImp::DeletePublication()
 	{
 		return;
 	}
-
-	if (wxMessageBox("Delete, are you sure?", "Confirm Delete", wxYES_NO | wxCANCEL, this) == wxYES)
+	SAConfirmDialogImp confirmDlg(this);
+	if (confirmDlg.ShowModal() == wxYES)
 	{
 		boost::ptr_vector<Publication>* list = wxGetApp().GetMainFrameViewModel()->getPublicationList();
 		wxGetApp().GetProvider()->Delete(currentPublication);

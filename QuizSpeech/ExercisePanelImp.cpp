@@ -7,6 +7,8 @@
 #include "DictationOverlayDialogImp.h"
 #include "DictationOverlayClientHelper.h"
 #include "SAConfirmDialogImp.h"
+#include "ActionCommandParser.h"
+#include "SAConfirmDialogImp.h"
 
 ExercisePanelImp::ExercisePanelImp( wxWindow* parent, Publication* publication )
 :
@@ -20,6 +22,61 @@ ExercisePanelImp::ExercisePanelImp(wxWindow* parent, Publication* publication, Q
 	ExercisePanel(parent), viewModel(publication, quiz->GetQuizId())
 {
 
+}
+
+void ExercisePanelImp::SetupSpeechHandlers()
+{
+	std::vector<std::wstring> ruleNames;
+	ruleNames.push_back(MyApp::RULE_EXERCISE_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+
+	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&ExercisePanelImp::OnCommandRecognized, this, _1, _2));
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+}
+
+
+void ExercisePanelImp::OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)
+{
+	std::wstring actionName;
+	std::wstring actionTarget;
+	std::wstring targetValue;
+	std::wstring ruleName;
+	ActionCommandParser actionParser;
+	actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
+
+	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
+	{
+		this->Close();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
+	{
+		if (this->txtName->HasFocus())
+		{
+			this->txtName->Clear();
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"addquestion"))
+	{
+		AddQuestion();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"deletequestion"))
+	{
+		DeleteQuestion();
+		return;
+	}
+}
+
+
+
+ExercisePanelImp::~ExercisePanelImp()
+{
+	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
 }
 
 void ExercisePanelImp::AddQuestion()
@@ -168,6 +225,10 @@ void ExercisePanelImp::RenderCurrentQuestion()
 
 	if (viewModel.GetCurrentQuestion() == nullptr)
 	{
+		playerQuestion.Clear();
+		playerAnswer.Clear();
+		questionText->Clear();
+		answerText->Clear();
 		return;
 	}
 	EnableQuestion();
@@ -322,7 +383,7 @@ void ExercisePanelImp::ExercisePanelOnInitDialog( wxInitDialogEvent& event )
 	RenderTopics();
 	RenderQuestions();
 	RenderCurrentQuestion();
-
+	SetupSpeechHandlers();
 	this->Layout();
 
 }
@@ -349,10 +410,29 @@ void ExercisePanelImp::AddQuestionOnButtonClick( wxCommandEvent& event )
 	AddQuestion();
 }
 
+void ExercisePanelImp::DeleteQuestion()
+{
+	if (viewModel.GetCurrentQuestion() == nullptr)
+	{
+		return;
+	}
+
+	SAConfirmDialogImp confirmDlg(this);
+	if (confirmDlg.ShowModal() == wxYES)
+	{
+		wxGetApp().GetProvider()->GetQuizProvider().Delete(viewModel.GetCurrentQuestion());
+		boost::ptr_vector<Question>* list = viewModel.GetQuestionList();
+		list->erase(std::find(list->begin(), list->end(), *viewModel.GetCurrentQuestion()));
+		viewModel.SetCurrentQuestion(nullptr);
+		RenderQuestions();
+		RenderCurrentQuestion();
+	}
+	SetupSpeechHandlers();
+}
+
 void ExercisePanelImp::DeleteQuestionOnButtonClick( wxCommandEvent& event )
 {
-	viewModel.SetCurrentQuestion(nullptr);
-	wxGetApp().GetProvider()->GetQuizProvider().Delete(viewModel.GetCurrentQuestion());
+	DeleteQuestion();
 }
 
 void ExercisePanelImp::DeleteQuestionOnUpdateUI( wxUpdateUIEvent& event )

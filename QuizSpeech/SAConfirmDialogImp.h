@@ -27,6 +27,7 @@ class SAConfirmDialogImp : public SAConfirmDialog
 		/** Constructor */
 		SAConfirmDialogImp( wxWindow* parent);
 		SAConfirmDialogImp(wxWindow* parent, const wxString& title, const wxString& message);
+		~SAConfirmDialogImp();
 	//// end generated class members
 	
 };
