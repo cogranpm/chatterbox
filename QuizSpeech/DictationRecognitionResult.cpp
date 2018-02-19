@@ -3,6 +3,7 @@
 #include "GlobalConstants.h"
 #include "CommandProperty.h"
 #include "ActionCommandParser.h"
+#include "MyApp.h"
 
 DictationRecognitionResult::DictationRecognitionResult(DictationContext* context) : context(context)
 {
@@ -75,23 +76,26 @@ void DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 		break;
 	case GID_DICTATIONCC:
 
-		CSpDynamicString dstrText;
-		BYTE dwAttributes;
-		hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
-		std::wstring commandText(dstrText.Copy());
-		if (commandText == L"stop recording")
-		{
-			/* user has told us to stop dictating based on diction command and control rules */
-			stopReceived = true;
-			recognitionReceived = false;
-			return;
-		}
-		//std::wstring ruleName(pPhrase->Rule.pszName);
-		/*const SPPHRASEPROPERTY* pProp = pPhrase->pProperties;
-		std::vector<CommandProperty> commandPropertyList;
+		//CSpDynamicString dstrText;
+		//BYTE dwAttributes;
+		//hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
+		//std::wstring commandText(dstrText.Copy());
+		//if (commandText == L"stop recording")
+		//{
+		//	/* user has told us to stop dictating based on diction command and control rules */
+		//	stopReceived = true;
+		//	recognitionReceived = false;
+		//	return;
+		//}
 
+
+		hr = pResult->GetPhrase(&pPhrase);
+		std::wstring ruleName(pPhrase->Rule.pszName);
+		std::vector<CommandProperty> commandPropertyList;
+		const SPPHRASEPROPERTY* pProp = pPhrase->pProperties;
 		while (pProp != NULL)
 		{
+
 			std::wstring phraseValue(L"");
 			std::wstring phraseProperty(L"");
 
@@ -106,22 +110,32 @@ void DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 			CommandProperty commandProperty(phraseProperty, phraseValue, ruleName);
 			commandPropertyList.push_back(commandProperty);
 			pProp = pProp->pNextSibling;
-		}*/
-		//ActionCommandParser parser;
-		//std::wstring actionName;
-		//std::wstring ruleNamea;
-		//std::wstring targetName;
-		//std::wstring targetValue;
-		//parser.Parse(commandPropertyList, actionName, targetName, targetValue, ruleNamea);
-		//if (actionName == L"stop" && targetName == L"recording")
-		//{
-		//	/* user has told us to stop dictating based on diction command and control rules */
-		//	stopReceived = true;
-		//	hypothesisReceived = false;
-		//	recognitionReceived = false;
-		//	return;
-		//}
+		}
+		ActionCommandParser actionParser;
+		std::wstring actionName;
+		std::wstring actionTarget;
+		std::wstring targetValue;
+		actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
 
+		/* not sure if allowing OK and cancel is smart because they are too common as words 
+			should enforce a phrase like stop recording 
+		*/
+		//if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
+		//{
+		//	//stopReceived = true;
+		//	//recognitionReceived = false;
+		//}
+		//else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
+		//{
+		//	//stopReceived = true;
+		//	//recognitionReceived = false;
+		//}
+		//else 
+		if (boost::algorithm::equals(actionName, L"stop"))
+		{
+			stopReceived = true;
+			recognitionReceived = false;
+		}
 	}
 
 	SPRECORESULTTIMES times;

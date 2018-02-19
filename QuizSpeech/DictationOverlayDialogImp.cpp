@@ -111,7 +111,6 @@ void DictationOverlayDialogImp::OnCommandRecognized(std::wstring& phrase, const 
 		{
 			audioPlayerPanel->Play();
 		}
-		
 	}
 }
 
