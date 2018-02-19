@@ -18,7 +18,7 @@ class PublicationDialogImp : public PublicationDialog
 {
 private:
 	short _type;
-	void OnCommandRecognized(std::wstring& phrase, std::vector<CommandProperty> commandPropertyList);
+	void OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList);
 	void DisableWindow(bool flag);
 
 	protected:

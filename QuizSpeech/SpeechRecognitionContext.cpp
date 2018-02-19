@@ -161,7 +161,7 @@ CComPtr<ISpRecoContext> SpeechRecognitionContext::GetContext()
 //when command and control recognition events are received
 //the CommandRecognitionResult instance is passed this intance in its constructor
 //the calling client wires up the signals and slots that it is interested in, ie m_command_completed
-void SpeechRecognitionContext::CommandRecognitionReceived(const std::wstring& commandText, std::vector<CommandProperty> commandPropertyList)
+void SpeechRecognitionContext::CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList)
 {
 	//broadcast this to the listeners
 	m_command_completed(commandText, commandPropertyList);

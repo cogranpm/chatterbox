@@ -7,6 +7,6 @@ class ActionCommandParser
 public:
 	ActionCommandParser();
 	~ActionCommandParser();
-	void Parse(std::vector<CommandProperty>& commandPropertyList, std::wstring& actionName, std::wstring& targetName, std::wstring& targetValue, std::wstring& ruleName);
+	void Parse(const std::vector<CommandProperty>& commandPropertyList, std::wstring& actionName, std::wstring& targetName, std::wstring& targetValue, std::wstring& ruleName);
 };
 

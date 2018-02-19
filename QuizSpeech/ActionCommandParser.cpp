@@ -11,7 +11,7 @@ ActionCommandParser::~ActionCommandParser()
 {
 }
 
-void ActionCommandParser::Parse(std::vector<CommandProperty>& commandPropertyList, std::wstring& actionName, std::wstring& targetName, std::wstring& targetValue, std::wstring& ruleName)
+void ActionCommandParser::Parse(const std::vector<CommandProperty>& commandPropertyList, std::wstring& actionName, std::wstring& targetName, std::wstring& targetValue, std::wstring& ruleName)
 {
 	//loop through a list of CommandProperty to find the pattern for actions which are name/value pairs
 	//eg action=add/delete/edit, entity=shelf, there might also be a targetValue from the ui, such as a shelf name, 

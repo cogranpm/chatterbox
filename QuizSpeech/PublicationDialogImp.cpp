@@ -45,7 +45,7 @@ void PublicationDialogImp::OnInitDialog( wxInitDialogEvent& event )
 }
 
 
-void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<CommandProperty> commandPropertyList)
+void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)
 {
 	std::wstring actionName;
 	std::wstring actionTarget;
