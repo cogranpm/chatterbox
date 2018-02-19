@@ -67,7 +67,11 @@ void SqliteProvider::initDB(const wxString dbPath)
 			this->CreateSampleData();
 		}
 
-
+		int ver = GetVersion();
+		if (ver == 0)
+		{
+			SetVersion(1);
+		}
 	}
 	catch (wxSQLite3Exception &e)
 	{
@@ -75,6 +79,32 @@ void SqliteProvider::initDB(const wxString dbPath)
 		throw e.GetMessage();
 	}
 
+}
+
+void SqliteProvider::SetVersion(int version)
+{
+	try
+	{
+		wxString statement = wxString::Format("PRAGMA USER_VERSION = %d;", version);
+		wxSQLite3Statement stmt = db->PrepareStatement(statement);
+		stmt.ExecuteUpdate();
+	}
+	catch (wxSQLite3Exception& ex)
+	{
+		throw ex.GetMessage();
+	}
+}
+
+
+int SqliteProvider::GetVersion()
+{
+	int val = 0;
+	wxSQLite3ResultSet set = db->ExecuteQuery(wxString("PRAGMA USER_VERSION;"));
+	while (set.NextRow())
+	{
+		val = set.GetInt(0, 0);
+	}
+	return val;
 }
 
 

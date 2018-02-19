@@ -73,5 +73,8 @@ private:
 	void SetTopicFromRecord(Topic* topic, wxSQLite3ResultSet& set);
 	void SetNoteFromRecord(Note* note, wxSQLite3ResultSet& set);
 	void SetNoteSegmentFromRecord(NoteSegment* noteSegement, wxSQLite3ResultSet& set);
+
+	void SetVersion(int version);
+	int GetVersion();
 };
 

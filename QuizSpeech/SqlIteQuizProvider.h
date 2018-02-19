@@ -30,6 +30,7 @@ private:
 	void SetQuizRunHeaderFromRecord(QuizRunHeader* entity, wxSQLite3ResultSet& set);
 	void SetQuizRunQuestionFromRecord(QuizRunQuestion* entity, wxSQLite3ResultSet& set);
 	void GetAnswerByQuestion(Question* question);
+	
 public:
 	SqlIteQuizProvider(wxSQLite3Database* db, SqliteDDLProvider* ddl);
 	~SqlIteQuizProvider();
