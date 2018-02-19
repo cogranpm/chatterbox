@@ -174,8 +174,11 @@ void MainFrameImp::SetCurrentShelf(Shelf* shelf)
 		wxGetApp().GetProvider()->GetSubjectsByShelf(shelf, wxGetApp().GetMainFrameViewModel()->getSubjectList());
 		this->RenderSubjects(NULL);
 	}
-	wxGetApp().GetMainFrameViewModel()->getPublicationList()->clear();
-	this->RenderPublications(NULL);
+	if (m_lstSubject->GetSelectedRow() == wxNOT_FOUND)
+	{
+		wxGetApp().GetMainFrameViewModel()->getPublicationList()->clear();
+		this->RenderPublications(NULL);
+	}
 }
 
 void MainFrameImp::SetCurrentSubject(Subject* subject)
@@ -234,6 +237,11 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 			this->m_dvlShelf->SelectRow(i);
 		}
 	}	
+	if ((m_dvlShelf->GetSelectedRow() == wxNOT_FOUND) && m_dvlShelf->GetItemCount() > 0)
+	{
+		m_dvlShelf->SelectRow(0);
+		OnSelectShelf(&shelfList->at(0));
+	}
 }
 
 
@@ -440,6 +448,11 @@ void MainFrameImp::RenderSubjects(Subject* subject)
 			this->m_lstSubject->SelectRow(i);
 		}
 	}	
+	if ((m_lstSubject->GetSelectedRow() == wxNOT_FOUND) && m_lstSubject->GetItemCount() > 0)
+	{
+		m_lstSubject->SelectRow(0);
+		OnSelectSubject(&itemsList->at(0));
+	}
 
 	/* using the list ctrl, something wrong when clicking on first item in list, is null
 	this->m_lstSubject->Hide();

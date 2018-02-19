@@ -25,6 +25,9 @@ const std::wstring MyApp::RULE_PUBLICATION_PANEL_CONTROLS = L"PUBLICATION_PANEL_
 /* EXERCISE PANEL */
 const std::wstring MyApp::RULE_EXERCISE_DIALOG = L"EXERCISE_DIALOG";
 const std::wstring MyApp::RULE_EXERCISE_CONTROLS = L"EXERCISE_CONTROLS";
+/* NOTE PANEL */
+const std::wstring MyApp::RULE_NOTE_DIALOG = L"NOTE_DIALOG";
+const std::wstring MyApp::RULE_NOTE_CONTROLS = L"NOTE_CONTROLS";
 
 const std::wstring MyApp::COMMAND_FILE = L"file";
 const std::wstring MyApp::COMMAND_FILE_MENU_QUIT = L"quit";

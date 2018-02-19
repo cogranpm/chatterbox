@@ -56,7 +56,9 @@ public:
 	/* exercise panel */
 	static const std::wstring RULE_EXERCISE_DIALOG;
 	static const std::wstring RULE_EXERCISE_CONTROLS;
-
+	/* note dialog */
+	static const std::wstring RULE_NOTE_DIALOG;
+	static const std::wstring RULE_NOTE_CONTROLS;
 
 	static const std::wstring COMMAND_FILE;
 	static const std::wstring COMMAND_FILE_MENU_QUIT;

@@ -148,9 +148,19 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		AddQuiz();
 		return;
 	}
+	else if (boost::algorithm::equals(actionName, L"editquiz"))
+	{
+		OnEditExercise();
+		return;
+	}
 	else if (boost::algorithm::equals(actionName, L"addnote"))
 	{
 		AddNote();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"editnote"))
+	{
+		OnEditNote();
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, L"deletequiz"))

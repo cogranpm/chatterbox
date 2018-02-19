@@ -6,7 +6,7 @@
 #include "DictationOverlayDialogImp.h"
 #include "DictationOverlayClientHelper.h"
 #include "SegmentTemplateDialogImp.h"
-
+#include "ActionCommandParser.h"
 
 struct findSegmentHeader
 {
@@ -28,17 +28,19 @@ NoteDialog( parent ), viewModel(note), noteAudioPlayer()// viewModel(std::make_u
 
 NoteDialogImp::~NoteDialogImp()
 {
-		/*lets delete all the panels that were created manually, this does happen normally but something is wrong
-		boost::ptr_vector<NoteSegment>* list = viewModel.GetNoteSegmentList();
-		for(int i = 0; i < list->size(); i ++ )
+	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
+	/*lets delete all the panels that were created manually, this does happen normally but something is wrong
+	boost::ptr_vector<NoteSegment>* list = viewModel.GetNoteSegmentList();
+	for(int i = 0; i < list->size(); i ++ )
+	{
+		NoteSegmentPanelImp* segmentPanel = list->at(i).GetPanel();
+		if(segmentPanel != NULL)
 		{
-			NoteSegmentPanelImp* segmentPanel = list->at(i).GetPanel();
-			if(segmentPanel != NULL)
-			{
-				delete segmentPanel;
-			}
+			delete segmentPanel;
 		}
-		*/
+	}
+	*/
 }
 
 void NoteDialogImp::OnInitDialog( wxInitDialogEvent& event ) 
@@ -88,24 +90,130 @@ void NoteDialogImp::RenderNoteSegmentTypes()
 void NoteDialogImp::SetupSpeechHandlers()
 {
 	std::vector<std::wstring> ruleNames;
-	//ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
-	//ruleNames.push_back(MyApp::RULE_FILE_MENU);
+	ruleNames.push_back(MyApp::RULE_NOTE_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 
 	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	//boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	//*(commandConnection) = wxGetApp().GetSpeechListener().onCommandRecognized(boost::bind(&MainFrameImp::OnCommandRecognized, this, _1, _2));
-	//wxGetApp().GetSpeechListener().EnableRules(ruleNames);
+	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&NoteDialogImp::OnCommandRecognized, this, _1, _2));
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
 }
 
+void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)
+{
+	std::wstring actionName;
+	std::wstring actionTarget;
+	std::wstring targetValue;
+	std::wstring ruleName;
+	ActionCommandParser actionParser;
+	actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
 
-void NoteDialogImp::RecordTitleOnButtonClick(wxCommandEvent& event)
-{ 
+	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
+	{
+		CloseMe();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
+	{
+		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->m_sdbSizer1OK->GetId());
+		this->m_sdbSizer1OK->Command(evt);
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
+	{
+		if (this->txtTitle->HasFocus())
+		{
+			this->txtTitle->Clear();
+		}
+		else if (this->txtDescription->HasFocus())
+		{
+			this->txtDescription->Clear();
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"recordtitle"))
+	{
+		RecordTitle();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"playtitle"))
+	{
+		titlePlayer.Play();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"recorddescription"))
+	{
+		RecordDescription();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"playdescription"))
+	{
+		player.Play();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"playall"))
+	{
+		noteAudioPlayer.Start(&viewModel);
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"applytemplate"))
+	{
+		AddSelectedSegments();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"addtemplate"))
+	{
+		NewSegment();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"edittemplate"))
+	{
+		EditSegment();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"deletetemplate"))
+	{
+		DeleteSegment();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"close"))
+	{
+		CloseMe();
+		return;
+	}
+}
+
+void NoteDialogImp::CloseMe()
+{
+	this->Close();
+}
+
+void NoteDialogImp::RecordTitle()
+{
 	std::wstring filePathBuffer(L"");
 	int returnValue = DictationOverlayClientHelper::ShowDictationDialog(viewModel.GetNote()->GetTitleAudioFile(), this, txtTitle, &titlePlayer, &filePathBuffer);
 	if (returnValue == wxID_OK)
 	{
 		viewModel.GetNote()->SetTitleAudioFile(filePathBuffer);
 	}
+	SetupSpeechHandlers();
+}
+
+void NoteDialogImp::RecordDescription()
+{
+	std::wstring filePathBuffer(L"");
+	int returnValue = DictationOverlayClientHelper::ShowDictationDialog(viewModel.GetNote()->GetDescriptionAudioFile(), this, txtDescription, &player, &filePathBuffer);
+	if (returnValue == wxID_OK)
+	{
+		viewModel.GetNote()->SetDescriptionAudioFile(filePathBuffer);
+	}
+	SetupSpeechHandlers();
+
+}
+
+void NoteDialogImp::RecordTitleOnButtonClick(wxCommandEvent& event)
+{ 
+	RecordTitle();
 }
 
 void NoteDialogImp::ClearTitleOnButtonClick(wxCommandEvent& event)
@@ -116,13 +224,7 @@ void NoteDialogImp::ClearTitleOnButtonClick(wxCommandEvent& event)
 
 void NoteDialogImp::RecordDescriptionOnButtonClick(wxCommandEvent& event)
 { 
-	std::wstring filePathBuffer(L"");
-	int returnValue = DictationOverlayClientHelper::ShowDictationDialog(viewModel.GetNote()->GetDescriptionAudioFile(), this, txtDescription, &player, &filePathBuffer);
-	if (returnValue == wxID_OK)
-	{
-		viewModel.GetNote()->SetDescriptionAudioFile(filePathBuffer);
-	}
-
+	RecordDescription();
 }
 
 void NoteDialogImp::ClearDescriptionOnButtonClick(wxCommandEvent& event)
@@ -216,16 +318,15 @@ NoteSegmentPanelImp* NoteDialogImp::AddSegment(NoteSegment* noteSegment, NoteSeg
 void NoteDialogImp::AddSegmentOnButtonClick( wxCommandEvent& event ) 
 {
 	this->AddSelectedSegments();
-
 }
 
 
 void NoteDialogImp::ClearSegmentOnButtonClick(wxCommandEvent& event) { event.Skip(); }
 
 
-void NoteDialogImp::NewSegmentOnButtonClick(wxCommandEvent& event) 
-{ 
-	/* open up a dialog to manage a new note segment template 
+void NoteDialogImp::NewSegment()
+{
+	/* open up a dialog to manage a new note segment template
 	then it will appear in the list of templates for the user to apply to the note
 	*/
 	SegmentTypeViewModel viewModel;
@@ -237,12 +338,16 @@ void NoteDialogImp::NewSegmentOnButtonClick(wxCommandEvent& event)
 		SaveSegmentTypes(viewModel);
 		RenderNoteSegmentTypes();
 	}
-	
+	SetupSpeechHandlers();
 }
 
-
-void NoteDialogImp::EditSegmentOnButtonClick(wxCommandEvent& event) 
+void NoteDialogImp::NewSegmentOnButtonClick(wxCommandEvent& event) 
 { 
+	NewSegment();
+}
+
+void NoteDialogImp::EditSegment()
+{
 	/* open up a dialog to manage an existing note segment template
 	then it will appear in the list of templates for the user to apply to the note
 	*/
@@ -271,6 +376,17 @@ void NoteDialogImp::EditSegmentOnButtonClick(wxCommandEvent& event)
 	{
 		lstTypes->SetSelection(selectedRow);
 	}
+	SetupSpeechHandlers();
+}
+
+void NoteDialogImp::DeleteSegment()
+{
+
+}
+
+void NoteDialogImp::EditSegmentOnButtonClick(wxCommandEvent& event) 
+{ 
+	EditSegment();
 }
 
 void NoteDialogImp::SaveSegmentTypes(SegmentTypeViewModel& viewModel)
