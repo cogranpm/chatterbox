@@ -120,18 +120,14 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 
 void PublicationPanelImp::SetupSpeechHandlers()
 {
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-
 	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_PANEL);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-
 	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
 	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
 	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&PublicationPanelImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->ChangeGrammarEnabledState(SPGS_ENABLED);
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
-	
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->ChangeGrammarEnabledState(SPGS_ENABLED);
 }
 
 
@@ -442,6 +438,7 @@ void PublicationPanelImp::AddNote()
 	{
 		this->OnAfterNoteDialogClosed(dialog, note);
 	}
+	SetupSpeechHandlers();
 }
 
 void PublicationPanelImp::AddNoteOnButtonClick( wxCommandEvent& event ) 
@@ -591,7 +588,7 @@ void PublicationPanelImp::OnAfterNoteDialogClosed(NoteDialogImp& dialog, Note* n
 		this->OnSelectNote(note);
 	}
 	this->RenderNotes(note);
-	SetupSpeechHandlers();
+	
 }
 
 void PublicationPanelImp::PlayOnButtonClick(wxCommandEvent& event) 
