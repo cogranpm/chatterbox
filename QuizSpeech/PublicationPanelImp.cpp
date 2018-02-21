@@ -150,6 +150,11 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		OnEditExercise();
 		return;
 	}
+	else if (boost::algorithm::equals(actionName, L"runquiz"))
+	{
+		RunQuiz();
+		return;
+	}
 	else if (boost::algorithm::equals(actionName, L"addnote"))
 	{
 		AddNote();
@@ -757,13 +762,22 @@ void PublicationPanelImp::QuizOnSelectionChanged(wxDataViewEvent& event)
 	this->OnSelectExercise(quiz);
 }
 
-void PublicationPanelImp::RunQuizOnButtonClick(wxCommandEvent& event)
+void PublicationPanelImp::RunQuiz()
 {
+	if (_viewModel->GetExercise() == nullptr)
+	{
+		return;
+	}
 	ExerciseRunDialogImp runDialog(this, _viewModel->GetExercise()->GetQuizId());
 	runDialog.ShowModal();
 	this->_viewModel->GetQuizRunHeaderList()->clear();
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
 	this->RenderQuizRuns();
+}
+
+void PublicationPanelImp::RunQuizOnButtonClick(wxCommandEvent& event)
+{
+	RunQuiz();
 }
 
 void PublicationPanelImp::RunQuizOnUpdateUI(wxUpdateUIEvent& event)

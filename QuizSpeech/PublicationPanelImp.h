@@ -42,6 +42,7 @@ class PublicationPanelImp : public pnlMain
 		void OnSelectExercise(Quiz* quiz);
 		void OnEditExercise();
 		void RenderQuizRuns();
+		void RunQuiz();
 		void SetupSpeechHandlers();
 		void ViewQuizRun();
 		void AddQuiz();
