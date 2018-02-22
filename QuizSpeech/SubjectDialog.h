@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -50,7 +50,7 @@ class SubjectDialog : public wxDialog
 		wxButton* btnStdCancel;
 		wxString _title; 
 		
-		SubjectDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Subject"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 524,144 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		SubjectDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Subject"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 524,144 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("SubjectDialog") ); 
 		~SubjectDialog();
 	
 };

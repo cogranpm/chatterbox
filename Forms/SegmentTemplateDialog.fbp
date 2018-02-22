@@ -50,7 +50,7 @@
             <property name="title">Segment Template</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
-            <property name="window_name"></property>
+            <property name="window_name">SegmentTemplateDialog</property>
             <property name="window_style"></property>
             <event name="OnActivate"></event>
             <event name="OnActivateApp"></event>
@@ -343,7 +343,7 @@
                                                 <property name="validator_data_type">wxString</property>
                                                 <property name="validator_style">wxFILTER_NONE</property>
                                                 <property name="validator_type">wxTextValidator</property>
-                                                <property name="validator_variable">name</property>
+                                                <property name="validator_variable">templateName</property>
                                                 <property name="value"></property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>

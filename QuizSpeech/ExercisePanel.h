@@ -100,7 +100,7 @@ class ExercisePanel : public wxPanel
 	public:
 		wxString dataName; 
 		
-		ExercisePanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 873,659 ), long style = wxTAB_TRAVERSAL ); 
+		ExercisePanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 873,659 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxT("ExercisePanel") ); 
 		~ExercisePanel();
 		
 		void m_splitter1OnIdle( wxIdleEvent& )

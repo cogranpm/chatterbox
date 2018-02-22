@@ -55,7 +55,7 @@ class OverlayDialog : public wxDialog
 		wxBoxSizer* szAudioPlayer;
 		wxString recognizedText; 
 		
-		OverlayDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 464,289 ), long style = 0 ); 
+		OverlayDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 464,289 ), long style = 0, const wxString& name = wxT("DictationOverlayDialog") ); 
 		~OverlayDialog();
 	
 };

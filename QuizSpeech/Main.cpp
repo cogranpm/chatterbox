@@ -55,6 +55,38 @@ const std::wstring MyApp::ENTITY_NOTE = L"note";
 const std::wstring MyApp::ENTITY_NOTESEGMENT = L"notesegment";
 
 
+/* window names */
+static const std::string MAIN_FRAME_WINDOW_NAME = "MainFrame";
+static const std::string PUBLICATION_PANEL_WINDOW_NAME = "PublicationPanel";;
+static const std::string AUDIOPLAYER_PANEL_WINDOW_NAME = "AudioPlayerPanel";;
+static const std::string EXERCISE_PANEL_WINDOW_NAME = "ExercisePanel";;
+static const std::string DICTATION_OVERLAY_DIALOG_WINDOW_NAME = "DictationOverlayDialog";;
+static const std::string EXERCISERUN_DIALOG_WINDOW_NAME = "ExerciseRunDialog";;
+
+static const std::string NOTE_DIALOG_WINDOW_NAME = "NoteDialog";;
+static const std::string NOTSEGMENT_PANEL_WINDOW_NAME = "NoteSegmentPanel";;
+static const std::string PUBLICATION_DIALOG_WINDOW_NAME = "PublicationDialog";;
+static const std::string SA_CONFIRM_DIALOG_WINDOW_NAME = "SAConfirmDialog";;
+static const std::string SEGEMENT_TEMPLATE_DIALOG_WINDOW_NAME = "SegmentTemplateDialog";;
+static const std::string SHELF_DIALOG_WINDOW_NAME = "ShelfDialog";;
+static const std::string SUBJECT_DIALOG_WINDOW_NAME = "SubjectDialog";;
+static const std::string TOPIC_DIALOG_WINDOW_NAME = "TopicDialog";;
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 //const SPSTREAMFORMAT spFormat = SPSF_22kHz16BitStereo;
 

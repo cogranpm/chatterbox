@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "SegmentTemplateDialog.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-SegmentTemplateDialog::SegmentTemplateDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+SegmentTemplateDialog::SegmentTemplateDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxDialog( parent, id, title, pos, size, style, name )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -43,7 +43,7 @@ SegmentTemplateDialog::SegmentTemplateDialog( wxWindow* parent, wxWindowID id, c
 	#else
 	txtName->SetMaxLength( 65 );
 	#endif
-	txtName->SetValidator( wxTextValidator( wxFILTER_NONE, &name ) );
+	txtName->SetValidator( wxTextValidator( wxFILTER_NONE, &templateName ) );
 	
 	bSizer6->Add( txtName, 1, wxALL, 5 );
 	

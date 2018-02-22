@@ -49,7 +49,7 @@ class TopicDialog : public wxDialog
 	public:
 		wxString _title; 
 		
-		TopicDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Topic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 473,147 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		TopicDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Topic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 473,147 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("TopicDialog") ); 
 		~TopicDialog();
 	
 };

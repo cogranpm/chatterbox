@@ -15,9 +15,12 @@ public:
 	void CreateRecognitionContext(SpeechRecognitionEngine* engine);
 	void Enable();
 	void Disable();
-	void EnableRules(std::vector<std::wstring>& ruleNames);
+	void EnableRules(std::vector<std::wstring>& ruleNames, const std::string& windowName);
+	void EnableRules();
 	void CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList);
 	void ChangeGrammarEnabledState(SPGRAMMARSTATE);
+	bool IsEnabled();
+	std::string& GetWindowName() { return windowName; }
 
 	//getters
 	CComPtr<ISpRecoContext> GetContext();
@@ -40,11 +43,12 @@ protected:
 
 
 private:
-
+	std::string windowName;
 	CComPtr<ISpRecoContext> context;
 	//CComPtr<ISpVoice>   voice;
 	CComPtr<ISpRecoGrammar> grammar;
 	SpeechRecognitionCallback* callbackInterface;
-	
+	//our own private copy of the client supplied rule names
+	std::vector<std::wstring>* ruleNames;
 };
 

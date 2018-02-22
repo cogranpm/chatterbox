@@ -92,7 +92,7 @@ class ExerciseRunDialog : public wxDialog
 	
 	public:
 		
-		ExerciseRunDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Run Exercise"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 912,666 ), long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER ); 
+		ExerciseRunDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Run Exercise"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 912,666 ), long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER, const wxString& name = wxT("ExerciseRunDialog") ); 
 		~ExerciseRunDialog();
 		
 		void listSplitterOnIdle( wxIdleEvent& )

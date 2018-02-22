@@ -41,7 +41,7 @@ void PublicationDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
 	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
 	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&PublicationDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 
 }
 
@@ -163,7 +163,7 @@ void PublicationDialogImp::TitleOnKillFocus(wxFocusEvent& event)
 	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 	//DisableWindow(false);
 	event.Skip(); 
 }
@@ -178,7 +178,7 @@ void PublicationDialogImp::TitleOnSetFocus(wxFocusEvent& event)
 	ruleNames.push_back(MyApp::RULE_DICTATION_ENTRY);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	ruleNames.push_back(MyApp::CONTROL_ACTION);
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 	//DisableWindow(false);
 	event.Skip(); 
 }
@@ -191,7 +191,7 @@ void PublicationDialogImp::TypesOnKillFocus(wxFocusEvent& event)
 	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 	//DisableWindow(false);
 	event.Skip();
 }
@@ -205,7 +205,7 @@ void PublicationDialogImp::TypesOnSetFocus(wxFocusEvent& event)
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	ruleNames.push_back(L"PUBLICATION_TYPES");
 	ruleNames.push_back(MyApp::CONTROL_ACTION);
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 	//DisableWindow(false);
 	event.Skip();
 }

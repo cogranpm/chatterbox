@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -56,7 +56,7 @@ class PublicationDialog : public wxDialog
 	public:
 		wxString _title; 
 		
-		PublicationDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Publication"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 428,184 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		PublicationDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Publication"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 428,184 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("PublicationDialog") ); 
 		~PublicationDialog();
 	
 };

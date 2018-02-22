@@ -100,7 +100,7 @@ void MainFrameImp::SetupSpeechHandlers()
 	//around everywhere that a dialog / panel needs to use one
 	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
 	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&MainFrameImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 }
 
 void MainFrameImp::menuFileQuitOnMenuSelection( wxCommandEvent& event )

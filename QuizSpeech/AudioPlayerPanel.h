@@ -42,7 +42,7 @@ class pnlPlayer : public wxPanel
 	public:
 		wxButton* btnPlay;
 		
-		pnlPlayer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 289,32 ), long style = wxTAB_TRAVERSAL ); 
+		pnlPlayer( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 289,32 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxT("AudioPlayerPanel") ); 
 		~pnlPlayer();
 	
 };

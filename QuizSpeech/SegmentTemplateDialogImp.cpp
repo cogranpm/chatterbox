@@ -25,7 +25,7 @@ void SegmentTemplateDialogImp::OnInitDialog(wxInitDialogEvent& event)
 { 
 
 	helpText = viewModel->GetModifiedHeader().getHelpText();
-	name = viewModel->GetModifiedHeader().getTitle();
+	templateName = viewModel->GetModifiedHeader().getTitle();
 
 	this->btnNew->SetBitmap(*wxGetApp().GetImages().addnewitem_icon);
 	this->btnRemove->SetBitmap(*wxGetApp().GetImages().delete_icon);
@@ -160,7 +160,7 @@ void SegmentTemplateDialogImp::OnOKButtonClick( wxCommandEvent& event )
 	}
 	else
 	{
-		viewModel->GetModifiedHeader().setTitle(name.ToStdWstring());
+		viewModel->GetModifiedHeader().setTitle(templateName.ToStdWstring());
 		viewModel->GetModifiedHeader().setHelpText(helpText.ToStdWstring());
 		event.Skip();
 	}

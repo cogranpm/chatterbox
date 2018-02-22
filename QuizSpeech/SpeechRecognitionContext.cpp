@@ -5,7 +5,7 @@
 
 
 SpeechRecognitionContext::SpeechRecognitionContext() :
-	callbackInterface(new SpeechRecognitionCallback(this)), grammar(nullptr), context(nullptr)
+	callbackInterface(new SpeechRecognitionCallback(this)), grammar(nullptr), context(nullptr), windowName(""), ruleNames(nullptr)
 {
 }
 
@@ -14,19 +14,18 @@ SpeechRecognitionContext::SpeechRecognitionContext() :
 
 SpeechRecognitionContext::~SpeechRecognitionContext()
 {
+	if (ruleNames != nullptr)
+	{
+		delete ruleNames;
+		ruleNames = nullptr;
+	}
+
 	if (this->grammar != nullptr)
 	{
-		//HRESULT hr = this->grammar->UnloadDictation();
 		this->grammar.Release();
 		this->grammar = nullptr;
 	}
 	
-	//if (this->voice != nullptr)
-	//{
-	//	this->voice.Release();
-	//	this->voice = nullptr;
-	//}
-
 	if (this->context != nullptr)
 	{
 		this->context.Release();
@@ -108,6 +107,15 @@ void SpeechRecognitionContext::Enable()
 
 void SpeechRecognitionContext::Disable()
 {
+	//deactive all rules
+	HRESULT hr = this->grammar->SetRuleState(NULL, NULL, SPRS_INACTIVE);
+	if (FAILED(hr))
+	{
+		this->grammar.Release();
+		const std::string message("Call to SetRuleState SPRS_INACTIVE failed");
+		::PrintError(L"Call to SetRuleState SPRS_INACTIVE failed", hr);
+		throw std::runtime_error(message);
+	}
 	this->ChangeGrammarEnabledState(SPGS_DISABLED);
 }
 
@@ -121,19 +129,34 @@ void SpeechRecognitionContext::ChangeGrammarEnabledState(SPGRAMMARSTATE stateFla
 		::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
 		throw std::runtime_error(message);
 	}
+	
 }
 
 //called by clients via the SpeechListener class when they have a set of rules to activate
 //for example when a particular screen is made active
-void SpeechRecognitionContext::EnableRules(std::vector<std::wstring>& ruleNames)
+void SpeechRecognitionContext::EnableRules(std::vector<std::wstring>& ruleNames, const std::string& windowName)
 {
+	this->windowName = windowName;
 	//make all the rules in ruleNames active
 
 	//first deactive all currently active rules
 	HRESULT hr = this->grammar->SetRuleState(NULL, NULL, SPRS_INACTIVE);
 
+	//copy the rules names so we can easily reload them
+	this->ruleNames = new std::vector<std::wstring>(ruleNames);
+	EnableRules();
+
+}
+
+void SpeechRecognitionContext::EnableRules()
+{
+	if (ruleNames == nullptr)
+	{
+		return;
+	}
+	HRESULT hr = S_OK;
 	//all rule names in @ruleNames are made active
-	for (std::vector<std::wstring>::iterator it = ruleNames.begin(); it != ruleNames.end(); ++it)
+	for (std::vector<std::wstring>::iterator it = this->ruleNames->begin(); it != this->ruleNames->end(); ++it)
 	{
 		std::wstring ruleName = *(it);
 		hr = this->grammar->SetRuleState(ruleName.c_str(), NULL, SPRS_ACTIVE);
@@ -146,6 +169,13 @@ void SpeechRecognitionContext::EnableRules(std::vector<std::wstring>& ruleNames)
 		}
 	}
 	this->ChangeGrammarEnabledState(SPGS_ENABLED);
+}
+
+bool SpeechRecognitionContext::IsEnabled()
+{
+	SPGRAMMARSTATE stateFlag;
+	HRESULT hr = this->grammar->GetGrammarState(&stateFlag);
+	return stateFlag == SPGS_ENABLED;
 }
 
 CComPtr<ISpRecoContext> SpeechRecognitionContext::GetContext()

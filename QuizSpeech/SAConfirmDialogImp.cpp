@@ -35,7 +35,7 @@ void SAConfirmDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
 	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
 	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&SAConfirmDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 }
 
 void SAConfirmDialogImp::NoButtonClick( wxCommandEvent& event )

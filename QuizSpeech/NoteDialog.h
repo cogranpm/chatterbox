@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -87,7 +87,7 @@ class NoteDialog : public wxDialog
 		wxBoxSizer* szTitlePlayer;
 		wxBoxSizer* szDescriptionPlayer;
 		
-		NoteDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Notes"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 928,604 ), long style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER ); 
+		NoteDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Notes"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 928,604 ), long style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER, const wxString& name = wxT("NoteDialog") ); 
 		~NoteDialog();
 	
 };

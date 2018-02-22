@@ -82,6 +82,22 @@ public:
 	static const std::wstring ENTITY_PUBLICATION;
 	static const std::wstring ENTITY_NOTE;
 	static const std::wstring ENTITY_NOTESEGMENT;
+
+	static const std::string MAIN_FRAME_WINDOW_NAME;
+	static const std::string PUBLICATION_PANEL_WINDOW_NAME;
+	static const std::string AUDIOPLAYER_PANEL_WINDOW_NAME;
+	static const std::string EXERCISE_PANEL_WINDOW_NAME;
+	static const std::string DICTATION_OVERLAY_DIALOG_WINDOW_NAME;
+	static const std::string EXERCISERUN_DIALOG_WINDOW_NAME;
+
+	static const std::string NOTE_DIALOG_WINDOW_NAME;
+	static const std::string NOTSEGMENT_PANEL_WINDOW_NAME;
+	static const std::string PUBLICATION_DIALOG_WINDOW_NAME;
+	static const std::string SA_CONFIRM_DIALOG_WINDOW_NAME;
+	static const std::string SEGEMENT_TEMPLATE_DIALOG_WINDOW_NAME;
+	static const std::string SHELF_DIALOG_WINDOW_NAME;
+	static const std::string SUBJECT_DIALOG_WINDOW_NAME;
+	static const std::string TOPIC_DIALOG_WINDOW_NAME;
 	
 private:
 	MainFrameImp *frame;

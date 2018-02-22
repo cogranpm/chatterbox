@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov  6 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __SEGMENTTEMPLATEDIALOG_H__
@@ -70,10 +70,10 @@ class SegmentTemplateDialog : public wxDialog
 		
 	
 	public:
-		wxString name; 
+		wxString templateName; 
 		wxString helpText; 
 		
-		SegmentTemplateDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Segment Template"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1011,643 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
+		SegmentTemplateDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Segment Template"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1011,643 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER, const wxString& name = wxT("SegmentTemplateDialog") ); 
 		~SegmentTemplateDialog();
 	
 };

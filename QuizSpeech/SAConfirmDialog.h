@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,7 +44,7 @@ class SAConfirmDialog : public wxDialog
 	
 	public:
 		
-		SAConfirmDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Confirm Delete"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 423,105 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		SAConfirmDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Confirm Delete"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 423,105 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("SAConfirmDialog") ); 
 		~SAConfirmDialog();
 	
 };

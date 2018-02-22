@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -49,7 +49,7 @@ class ShelfDialog : public wxDialog
 		wxInfoBar* m_infoCtrl;
 		wxString _title; 
 		
-		ShelfDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Shelf"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 479,140 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		ShelfDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Shelf"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 479,140 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("ShelfDialog") ); 
 		~ShelfDialog();
 	
 };
