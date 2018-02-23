@@ -30,6 +30,8 @@ class PublicationPanelImp : public pnlMain
 		PublicationViewModel* _viewModel;
 		NoteListAudioPlayer noteListAudioPlayer;
 		NoteAudioPlayer noteAudioPlayer;
+		std::vector<std::wstring> ruleNames;
+
 		void RenderTopics(Topic* topic);
 		void EditTopic(Topic* topic);
 		void OnSelectTopic(Topic* topic);

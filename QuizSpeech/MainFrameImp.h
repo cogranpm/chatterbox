@@ -16,6 +16,9 @@ private:
 	wxDataViewListStore* subjectModel;
 	wxDataViewListStore* publicationModel;
 	Shelf* GetCurrentShelf();
+	std::vector<std::wstring> ruleNames;
+
+
 	void OnSelectShelf(Shelf* shelf);
 	void AddShelf();
 	void DeleteShelf();

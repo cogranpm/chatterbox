@@ -133,9 +133,39 @@ void SpeechRecognitionContext::ChangeGrammarEnabledState(SPGRAMMARSTATE stateFla
 	
 }
 
+boost::signals2::connection* SpeechRecognitionContext::GetCommandReceivedConnection(void)
+{
+	return &this->commandReceivedConnection;
+}
+
+void SpeechRecognitionContext::Disconnect()
+{
+	if (commandReceivedConnection.connected())
+	{
+		commandReceivedConnection.disconnect();
+	}
+	Disable();
+}
+
+void SpeechRecognitionContext::SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber)
+{
+		if (GetWindowName() == windowName)
+		{
+			if (!IsEnabled())
+			{
+				EnableRules();
+			}
+		}
+		else
+		{
+			commandReceivedConnection = onCommandRecognized(subscriber);
+			EnableRules(ruleNames, windowName);
+		}
+}
+
 //called by clients via the SpeechListener class when they have a set of rules to activate
 //for example when a particular screen is made active
-void SpeechRecognitionContext::EnableRules(std::vector<std::wstring>& ruleNames, const std::string& windowName)
+void SpeechRecognitionContext::EnableRules(const std::vector<std::wstring>& ruleNames, const std::string& windowName)
 {
 	this->windowName = windowName;
 	//make all the rules in ruleNames active

@@ -61,7 +61,8 @@ PublicationPanelImp::~PublicationPanelImp()
 		delete this->quizRunModel;
 	}
 
-	wxGetApp().DisconnectFromSpeech();
+	//wxGetApp().DisconnectFromSpeech();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 }
 
 void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
@@ -110,28 +111,32 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	this->RenderExercises(nullptr);
 	this->RenderQuizRuns();
 
+	ruleNames.push_back(MyApp::RULE_PUBLICATION_PANEL);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	SetupSpeechHandlers();
 }
 
 void PublicationPanelImp::SetupSpeechHandlers()
 {
-	if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == this->GetName())
-	{
-		if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
-		{
-			wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
-		}
-	}
-	else
-	{
-		std::vector<std::wstring> ruleNames;
-		ruleNames.push_back(MyApp::RULE_PUBLICATION_PANEL);
-		ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-		wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-		boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-		*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&PublicationPanelImp::OnCommandRecognized, this, _1, _2));
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
-	}
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames, this->GetName().ToStdString(),
+		boost::bind(&PublicationPanelImp::OnCommandRecognized, this, _1, _2));
+	//if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == this->GetName())
+	//{
+	//	if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
+	//	{
+	//		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
+	//	}
+	//}
+	//else
+	//{
+	//	std::vector<std::wstring> ruleNames;
+	//	ruleNames.push_back(MyApp::RULE_PUBLICATION_PANEL);
+	//	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	//	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	//	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+	//	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&PublicationPanelImp::OnCommandRecognized, this, _1, _2));
+	//	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	//}
 }
 
 

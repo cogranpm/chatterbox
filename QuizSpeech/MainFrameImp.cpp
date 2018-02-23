@@ -13,7 +13,7 @@
 
 MainFrameImp::MainFrameImp( wxWindow* parent )
 :
-MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationModel(nullptr)
+MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationModel(nullptr), ruleNames()
 {
 
 	/* icons */
@@ -49,7 +49,7 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	subjectModel->DecRef();
 	publicationModel->DecRef();
 
-	SetupSpeechHandlers();
+
 
 	/* load shelves from provider */
 	boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
@@ -57,12 +57,15 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	wxGetApp().GetProvider()->GetAllShelves(shelfList);
 	this->RenderShelves(NULL);
 	
-
+	ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
+	ruleNames.push_back(MyApp::RULE_FILE_MENU);
+	SetupSpeechHandlers();
 }
 
 MainFrameImp::~MainFrameImp()
 {
-	wxGetApp().DisconnectFromSpeech();
+	//wxGetApp().DisconnectFromSpeech();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	if(this->shelfModel != nullptr)
 	{
 		this->shelfModel->DeleteAllItems();
@@ -90,27 +93,30 @@ MainFrameImp::~MainFrameImp()
 
 void MainFrameImp::SetupSpeechHandlers()
 {
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames,
+		this->GetName().ToStdString(),
+		boost::bind(&MainFrameImp::OnCommandRecognized, this, _1, _2));
 
-	if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == this->GetName())
-	{
-		if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
-		{
-			wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
-		}
-	}
-	else
-	{
-		std::vector<std::wstring> ruleNames;
-		ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
-		ruleNames.push_back(MyApp::RULE_FILE_MENU);
+	//if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == this->GetName())
+	//{
+	//	if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
+	//	{
+	//		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
+	//	}
+	//}
+	//else
+	//{
+	//	std::vector<std::wstring> ruleNames;
+	//	ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
+	//	ruleNames.push_back(MyApp::RULE_FILE_MENU);
 
-		wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-		//keeping the signal connection in the main instance to avoid having connections floating
-		//around everywhere that a dialog / panel needs to use one
-		boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-		*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&MainFrameImp::OnCommandRecognized, this, _1, _2));
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
-	}
+	//	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	//	//keeping the signal connection in the main instance to avoid having connections floating
+	//	//around everywhere that a dialog / panel needs to use one
+	//	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+	//	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&MainFrameImp::OnCommandRecognized, this, _1, _2));
+	//	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	//}
 }
 
 void MainFrameImp::menuFileQuitOnMenuSelection( wxCommandEvent& event )

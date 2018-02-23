@@ -25,7 +25,6 @@ public:
 	int OnExit();
 	SpeechListener& GetSpeechListener() { return sp; }
 	FileHandler& GetFileHandler() { return fh;}
-	//AudioWorker& GetAudioWorker() { return audioWorker;}
 	MainFrameViewModel* GetMainFrameViewModel();
 	MainFrameImp* GetMainFrame();
 	SqliteProvider* GetProvider() { return dataProvider.get();}
@@ -34,11 +33,7 @@ public:
 	void DisconnectFromSpeech();
 	boost::signals2::connection* GetCommandReceivedConnection(void);
 	void DisconnectSpeechHandler(boost::signals2::connection* connection);
-	//void SetupSpeechHandlers(std::vector<std::wstring>& ruleNames, std::string windowName, boost::signals2::signal<void(std::wstring, const std::vector<CommandProperty>&)>::slot_function_type subscriber);
-
 	const std::wstring GetUserDataDirectory();
-
-	
 
 	//constants
 	static const size_t HOME_PAGE_INDEX;
@@ -106,7 +101,6 @@ public:
 private:
 	MainFrameImp *frame;
 	std::unique_ptr<SqliteProvider> dataProvider;
-	//AudioWorker audioWorker;
 	SpeechListener sp;
 	FileHandler fh;
 	std::unique_ptr<ApplicationImages> images;

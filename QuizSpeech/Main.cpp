@@ -211,22 +211,6 @@ void MyApp::DisconnectFromSpeech()
 	GetSpeechListener().GetSpeechRecognitionContext()->Disable();
 }
 
-//void MyApp::SetupSpeechHandlers(std::vector<std::wstring>& ruleNames, std::string& windowName, boost::signals2::signal<void(std::wstring, const std::vector<CommandProperty>&)>::slot_function_type subscriber)
-//{
-//	if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == windowName)
-//	{
-//		if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
-//		{
-//			wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
-//		}
-//	}
-//	else
-//	{
-//		boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-//		*(commandConnection) = GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(subscriber);
-//		GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, windowName);
-//	}
-//}
 
 MainFrameViewModel* MyApp::GetMainFrameViewModel()
 {
