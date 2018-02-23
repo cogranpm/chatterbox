@@ -85,7 +85,8 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 		throw std::runtime_error(message);
 	}
 
-	
+	this->Disable();
+
 	WPARAM wData = 0;
 	LPARAM lData = 0;
 	hr = this->context->SetNotifyCallbackInterface(callbackInterface, wData, lData);
@@ -97,7 +98,7 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 		throw std::runtime_error(message);
 	}
 
-	this->Disable();
+	
 }
 
 void SpeechRecognitionContext::Enable()
@@ -140,6 +141,7 @@ void SpeechRecognitionContext::EnableRules(std::vector<std::wstring>& ruleNames,
 	//make all the rules in ruleNames active
 
 	//first deactive all currently active rules
+	this->ChangeGrammarEnabledState(SPGS_DISABLED);
 	HRESULT hr = this->grammar->SetRuleState(NULL, NULL, SPRS_INACTIVE);
 
 	//copy the rules names so we can easily reload them

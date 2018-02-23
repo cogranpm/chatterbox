@@ -54,6 +54,10 @@ ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quiz
 	Init();
 }
 
+ExerciseRunDialogImp::~ExerciseRunDialogImp()
+{
+	wxGetApp().DisconnectFromSpeech();
+}
 
 void ExerciseRunDialogImp::Init()
 {

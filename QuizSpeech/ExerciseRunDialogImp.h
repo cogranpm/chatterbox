@@ -65,6 +65,7 @@ class ExerciseRunDialogImp : public ExerciseRunDialog//, AudioPlayerWrapperClien
 		/** Constructor */
 		ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader);
 		ExerciseRunDialogImp( wxWindow* parent, unsigned long quizId );
+		~ExerciseRunDialogImp();
 	//// end generated class members
 		//void PlayCompleted();
 };

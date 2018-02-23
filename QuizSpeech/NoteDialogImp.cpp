@@ -28,8 +28,7 @@ NoteDialog( parent ), viewModel(note), noteAudioPlayer()// viewModel(std::make_u
 
 NoteDialogImp::~NoteDialogImp()
 {
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
+	wxGetApp().DisconnectFromSpeech();
 	/*lets delete all the panels that were created manually, this does happen normally but something is wrong
 	boost::ptr_vector<NoteSegment>* list = viewModel.GetNoteSegmentList();
 	for(int i = 0; i < list->size(); i ++ )
@@ -89,14 +88,28 @@ void NoteDialogImp::RenderNoteSegmentTypes()
 
 void NoteDialogImp::SetupSpeechHandlers()
 {
+
 	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(MyApp::RULE_NOTE_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+//	wxGetApp().SetupSpeechHandlers(ruleNames, this->GetName().ToStdString());
 
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&NoteDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == this->GetName())
+	{
+		if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
+		{
+			wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
+		}
+	}
+	else
+	{
+		std::vector<std::wstring> ruleNames;
+		ruleNames.push_back(MyApp::RULE_NOTE_DIALOG);
+		ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+		boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+		*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&NoteDialogImp::OnCommandRecognized, this, _1, _2));
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	}
 }
 
 void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)

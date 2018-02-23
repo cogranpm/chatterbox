@@ -62,6 +62,7 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 
 MainFrameImp::~MainFrameImp()
 {
+	wxGetApp().DisconnectFromSpeech();
 	if(this->shelfModel != nullptr)
 	{
 		this->shelfModel->DeleteAllItems();
@@ -89,18 +90,27 @@ MainFrameImp::~MainFrameImp()
 
 void MainFrameImp::SetupSpeechHandlers()
 {
-	//wxGetApp().GetSpeechListener().SwitchRule(MainFrameImp::RULE_HOME_SCREEN);
-	//use enable rule instead
-	std::vector<std::wstring> ruleNames;
-	ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
-	ruleNames.push_back(MyApp::RULE_FILE_MENU);
 
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	//keeping the signal connection in the main instance to avoid having connections floating
-	//around everywhere that a dialog / panel needs to use one
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&MainFrameImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == this->GetName())
+	{
+		if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
+		{
+			wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
+		}
+	}
+	else
+	{
+		std::vector<std::wstring> ruleNames;
+		ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
+		ruleNames.push_back(MyApp::RULE_FILE_MENU);
+
+		wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+		//keeping the signal connection in the main instance to avoid having connections floating
+		//around everywhere that a dialog / panel needs to use one
+		boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+		*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&MainFrameImp::OnCommandRecognized, this, _1, _2));
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	}
 }
 
 void MainFrameImp::menuFileQuitOnMenuSelection( wxCommandEvent& event )
@@ -135,7 +145,7 @@ void MainFrameImp::OnNotebookPageChanged(wxAuiNotebookEvent& event)
 		this->m_auiShelf->SetWindowStyle(wxAUI_NB_CLOSE_ON_ACTIVE_TAB);
 	}
 	wxWindow* win = this->m_auiShelf->GetCurrentPage();
-	if (win->GetName() == "PublicationPanel")
+	if (win->GetName().ToStdString() == MyApp::PUBLICATION_PANEL_WINDOW_NAME)
 	{
 		PublicationPanelImp* panel = (PublicationPanelImp*)win;
 		if (panel != nullptr)

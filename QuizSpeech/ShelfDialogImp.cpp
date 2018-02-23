@@ -13,6 +13,7 @@ ShelfDialogImp::ShelfDialogImp( wxWindow* parent) : ShelfDialog(parent)
 
 ShelfDialogImp::~ShelfDialogImp(void)
 {
+	wxGetApp().DisconnectFromSpeech();
 }
 
 
@@ -32,8 +33,6 @@ void ShelfDialogImp::SetupSpeechHandlers()
 	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(MyApp::RULE_SHELF_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
 	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
 	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&ShelfDialogImp::OnCommandRecognized, this, _1, _2));
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());

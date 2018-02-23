@@ -46,8 +46,7 @@ DictationOverlayDialogImp::~DictationOverlayDialogImp()
 	{
 		dictationStoppedConnection.disconnect();
 	}
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
+	wxGetApp().DisconnectFromSpeech();
 }
 
 void DictationOverlayDialogImp::OnInitDialog(wxInitDialogEvent& event) 

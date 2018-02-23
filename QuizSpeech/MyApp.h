@@ -15,11 +15,13 @@
 #include "ApplicationImages.h"
 #include "AudioPlayer.h"
 
+
 class MyApp: public wxApp
 {
 
 public:
-    virtual bool OnInit();
+    
+	virtual bool OnInit();
 	int OnExit();
 	SpeechListener& GetSpeechListener() { return sp; }
 	FileHandler& GetFileHandler() { return fh;}
@@ -29,11 +31,14 @@ public:
 	SqliteProvider* GetProvider() { return dataProvider.get();}
 	ApplicationImages& GetImages();
 	void OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList);
-	
+	void DisconnectFromSpeech();
 	boost::signals2::connection* GetCommandReceivedConnection(void);
 	void DisconnectSpeechHandler(boost::signals2::connection* connection);
+	//void SetupSpeechHandlers(std::vector<std::wstring>& ruleNames, std::string windowName, boost::signals2::signal<void(std::wstring, const std::vector<CommandProperty>&)>::slot_function_type subscriber);
 
 	const std::wstring GetUserDataDirectory();
+
+	
 
 	//constants
 	static const size_t HOME_PAGE_INDEX;
@@ -89,7 +94,6 @@ public:
 	static const std::string EXERCISE_PANEL_WINDOW_NAME;
 	static const std::string DICTATION_OVERLAY_DIALOG_WINDOW_NAME;
 	static const std::string EXERCISERUN_DIALOG_WINDOW_NAME;
-
 	static const std::string NOTE_DIALOG_WINDOW_NAME;
 	static const std::string NOTSEGMENT_PANEL_WINDOW_NAME;
 	static const std::string PUBLICATION_DIALOG_WINDOW_NAME;

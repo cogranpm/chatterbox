@@ -26,6 +26,7 @@ AudioPlayerPanelImp::~AudioPlayerPanelImp()
 	{
 		onAudioEndConnection.disconnect();
 	}
+	
 }
 
 

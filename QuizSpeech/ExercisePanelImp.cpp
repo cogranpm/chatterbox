@@ -24,6 +24,11 @@ ExercisePanelImp::ExercisePanelImp(wxWindow* parent, Publication* publication, Q
 
 }
 
+ExercisePanelImp::~ExercisePanelImp()
+{
+	wxGetApp().DisconnectFromSpeech();
+}
+
 void ExercisePanelImp::SetupSpeechHandlers()
 {
 	std::vector<std::wstring> ruleNames;
@@ -85,13 +90,6 @@ void ExercisePanelImp::CloseMe()
 	}
 }
 
-
-
-ExercisePanelImp::~ExercisePanelImp()
-{
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
-}
 
 void ExercisePanelImp::AddQuestion()
 {

@@ -61,8 +61,7 @@ PublicationPanelImp::~PublicationPanelImp()
 		delete this->quizRunModel;
 	}
 
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
+	wxGetApp().DisconnectFromSpeech();
 }
 
 void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )

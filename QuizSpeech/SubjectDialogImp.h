@@ -21,6 +21,7 @@ class SubjectDialogImp : public SubjectDialog
 	public:
 		/** Constructor */
 		SubjectDialogImp( wxWindow* parent );
+		~SubjectDialogImp();
 
 protected:
 		void OnClose( wxCloseEvent& event );

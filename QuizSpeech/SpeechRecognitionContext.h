@@ -5,7 +5,6 @@
 #include "CommandProperty.h"
 
 
-
 class SpeechRecognitionContext
 {
 public:

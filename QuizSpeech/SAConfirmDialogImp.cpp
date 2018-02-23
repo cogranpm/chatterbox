@@ -20,8 +20,7 @@ SAConfirmDialogImp::SAConfirmDialogImp(wxWindow* parent, const wxString& title, 
 
 SAConfirmDialogImp::~SAConfirmDialogImp()
 {
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
+	wxGetApp().DisconnectFromSpeech();
 }
 
 void SAConfirmDialogImp::OnInitDialog( wxInitDialogEvent& event )

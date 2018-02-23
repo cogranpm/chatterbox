@@ -56,37 +56,20 @@ const std::wstring MyApp::ENTITY_NOTESEGMENT = L"notesegment";
 
 
 /* window names */
-static const std::string MAIN_FRAME_WINDOW_NAME = "MainFrame";
-static const std::string PUBLICATION_PANEL_WINDOW_NAME = "PublicationPanel";;
-static const std::string AUDIOPLAYER_PANEL_WINDOW_NAME = "AudioPlayerPanel";;
-static const std::string EXERCISE_PANEL_WINDOW_NAME = "ExercisePanel";;
-static const std::string DICTATION_OVERLAY_DIALOG_WINDOW_NAME = "DictationOverlayDialog";;
-static const std::string EXERCISERUN_DIALOG_WINDOW_NAME = "ExerciseRunDialog";;
-
-static const std::string NOTE_DIALOG_WINDOW_NAME = "NoteDialog";;
-static const std::string NOTSEGMENT_PANEL_WINDOW_NAME = "NoteSegmentPanel";;
-static const std::string PUBLICATION_DIALOG_WINDOW_NAME = "PublicationDialog";;
-static const std::string SA_CONFIRM_DIALOG_WINDOW_NAME = "SAConfirmDialog";;
-static const std::string SEGEMENT_TEMPLATE_DIALOG_WINDOW_NAME = "SegmentTemplateDialog";;
-static const std::string SHELF_DIALOG_WINDOW_NAME = "ShelfDialog";;
-static const std::string SUBJECT_DIALOG_WINDOW_NAME = "SubjectDialog";;
-static const std::string TOPIC_DIALOG_WINDOW_NAME = "TopicDialog";;
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
+const std::string MyApp::MAIN_FRAME_WINDOW_NAME = "MainFrame";
+const std::string MyApp::PUBLICATION_PANEL_WINDOW_NAME = "PublicationPanel";;
+const std::string MyApp::AUDIOPLAYER_PANEL_WINDOW_NAME = "AudioPlayerPanel";;
+const std::string MyApp::EXERCISE_PANEL_WINDOW_NAME = "ExercisePanel";;
+const std::string MyApp::DICTATION_OVERLAY_DIALOG_WINDOW_NAME = "DictationOverlayDialog";;
+const std::string MyApp::EXERCISERUN_DIALOG_WINDOW_NAME = "ExerciseRunDialog";;
+const std::string MyApp::NOTE_DIALOG_WINDOW_NAME = "NoteDialog";;
+const std::string MyApp::NOTSEGMENT_PANEL_WINDOW_NAME = "NoteSegmentPanel";;
+const std::string MyApp::PUBLICATION_DIALOG_WINDOW_NAME = "PublicationDialog";;
+const std::string MyApp::SA_CONFIRM_DIALOG_WINDOW_NAME = "SAConfirmDialog";;
+const std::string MyApp::SEGEMENT_TEMPLATE_DIALOG_WINDOW_NAME = "SegmentTemplateDialog";;
+const std::string MyApp::SHELF_DIALOG_WINDOW_NAME = "ShelfDialog";;
+const std::string MyApp::SUBJECT_DIALOG_WINDOW_NAME = "SubjectDialog";;
+const std::string MyApp::TOPIC_DIALOG_WINDOW_NAME = "TopicDialog";;
 
 //const SPSTREAMFORMAT spFormat = SPSF_22kHz16BitStereo;
 
@@ -221,6 +204,29 @@ void MyApp::DisconnectSpeechHandler(boost::signals2::connection* connection)
 		connection->disconnect();
 	}
 }
+
+void MyApp::DisconnectFromSpeech()
+{
+	DisconnectSpeechHandler(GetCommandReceivedConnection());
+	GetSpeechListener().GetSpeechRecognitionContext()->Disable();
+}
+
+//void MyApp::SetupSpeechHandlers(std::vector<std::wstring>& ruleNames, std::string& windowName, boost::signals2::signal<void(std::wstring, const std::vector<CommandProperty>&)>::slot_function_type subscriber)
+//{
+//	if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == windowName)
+//	{
+//		if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
+//		{
+//			wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
+//		}
+//	}
+//	else
+//	{
+//		boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+//		*(commandConnection) = GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(subscriber);
+//		GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, windowName);
+//	}
+//}
 
 MainFrameViewModel* MyApp::GetMainFrameViewModel()
 {
