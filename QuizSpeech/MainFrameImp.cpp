@@ -643,6 +643,7 @@ void MainFrameImp::EditPublication(void)
 	{
 		return;
 	}
+	
 	wxPanel* pnlNewPublication  = new PublicationPanelImp(this->m_auiShelf, this->GetCurrentPublication());
 	this->m_auiShelf->AddPage(pnlNewPublication, "Publication - " + this->GetCurrentPublication()->getTitle(), true);
 	

@@ -21,14 +21,15 @@ struct findSegmentHeader
 
 NoteDialogImp::NoteDialogImp( wxWindow* parent, Note* note )
 :
-NoteDialog( parent ), viewModel(note), noteAudioPlayer()// viewModel(std::make_unique<NoteViewModel>(note))
+NoteDialog( parent ), viewModel(note), noteAudioPlayer(), ruleNames()// viewModel(std::make_unique<NoteViewModel>(note))
 {
 	
 }
 
 NoteDialogImp::~NoteDialogImp()
 {
-	wxGetApp().DisconnectFromSpeech();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	
 	/*lets delete all the panels that were created manually, this does happen normally but something is wrong
 	boost::ptr_vector<NoteSegment>* list = viewModel.GetNoteSegmentList();
 	for(int i = 0; i < list->size(); i ++ )
@@ -64,6 +65,8 @@ void NoteDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	/* load all the segments for this note */
 	wxGetApp().GetProvider()->GetNoteSegmentsByNote(viewModel.GetNote(), viewModel.GetNoteSegmentList());
 	RenderNoteSegmentTypes();
+	ruleNames.push_back(MyApp::RULE_NOTE_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	this->SetupSpeechHandlers();
 	this->RenderNote();
 	this->lstTypes->SetSelection(0);
@@ -89,27 +92,9 @@ void NoteDialogImp::RenderNoteSegmentTypes()
 void NoteDialogImp::SetupSpeechHandlers()
 {
 
-	std::vector<std::wstring> ruleNames;
-	ruleNames.push_back(MyApp::RULE_NOTE_DIALOG);
-	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-//	wxGetApp().SetupSpeechHandlers(ruleNames, this->GetName().ToStdString());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames, this->GetName().ToStdString(),
+		boost::bind(&NoteDialogImp::OnCommandRecognized, this, _1, _2));
 
-	if (wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->GetWindowName() == this->GetName())
-	{
-		if (!wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->IsEnabled())
-		{
-			wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules();
-		}
-	}
-	else
-	{
-		std::vector<std::wstring> ruleNames;
-		ruleNames.push_back(MyApp::RULE_NOTE_DIALOG);
-		ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-		boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-		*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&NoteDialogImp::OnCommandRecognized, this, _1, _2));
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
-	}
 }
 
 void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)
@@ -128,6 +113,7 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
 	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->m_sdbSizer1OK->GetId());
 		this->m_sdbSizer1OK->Command(evt);
 		return;
@@ -198,6 +184,7 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 
 void NoteDialogImp::CloseMe()
 {
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	this->Close();
 }
 

@@ -20,5 +20,6 @@ private:
 	//Shelf* shelf;
 	bool OnOK();
 	bool OnCancel();
+	std::vector<std::wstring> ruleNames;
 };
 

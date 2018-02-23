@@ -140,11 +140,12 @@ boost::signals2::connection* SpeechRecognitionContext::GetCommandReceivedConnect
 
 void SpeechRecognitionContext::Disconnect()
 {
+	//Disable();
 	if (commandReceivedConnection.connected())
 	{
 		commandReceivedConnection.disconnect();
 	}
-	Disable();
+	
 }
 
 void SpeechRecognitionContext::SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber)
@@ -171,9 +172,9 @@ void SpeechRecognitionContext::EnableRules(const std::vector<std::wstring>& rule
 	//make all the rules in ruleNames active
 
 	//first deactive all currently active rules
-	this->ChangeGrammarEnabledState(SPGS_DISABLED);
 	HRESULT hr = this->grammar->SetRuleState(NULL, NULL, SPRS_INACTIVE);
-
+	//this->ChangeGrammarEnabledState(SPGS_DISABLED);
+	
 	//copy the rules names so we can easily reload them
 	this->ruleNames = new std::vector<std::wstring>(ruleNames);
 	EnableRules();
@@ -187,6 +188,7 @@ void SpeechRecognitionContext::EnableRules()
 		return;
 	}
 	HRESULT hr = S_OK;
+	//this->ChangeGrammarEnabledState(SPGS_ENABLED);
 	//all rule names in @ruleNames are made active
 	for (std::vector<std::wstring>::iterator it = this->ruleNames->begin(); it != this->ruleNames->end(); ++it)
 	{
@@ -200,7 +202,7 @@ void SpeechRecognitionContext::EnableRules()
 			throw std::runtime_error(message);
 		}
 	}
-	this->ChangeGrammarEnabledState(SPGS_ENABLED);
+	//this->ChangeGrammarEnabledState(SPGS_ENABLED);
 }
 
 bool SpeechRecognitionContext::IsEnabled()

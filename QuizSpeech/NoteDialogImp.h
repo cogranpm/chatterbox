@@ -32,6 +32,7 @@ class NoteDialogImp : public NoteDialog
 		AudioPlayerPanelImp* playerPanel;
 		AudioPlayerPanelImp* titlePlayerPanel;
 		NoteAudioPlayer noteAudioPlayer;
+		std::vector<std::wstring> ruleNames;
 
 		void RenderNote(void);
 		void AddSelectedSegments();

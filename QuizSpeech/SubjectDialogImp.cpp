@@ -9,7 +9,7 @@
 
 SubjectDialogImp::SubjectDialogImp( wxWindow* parent )
 :
-SubjectDialog( parent )
+SubjectDialog( parent ), ruleNames()
 {
 
 }
@@ -17,11 +17,12 @@ SubjectDialog( parent )
 
 SubjectDialogImp::~SubjectDialogImp()
 {
-	wxGetApp().DisconnectFromSpeech();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 }
 
 void SubjectDialogImp::OnClose( wxCloseEvent& event )
 {
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	event.Skip();
 }
 
@@ -31,14 +32,12 @@ void SubjectDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	this->m_txtTitle->SetValue(this->_title);
 	this->m_txtTitle->SetFocus();
 
-	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(MyApp::RULE_SUBJECT_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&SubjectDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
-
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames,
+		this->GetName().ToStdString(),
+		boost::bind(&SubjectDialogImp::OnCommandRecognized, this, _1, _2));
 
 }
 
@@ -58,6 +57,7 @@ void SubjectDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Com
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		this->Close();
 		return;
 	}
@@ -83,6 +83,7 @@ void SubjectDialogImp::OnOKButtonClick( wxCommandEvent& event )
 	}
 	else
 	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		event.Skip();
 	}
 }

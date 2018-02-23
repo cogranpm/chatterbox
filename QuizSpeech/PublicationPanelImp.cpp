@@ -12,7 +12,7 @@
 
 PublicationPanelImp::PublicationPanelImp( wxWindow* parent, Publication* publication)
 :
-pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAudioPlayer(), noteAudioPlayer()
+pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAudioPlayer(), noteAudioPlayer(), ruleNames()
 {
 	this->cboType->SetClientObject(0, new PublicationType(0));
 	this->cboType->SetClientObject(1, new PublicationType(1));
@@ -24,6 +24,8 @@ pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAu
 
 PublicationPanelImp::~PublicationPanelImp()
 {
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+
 	if(_viewModel != nullptr)
 	{
 		delete _viewModel;
@@ -61,8 +63,6 @@ PublicationPanelImp::~PublicationPanelImp()
 		delete this->quizRunModel;
 	}
 
-	//wxGetApp().DisconnectFromSpeech();
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 }
 
 void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
@@ -103,7 +103,6 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	_noteModel->DecRef();
 	_quizModel->DecRef();
 	quizRunModel->DecRef();
-	this->SetupSpeechHandlers();
 	wxGetApp().GetProvider()->GetTopicsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetTopicList());
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
@@ -202,6 +201,7 @@ void PublicationPanelImp::CloseMe()
 	int index = wxGetApp().GetMainFrame()->GetShelfNotebook()->GetPageIndex(this);
 	if (index != wxNOT_FOUND)
 	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		wxGetApp().GetMainFrame()->GetShelfNotebook()->DeletePage(index);
 	}
 }
@@ -446,6 +446,11 @@ void PublicationPanelImp::OnSelectNote(Note* note)
 
 void PublicationPanelImp::AddNote()
 {
+	if (this->_viewModel->GetTopic() == nullptr)
+	{
+		return;
+	}
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	Note* note = new Note(this->_viewModel->GetTopic()->getTopicId());
 	NoteDialogImp dialog(this, note);
 	if (dialog.ShowModal() == wxID_OK)

@@ -10,14 +10,14 @@
 
 PublicationDialogImp::PublicationDialogImp( wxWindow* parent )
 :
-PublicationDialog( parent )
+PublicationDialog( parent ), ruleNames()
 {
 
 }
 
 PublicationDialogImp::~PublicationDialogImp()
 {
-	wxGetApp().DisconnectFromSpeech();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 }
 
 void PublicationDialogImp::OnInitDialog( wxInitDialogEvent& event )
@@ -30,17 +30,11 @@ void PublicationDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	/* just so happens that index matches key for this combo box */
 	this->m_cboTypes->SetSelection(this->_type);
 
-	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
-	//ruleNames.push_back(MyApp::RULE_DICTATION_ENTRY);
-	//ruleNames.push_back(MyApp::RULE_PUBLICATION_TYPES);
-	//ruleNames.push_back(MyApp::RULE_PUBLICATION_CONTROLS);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&PublicationDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames,
+		this->GetName().ToStdString(),
+		boost::bind(&PublicationDialogImp::OnCommandRecognized, this, _1, _2));
 
 }
 
@@ -56,12 +50,14 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 
 	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
 	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->btnStdOK->GetId());
 		this->btnStdOK->Command(evt);
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		this->Close();
 		return;
 	}
@@ -149,6 +145,7 @@ void PublicationDialogImp::OnOKButtonClick( wxCommandEvent& event )
 	}
 	else
 	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		PublicationType* data = dynamic_cast<PublicationType*>(this->m_cboTypes->GetClientObject(this->m_cboTypes->GetSelection()));
 		this->_type = data->getKey();
 		event.Skip();
@@ -159,7 +156,7 @@ void PublicationDialogImp::TitleOnKillFocus(wxFocusEvent& event)
 { 
 	::PrintError(L"kill focus title", S_OK);
 	//DisableWindow(true);
-	std::vector<std::wstring> ruleNames;
+	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
@@ -172,7 +169,7 @@ void PublicationDialogImp::TitleOnSetFocus(wxFocusEvent& event)
 {
 	::PrintError(L"set focus title", S_OK);
 	//DisableWindow(true);
-	std::vector<std::wstring> ruleNames;
+	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DICTATION_ENTRY);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
@@ -187,7 +184,7 @@ void PublicationDialogImp::TypesOnKillFocus(wxFocusEvent& event)
 {
 	::PrintError(L"kill focus type", S_OK);
 	//DisableWindow(true);
-	std::vector<std::wstring> ruleNames;
+	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
@@ -199,7 +196,7 @@ void PublicationDialogImp::TypesOnSetFocus(wxFocusEvent& event)
 {
 	::PrintError(L"set focus type", S_OK);
 	//DisableWindow(true);
-	std::vector<std::wstring> ruleNames;
+	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	ruleNames.push_back(L"PUBLICATION_TYPES");

@@ -6,14 +6,15 @@
 #include "MyApp.h"
 #include "ActionCommandParser.h"
 
-ShelfDialogImp::ShelfDialogImp( wxWindow* parent) : ShelfDialog(parent)
+ShelfDialogImp::ShelfDialogImp( wxWindow* parent) : ShelfDialog(parent), ruleNames()
 {
 }
 
 
 ShelfDialogImp::~ShelfDialogImp(void)
 {
-	wxGetApp().DisconnectFromSpeech();
+	//wxGetApp().DisconnectFromSpeech();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 }
 
 
@@ -25,17 +26,20 @@ void ShelfDialogImp::OnClose( wxCloseEvent& event )
 void ShelfDialogImp::OnInitDialog( wxInitDialogEvent& event )
 {
 	this->m_txtName->SetValue(this->_title);
+	ruleNames.push_back(MyApp::RULE_SHELF_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	this->SetupSpeechHandlers();
 }
 
 void ShelfDialogImp::SetupSpeechHandlers()
 {
-	std::vector<std::wstring> ruleNames;
-	ruleNames.push_back(MyApp::RULE_SHELF_DIALOG);
-	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&ShelfDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames,
+		this->GetName().ToStdString(),
+		boost::bind(&ShelfDialogImp::OnCommandRecognized, this, _1, _2));
+
+	//boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
+	//*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&ShelfDialogImp::OnCommandRecognized, this, _1, _2));
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 }
 
 void ShelfDialogImp::OnOKButtonClick(wxCommandEvent& event)
@@ -100,6 +104,7 @@ bool ShelfDialogImp::OnOK()
 
 bool ShelfDialogImp::OnCancel()
 {
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	this->Close();
 	return true;
 }
