@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -118,6 +118,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
 	lstTopics = new wxDataViewListCtrl( panelTopics, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	colTopicIndex = lstTopics->AppendTextColumn( wxT("Index") );
 	colTopicTitle = lstTopics->AppendTextColumn( wxT("Title") );
 	bSizer6->Add( lstTopics, 1, wxALL|wxEXPAND, 5 );
 	

@@ -23,6 +23,7 @@ class ExercisePanelImp : public ExercisePanel
 	AudioPlayerPanelImp* playerPanelQuestion;
 	AudioPlayer playerAnswer;
 	AudioPlayerPanelImp* playerPanelAnswer;
+	std::vector<std::wstring> ruleNames;
 
 	void Update();
 	void RenderTopics();

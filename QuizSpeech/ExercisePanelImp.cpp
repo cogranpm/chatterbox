@@ -19,7 +19,7 @@ ExercisePanel( parent ), viewModel(publication)
 
 /* called when editing an existing quiz */
 ExercisePanelImp::ExercisePanelImp(wxWindow* parent, Publication* publication, Quiz* quiz) :
-	ExercisePanel(parent), viewModel(publication, quiz->GetQuizId())
+	ExercisePanel(parent), viewModel(publication, quiz->GetQuizId()), ruleNames()
 {
 
 }
@@ -31,14 +31,7 @@ ExercisePanelImp::~ExercisePanelImp()
 
 void ExercisePanelImp::SetupSpeechHandlers()
 {
-	std::vector<std::wstring> ruleNames;
-	ruleNames.push_back(MyApp::RULE_EXERCISE_DIALOG);
-	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
-
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&ExercisePanelImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames, this->GetName().ToStdString(), boost::bind(&ExercisePanelImp::OnCommandRecognized, this, _1, _2));
 }
 
 
@@ -79,6 +72,7 @@ void ExercisePanelImp::OnCommandRecognized(std::wstring& phrase, const std::vect
 		CloseMe();
 		return;
 	}
+	wxGetApp().OnCommandRecognized(phrase, commandPropertyList);
 }
 
 void ExercisePanelImp::CloseMe()
@@ -395,6 +389,8 @@ void ExercisePanelImp::ExercisePanelOnInitDialog( wxInitDialogEvent& event )
 	RenderTopics();
 	RenderQuestions();
 	RenderCurrentQuestion();
+	ruleNames.push_back(MyApp::RULE_EXERCISE_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	SetupSpeechHandlers();
 	this->Layout();
 

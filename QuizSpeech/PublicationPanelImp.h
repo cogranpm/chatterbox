@@ -33,7 +33,7 @@ class PublicationPanelImp : public pnlMain
 		std::vector<std::wstring> ruleNames;
 
 		void RenderTopics(Topic* topic);
-		void EditTopic(Topic* topic);
+		void EditTopic();
 		void OnSelectTopic(Topic* topic);
 		void RenderNotes(Note* note);
 		void OnSelectNote(Note* note);
@@ -54,6 +54,9 @@ class PublicationPanelImp : public pnlMain
 		void DeleteQuizRun();
 		void OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList);
 		void CloseMe();
+		void AddTopic();
+		void DeleteTopic();
+		
 
 	protected:
 		void OnInitDialog( wxInitDialogEvent& event );

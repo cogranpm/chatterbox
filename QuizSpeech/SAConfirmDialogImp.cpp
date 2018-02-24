@@ -13,14 +13,14 @@ SAConfirmDialog( parent )
 
 SAConfirmDialogImp::SAConfirmDialogImp(wxWindow* parent, const wxString& title, const wxString& message)
 	:
-	SAConfirmDialog(parent, wxID_ANY, title), message(message)
+	SAConfirmDialog(parent, wxID_ANY, title), message(message), ruleNames()
 {
 
 }
 
 SAConfirmDialogImp::~SAConfirmDialogImp()
 {
-	wxGetApp().DisconnectFromSpeech();
+	
 }
 
 void SAConfirmDialogImp::OnInitDialog( wxInitDialogEvent& event )
@@ -29,12 +29,9 @@ void SAConfirmDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	{
 		txtMessage->SetLabel(message);
 	}
-	std::vector<std::wstring> ruleNames;
 	ruleNames.push_back(L"DIALOG_CONFIRM_ACTIONS");
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&SAConfirmDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames, this->GetName().ToStdString(), boost::bind(&SAConfirmDialogImp::OnCommandRecognized, this, _1, _2));
+	
 }
 
 void SAConfirmDialogImp::NoButtonClick( wxCommandEvent& event )

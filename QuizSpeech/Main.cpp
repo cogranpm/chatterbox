@@ -13,6 +13,7 @@ const std::wstring MyApp::RULE_FILE_MENU = L"FILE_MENU";
 const std::wstring MyApp::RULE_HOME_SCREEN = L"HOME_SCREEN";
 const std::wstring MyApp::RULE_SHELF_DIALOG = L"SHELF_DIALOG";
 const std::wstring MyApp::RULE_SUBJECT_DIALOG = L"SUBJECT_DIALOG";
+const std::wstring MyApp::RULE_TOPIC_DIALOG = L"TOPIC_DIALOG";
 const std::wstring MyApp::RULE_PUBLICATION_DIALOG = L"PUBLICATION_DIALOG";
 const std::wstring MyApp::RULE_PUBLICATION_TYPES = L"PUBLICATION_TYPES";
 const std::wstring MyApp::RULE_PUBLICATION_CONTROLS = L"PUBLICATION_CONTROLS";

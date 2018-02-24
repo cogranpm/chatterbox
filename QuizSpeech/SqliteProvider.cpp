@@ -314,7 +314,7 @@ void SqliteProvider::Delete(Topic* topic)
 
 void SqliteProvider::GetTopicsByPublication(Publication* publication, boost::ptr_vector<Topic>* topicList)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Name, TopicId FROM Topic WHERE PublicationId = ? ORDER BY Name;");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Name, TopicId FROM Topic WHERE PublicationId = ? ORDER BY CreatedDate ASC;");
 	stmt.Bind(1, wxLongLong(publication->getPublicationId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while(set.NextRow())

@@ -143,31 +143,34 @@ boost::signals2::connection* SpeechRecognitionContext::GetCommandReceivedConnect
 void SpeechRecognitionContext::Disconnect()
 {
 	//Disable();
-	/*if (commandReceivedConnection.connected())
+	if (commandReceivedConnection.connected())
 	{
 		commandReceivedConnection.disconnect();
 	}
-	*/
+	
 }
 
 void SpeechRecognitionContext::SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber)
 {
-		if (GetWindowName() == windowName)
+	//Pause stops the SR engine at a synchronization point to change grammars and rule states
+	this->context->Pause(0);
+	if (GetWindowName() == windowName)
+	{
+		if (!IsEnabled())
 		{
-			if (!IsEnabled())
-			{
-				EnableRules();
-			}
+			EnableRules();
 		}
-		else
+	}
+	else
+	{
+		if (commandReceivedConnection.connected())
 		{
-			if (commandReceivedConnection.connected())
-			{
-				commandReceivedConnection.disconnect();
-			}
-			commandReceivedConnection = onCommandRecognized(subscriber);
-			EnableRules(ruleNames, windowName);
+			commandReceivedConnection.disconnect();
 		}
+		commandReceivedConnection = onCommandRecognized(subscriber);
+		EnableRules(ruleNames, windowName);
+	}
+	this->context->Resume(0);
 }
 
 //called by clients via the SpeechListener class when they have a set of rules to activate

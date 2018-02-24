@@ -179,6 +179,21 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		DeleteQuiz();
 		return;
 	}
+	else if (boost::algorithm::equals(actionName, L"addtopic"))
+	{
+		AddTopic();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"edittopic"))
+	{
+		EditTopic();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"deletetopic"))
+	{
+		DeleteTopic();
+		return;
+	}
 	else if (boost::algorithm::equals(actionName, L"deletenote"))
 	{
 		DeleteNote();
@@ -283,6 +298,7 @@ void PublicationPanelImp::RenderTopics(Topic* topic)
 	for(int i = 0; i < list->size(); i ++ )
 	{
 		data.clear();
+		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
 		data.push_back(list->at(i).getName());
 		_topicModel->AppendItem( data, wxUIntPtr(&list->at(i)));
 		if(topic != nullptr && list->at(i).getTopicId() == topic->getTopicId())
@@ -292,29 +308,34 @@ void PublicationPanelImp::RenderTopics(Topic* topic)
 	}	
 }
 
-
-void PublicationPanelImp::AddTopicOnButtonClick( wxCommandEvent& event ) 
-{ 
-	TopicDialog dialog(this);
+void PublicationPanelImp::AddTopic()
+{
+	TopicDialogImp dialog(this);
 	dialog._title = wxString("");
-	if(dialog.ShowModal() == wxID_OK && !(dialog._title.IsEmpty()))
+	if (dialog.ShowModal() == wxID_OK && !(dialog._title.IsEmpty()))
 	{
 		Topic* newTopic = new Topic(_viewModel->GetPublication()->getPublicationId(), dialog._title.ToStdWstring());
 		_viewModel->AddTopic(newTopic);
 		wxGetApp().GetProvider()->Insert(_viewModel->GetTopic());
 		this->RenderTopics(_viewModel->GetTopic());
 	}
+	SetupSpeechHandlers();
 }
 
-void PublicationPanelImp::DeleteTopicOnButtonClick( wxCommandEvent& event ) 
+void PublicationPanelImp::AddTopicOnButtonClick( wxCommandEvent& event ) 
 { 
+	AddTopic();
+}
+
+void PublicationPanelImp::DeleteTopic()
+{
 	Topic* topic = this->_viewModel->GetTopic();
-	if(topic == nullptr)
+	if (topic == nullptr)
 	{
 		return;
 	}
-	
-	if(wxMessageBox("Delete, are you sure?", "Confirm Delete", wxYES_NO | wxCANCEL, this) == wxYES)
+
+	if (wxMessageBox("Delete, are you sure?", "Confirm Delete", wxYES_NO | wxCANCEL, this) == wxYES)
 	{
 		boost::ptr_vector<Topic>* list = this->_viewModel->GetTopicList();
 		wxGetApp().GetProvider()->Delete(topic);
@@ -325,18 +346,25 @@ void PublicationPanelImp::DeleteTopicOnButtonClick( wxCommandEvent& event )
 }
 
 
-void PublicationPanelImp::EditTopicOnButtonClick( wxCommandEvent& event ) 
-{
-	this->EditTopic(_viewModel->GetTopic());
+void PublicationPanelImp::DeleteTopicOnButtonClick( wxCommandEvent& event ) 
+{ 
+	DeleteTopic();
 }
 
-void PublicationPanelImp::EditTopic(Topic* topic)
+
+void PublicationPanelImp::EditTopicOnButtonClick( wxCommandEvent& event ) 
 {
+	this->EditTopic();
+}
+
+void PublicationPanelImp::EditTopic()
+{
+	Topic* topic = _viewModel->GetTopic();
 	if(topic == nullptr)
 	{
 		return;
 	}
-	TopicDialog dialog(this);
+	TopicDialogImp dialog(this);
 	dialog._title = topic->getName();
 	if(dialog.ShowModal() == wxID_OK && !(dialog._title.IsEmpty()))
 	{
@@ -354,7 +382,7 @@ void PublicationPanelImp::EditTopic(Topic* topic)
 
 void PublicationPanelImp::OnTopicItemActivated( wxDataViewEvent& event )
 {
-	this->EditTopic(_viewModel->GetTopic());
+	this->EditTopic();
 }
 
 void PublicationPanelImp::OnTopicSelectionChanged( wxDataViewEvent& event )
@@ -554,6 +582,10 @@ void PublicationPanelImp::NotesOnSelectionChanged( wxDataViewEvent& event )
 
 void PublicationPanelImp::OnEditNote()
 {
+	if (_viewModel->GetNote() == nullptr)
+	{
+		return;
+	}
 	NoteDialogImp dialog(this, this->_viewModel->GetNote());
 	if(dialog.ShowModal() == wxID_OK)
 	{

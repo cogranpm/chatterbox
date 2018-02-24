@@ -44,6 +44,7 @@ public:
 	static const std::wstring RULE_HOME_SCREEN;
 	static const std::wstring RULE_SHELF_DIALOG;
 	static const std::wstring RULE_SUBJECT_DIALOG;
+	static const std::wstring RULE_TOPIC_DIALOG;
 	static const std::wstring RULE_PUBLICATION_DIALOG;
 	static const std::wstring RULE_PUBLICATION_TYPES;
 	static const std::wstring RULE_PUBLICATION_CONTROLS;

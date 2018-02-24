@@ -1,18 +1,96 @@
 #include "TopicDialogImp.h"
+#include <wx/valtext.h>
+#include <wx/log.h> 
+#include <wx/infobar.h>
+#include <wx/event.h>
+#include "MyApp.h"
+#include "ActionCommandParser.h"
+
 
 TopicDialogImp::TopicDialogImp( wxWindow* parent )
 :
-TopicDialog( parent )
+TopicDialog( parent ), ruleNames()
 {
 
 }
 
 void TopicDialogImp::OnCancelButtonClick( wxCommandEvent& event )
 {
-// TODO: Implement OnCancelButtonClick
+	OnCancel();
 }
 
 void TopicDialogImp::OnOKButtonClick( wxCommandEvent& event )
 {
-// TODO: Implement OnOKButtonClick
+	if (!this->OnOK())
+	{
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+		event.Skip();
+	}
+}
+
+bool TopicDialogImp::OnOK()
+{
+	this->txtTitle->GetValidator()->TransferFromWindow();
+	if (this->_title.IsEmpty())
+	{
+		this->m_infoCtrl1->ShowMessage("Title may not be empty");
+		this->txtTitle->SetFocus();
+		return true;
+	}
+	else
+	{
+		
+		return false;
+	}
+}
+
+bool TopicDialogImp::OnCancel()
+{
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	this->EndModal(wxID_CANCEL);
+	return true;
+}
+
+void TopicDialogImp::OnInitDialog(wxInitDialogEvent& event)
+{
+	ruleNames.push_back(MyApp::RULE_TOPIC_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	this->SetupSpeechHandlers();
+}
+
+
+void TopicDialogImp::SetupSpeechHandlers()
+{
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames,
+		this->GetName().ToStdString(),
+		boost::bind(&TopicDialogImp::OnCommandRecognized, this, _1, _2));
+}
+
+void TopicDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<CommandProperty> commandPropertyList)
+{
+	std::wstring actionName;
+	std::wstring actionTarget;
+	std::wstring targetValue;
+	std::wstring ruleName;
+	ActionCommandParser actionParser;
+	actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
+	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
+	{
+		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->m_sdbSizer2OK->GetId());
+		this->m_sdbSizer2OK->Command(evt);
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
+	{
+		this->OnCancel();
+		return;
+	}
+	else
+	{
+		//must be free text
+		this->txtTitle->AppendText(phrase);
+		return;
+	}
+
+
 }

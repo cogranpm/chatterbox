@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -58,6 +58,7 @@ class pnlMain : public wxPanel
 		wxButton* btnDeleteTopic;
 		wxButton* btnEditTopic;
 		wxDataViewListCtrl* lstTopics;
+		wxDataViewColumn* colTopicIndex;
 		wxDataViewColumn* colTopicTitle;
 		wxPanel* panelTopicChildren;
 		wxNotebook* notebookChildren;

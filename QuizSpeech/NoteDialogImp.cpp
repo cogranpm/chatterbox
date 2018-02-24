@@ -28,7 +28,7 @@ NoteDialog( parent ), viewModel(note), noteAudioPlayer(), ruleNames()// viewMode
 
 NoteDialogImp::~NoteDialogImp()
 {
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	
 	/*lets delete all the panels that were created manually, this does happen normally but something is wrong
 	boost::ptr_vector<NoteSegment>* list = viewModel.GetNoteSegmentList();
@@ -91,7 +91,6 @@ void NoteDialogImp::RenderNoteSegmentTypes()
 
 void NoteDialogImp::SetupSpeechHandlers()
 {
-
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames, this->GetName().ToStdString(),
 		boost::bind(&NoteDialogImp::OnCommandRecognized, this, _1, _2));
 
@@ -184,7 +183,7 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 
 void NoteDialogImp::CloseMe()
 {
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	this->Close();
 }
 
