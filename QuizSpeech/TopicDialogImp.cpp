@@ -55,6 +55,8 @@ void TopicDialogImp::OnInitDialog(wxInitDialogEvent& event)
 {
 	ruleNames.push_back(MyApp::RULE_TOPIC_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	ruleNames.push_back(MyApp::CONTROL_ACTION);
+	ruleNames.push_back(MyApp::RULE_DICTATION_ENTRY);
 	this->SetupSpeechHandlers();
 }
 
@@ -83,6 +85,27 @@ void TopicDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Comma
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
 		this->OnCancel();
+		return;
+	}
+	else if (boost::algorithm::equals(actionTarget, L"title"))
+	{
+		txtTitle->SetFocus();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
+	{
+		if (this->txtTitle->HasFocus())
+		{
+			this->txtTitle->Clear();
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_SELECT))
+	{
+		if (this->txtTitle->HasFocus())
+		{
+			this->txtTitle->SelectAll();
+		}
 		return;
 	}
 	else

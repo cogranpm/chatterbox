@@ -17,7 +17,7 @@ private:
 	wxDataViewListStore* publicationModel;
 	Shelf* GetCurrentShelf();
 	std::vector<std::wstring> ruleNames;
-
+	bool initialized;
 
 	void OnSelectShelf(Shelf* shelf);
 	void AddShelf();
@@ -38,7 +38,7 @@ private:
 	void enableShelfButtons(bool enable);
 	void enableSubjectButtons(bool enable);
 	void SetupSpeechHandlers();
-	
+	void Refresh();
 
 	protected:
 

@@ -143,10 +143,10 @@ boost::signals2::connection* SpeechRecognitionContext::GetCommandReceivedConnect
 void SpeechRecognitionContext::Disconnect()
 {
 	//Disable();
-	if (commandReceivedConnection.connected())
-	{
-		commandReceivedConnection.disconnect();
-	}
+	//if (commandReceivedConnection.connected())
+	//{
+	//	commandReceivedConnection.disconnect();
+	//}
 	
 }
 

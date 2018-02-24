@@ -13,7 +13,7 @@
 
 MainFrameImp::MainFrameImp( wxWindow* parent )
 :
-MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationModel(nullptr), ruleNames()
+MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationModel(nullptr), ruleNames(), initialized(false)
 {
 
 	/* icons */
@@ -60,6 +60,7 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
 	ruleNames.push_back(MyApp::RULE_FILE_MENU);
 	SetupSpeechHandlers();
+	initialized = true;
 }
 
 MainFrameImp::~MainFrameImp()
@@ -145,6 +146,7 @@ void MainFrameImp::OnNotebookPageChanged(wxAuiNotebookEvent& event)
 	if (event.GetSelection() == MyApp::HOME_PAGE_INDEX)
 	{
 		this->m_auiShelf->SetWindowStyle(0);
+		Refresh();
 	}
 	else
 	{
@@ -161,6 +163,11 @@ void MainFrameImp::OnNotebookPageChanged(wxAuiNotebookEvent& event)
 		}
 	}
 	event.Skip();
+}
+void MainFrameImp::Refresh()
+{
+	SetupSpeechHandlers();
+	/* redraw the publications in case the name changed */
 }
 
 Shelf* MainFrameImp::GetCurrentShelf()
