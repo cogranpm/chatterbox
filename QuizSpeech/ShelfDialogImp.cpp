@@ -13,8 +13,7 @@ ShelfDialogImp::ShelfDialogImp( wxWindow* parent) : ShelfDialog(parent), ruleNam
 
 ShelfDialogImp::~ShelfDialogImp(void)
 {
-	//wxGetApp().DisconnectFromSpeech();
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 }
 
 
@@ -36,10 +35,6 @@ void ShelfDialogImp::SetupSpeechHandlers()
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames,
 		this->GetName().ToStdString(),
 		boost::bind(&ShelfDialogImp::OnCommandRecognized, this, _1, _2));
-
-	//boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	//*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&ShelfDialogImp::OnCommandRecognized, this, _1, _2));
-	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 }
 
 void ShelfDialogImp::OnOKButtonClick(wxCommandEvent& event)
@@ -63,12 +58,6 @@ void ShelfDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Comma
 	{
 		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->m_sdbSizer1OK->GetId());
 		this->m_sdbSizer1OK->Command(evt);
-//		wxEvtHandler* okHandler = this->m_sdbSizer1OK->GetEventHandler();
-		/*
-		if (!this->OnOK())
-		{
-			this->Close();
-		}*/
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
@@ -98,13 +87,14 @@ bool ShelfDialogImp::OnOK()
 	}
 	else
 	{
+		//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		return false;
 	}
 }
 
 bool ShelfDialogImp::OnCancel()
 {
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	this->Close();
 	return true;
 }

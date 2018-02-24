@@ -112,6 +112,7 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_PANEL);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	ruleNames.push_back(MyApp::RULE_FILE_MENU);
 	SetupSpeechHandlers();
 }
 
@@ -193,6 +194,7 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		CloseMe();
 		return;
 	}
+	wxGetApp().OnCommandRecognized(phrase, commandPropertyList);
 }
 
 

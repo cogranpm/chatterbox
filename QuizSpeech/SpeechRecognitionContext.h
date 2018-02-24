@@ -12,15 +12,13 @@ public:
 	~SpeechRecognitionContext();
 
 	typedef boost::signals2::signal<void(std::wstring, const std::vector<CommandProperty>&)>  type_commandrecognized;
-	boost::signals2::connection onCommandRecognized(type_commandrecognized::slot_function_type subscriber);
-	type_commandrecognized m_command_completed;
 
 	void CreateRecognitionContext(SpeechRecognitionEngine* engine);
 	void Enable();
 	void Disable();
 	void EnableRules(const std::vector<std::wstring>& ruleNames, const std::string& windowName);
-	void EnableRules();
 	void SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber);
+	boost::signals2::connection onCommandRecognized(type_commandrecognized::slot_function_type subscriber);
 	void CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList);
 	void ChangeGrammarEnabledState(SPGRAMMARSTATE);
 	bool IsEnabled();
@@ -52,8 +50,13 @@ private:
 	//CComPtr<ISpVoice>   voice;
 	CComPtr<ISpRecoGrammar> grammar;
 	SpeechRecognitionCallback* callbackInterface;
+	type_commandrecognized m_command_completed;
+
 	//our own private copy of the client supplied rule names
 	std::vector<std::wstring>* ruleNames;
 	boost::signals2::connection  commandReceivedConnection;
+	void SetupCallback();
+	void EnableRules();
+
 };
 

@@ -86,10 +86,14 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 	}
 
 	this->Disable();
+	SetupCallback();
+}
 
+void SpeechRecognitionContext::SetupCallback()
+{
 	WPARAM wData = 0;
 	LPARAM lData = 0;
-	hr = this->context->SetNotifyCallbackInterface(callbackInterface, wData, lData);
+	HRESULT hr = this->context->SetNotifyCallbackInterface(callbackInterface, wData, lData);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -97,8 +101,6 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 		::PrintError(L"Call to SetNotifyCallbackInterface failed", hr);
 		throw std::runtime_error(message);
 	}
-
-	
 }
 
 void SpeechRecognitionContext::Enable()
@@ -141,11 +143,11 @@ boost::signals2::connection* SpeechRecognitionContext::GetCommandReceivedConnect
 void SpeechRecognitionContext::Disconnect()
 {
 	//Disable();
-	if (commandReceivedConnection.connected())
+	/*if (commandReceivedConnection.connected())
 	{
 		commandReceivedConnection.disconnect();
 	}
-	
+	*/
 }
 
 void SpeechRecognitionContext::SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber)
@@ -159,6 +161,10 @@ void SpeechRecognitionContext::SetupSpeechHandlers(const std::vector<std::wstrin
 		}
 		else
 		{
+			if (commandReceivedConnection.connected())
+			{
+				commandReceivedConnection.disconnect();
+			}
 			commandReceivedConnection = onCommandRecognized(subscriber);
 			EnableRules(ruleNames, windowName);
 		}
@@ -178,7 +184,6 @@ void SpeechRecognitionContext::EnableRules(const std::vector<std::wstring>& rule
 	//copy the rules names so we can easily reload them
 	this->ruleNames = new std::vector<std::wstring>(ruleNames);
 	EnableRules();
-
 }
 
 void SpeechRecognitionContext::EnableRules()
@@ -187,6 +192,7 @@ void SpeechRecognitionContext::EnableRules()
 	{
 		return;
 	}
+	Disable();
 	HRESULT hr = S_OK;
 	//this->ChangeGrammarEnabledState(SPGS_ENABLED);
 	//all rule names in @ruleNames are made active
@@ -203,6 +209,7 @@ void SpeechRecognitionContext::EnableRules()
 		}
 	}
 	//this->ChangeGrammarEnabledState(SPGS_ENABLED);
+	Enable();
 }
 
 bool SpeechRecognitionContext::IsEnabled()
