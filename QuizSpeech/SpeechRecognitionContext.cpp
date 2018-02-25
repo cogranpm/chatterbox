@@ -219,7 +219,7 @@ void SpeechRecognitionContext::EnableRules()
 void SpeechRecognitionContext::BeginCreateDynamicRule()
 {
 	this->context->Pause(0);
-	HRESULT hr = grammar->GetRule(MyApp::RULE_DYNAMIC, NULL, SPRAF_Dynamic, FALSE, &hRule);
+	HRESULT hr = grammar->GetRule(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRAF_Dynamic, FALSE, &hRule);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -241,6 +241,14 @@ void SpeechRecognitionContext::BeginCreateDynamicRule()
 void SpeechRecognitionContext::EndCreateDynamicRule()
 {
 	HRESULT hr = grammar->Commit(NULL);
+	if (FAILED(hr))
+	{
+		this->grammar.Release();
+		const std::string message("Call to Commit Active failed");
+		::PrintError(L"Call to Commit Active failed", hr);
+		throw std::runtime_error(message);
+	}
+	hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_ACTIVE);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
