@@ -785,8 +785,7 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 		if (boost::algorithm::equals(actionName, L"select shelf index"))
 		{
 			int index = boost::lexical_cast<int>(actionTarget);
-			m_dvlShelf->SelectRow(index);
-
+			m_dvlShelf->SelectRow(index - 1);
 		}
 		return;
 	}
