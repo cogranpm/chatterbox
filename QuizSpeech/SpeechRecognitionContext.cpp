@@ -274,7 +274,7 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, const std::wstring& index, const std::wstring& propertyName)
 {
 	SPPROPERTYINFO info;
-	info.pszName = L"select shelf";
+	info.pszName = propertyName.c_str();
 	info.pszValue = display.c_str();
 	info.vValue.vt = VT_UI4; //just seems to need something here
 
@@ -289,7 +289,9 @@ void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, co
 	}
 
 	SPPROPERTYINFO infoIndex;
-	infoIndex.pszName = L"select shelf index";
+	std::wstring indexName(propertyName);
+	indexName.append(L" index");
+	infoIndex.pszName = indexName.c_str();
 	infoIndex.pszValue = index.c_str();
 	infoIndex.vValue.vt = VT_UI4;
 	hr = grammar->AddWordTransition(hRule, NULL, index.c_str(), NULL, SPWT_LEXICAL, 1, &infoIndex);
