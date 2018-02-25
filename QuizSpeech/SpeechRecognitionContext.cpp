@@ -270,16 +270,15 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 }
 
 
-void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, std::wstring& index)
+void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, std::wstring& index, std::wstring& propertyName)
 {
 	SPPROPERTYINFO info;
 	info.pszName = L"select shelf";
-	info.pszValue = index.c_str();
-	info.ulId = 0;
-	//info.vValue = VT_I4;
-	//info.vValue = VT_BYREF;
-	//HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, &info);
-	HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
+	info.pszValue = display.c_str();
+	info.vValue.vt = VT_UI4; //just seems to need something here
+
+	HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, &info);
+	//HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -288,7 +287,11 @@ void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, std::wst
 		throw std::runtime_error(message);
 	}
 
-	hr = grammar->AddWordTransition(hRule, NULL, index.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
+	SPPROPERTYINFO infoIndex;
+	infoIndex.pszName = L"select shelf";
+	infoIndex.pszValue = index.c_str();
+	infoIndex.vValue.vt = VT_UI4;
+	hr = grammar->AddWordTransition(hRule, NULL, index.c_str(), NULL, SPWT_LEXICAL, 1, &infoIndex);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();

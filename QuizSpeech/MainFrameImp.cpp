@@ -266,11 +266,13 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 		{
 			this->m_dvlShelf->SelectRow(i);
 		}
-		std::wstring rulePhrase(L"select shelf ");
+		//std::wstring rulePhrase(L"select shelf ");
+		std::wstring rulePhrase(L"");
 		rulePhrase.append(shelfList->at(i).getTitle());
-		std::wstring rulePhraseForIndexSelection(L"select shelf ");
+		//std::wstring rulePhraseForIndexSelection(L"select shelf ");
+		std::wstring rulePhraseForIndexSelection(L"");
 		rulePhraseForIndexSelection.append(index);
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, L"select shelf");
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 
