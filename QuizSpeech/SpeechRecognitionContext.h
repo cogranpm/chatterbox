@@ -17,7 +17,9 @@ public:
 	void Enable();
 	void Disable();
 	void EnableRules(const std::vector<std::wstring>& ruleNames, const std::string& windowName);
-	void EnableDynamicRule(std::vector<EntityItem>& list);
+	void BeginCreateDynamicRule();
+	void EndCreateDynamicRule();
+	void CreateDynamicRule(std::wstring& display, int index);
 	void SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber);
 	boost::signals2::connection onCommandRecognized(type_commandrecognized::slot_function_type subscriber);
 	void CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList);
@@ -52,6 +54,9 @@ private:
 	CComPtr<ISpRecoGrammar> grammar;
 	SpeechRecognitionCallback* callbackInterface;
 	type_commandrecognized m_command_completed;
+
+	/* holds dynamic rule handle whilst dynamic rules are created */
+	SPSTATEHANDLE hRule;
 
 	//our own private copy of the client supplied rule names
 	std::vector<std::wstring>* ruleNames;

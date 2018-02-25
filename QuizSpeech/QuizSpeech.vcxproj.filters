@@ -60,9 +60,6 @@
     <ClCompile Include="Question.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QuizProvider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Topic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -312,9 +309,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Question.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="QuizProvider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Topic.h">

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -80,6 +80,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	m_dvlShelf = new wxDataViewListCtrl( pnlShelfList, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_SINGLE );
+	colShelfIndex = m_dvlShelf->AppendTextColumn( wxT("Index") );
 	m_dvlcShelfName = m_dvlShelf->AppendTextColumn( wxT("Title") );
 	bSizer7->Add( m_dvlShelf, 1, wxEXPAND, 5 );
 	

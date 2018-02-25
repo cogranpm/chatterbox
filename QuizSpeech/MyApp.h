@@ -50,6 +50,7 @@ public:
 	static const std::wstring RULE_PUBLICATION_CONTROLS;
 	static const std::wstring RULE_DIALOG_ACTIONS;
 	static const std::wstring RULE_DICTATION_ENTRY;
+	static const std::wstring RULE_DYNAMIC;
 
 	/* publication panel */
 	static const std::wstring RULE_PUBLICATION_PANEL;

@@ -254,16 +254,22 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 	this->shelfModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule();
 	for(int i = 0; i < shelfList->size(); i ++ )
 	{
 		data.clear();
+		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
+		data.push_back(index);
 		data.push_back(shelfList->at(i).getTitle());
 		shelfModel->AppendItem( data, wxUIntPtr(&shelfList->at(i)));
 		if(shelf != NULL && shelfList->at(i).getShelfId() == shelf->getShelfId())
 		{
 			this->m_dvlShelf->SelectRow(i);
 		}
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(shelfList->at(i).getTitle(), i + 1);
 	}	
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
+
 	if ((m_dvlShelf->GetSelectedRow() == wxNOT_FOUND) && m_dvlShelf->GetItemCount() > 0)
 	{
 		m_dvlShelf->SelectRow(0);
@@ -764,6 +770,11 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			this->EditPublication();
 			return;
 		}
+	}
+	else if(boost::algorithm::equals(ruleName, MyApp::RULE_DYNAMIC))
+	{
+		//is it a list lookup
+		return;
 	}
 
 	//if frame doesn't handle the spoken command, send it to the application

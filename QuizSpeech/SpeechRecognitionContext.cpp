@@ -215,10 +215,11 @@ void SpeechRecognitionContext::EnableRules()
 	Enable();
 }
 
-void SpeechRecognitionContext::EnableDynamicRule(std::vector<EntityItem>& list)
+
+void SpeechRecognitionContext::BeginCreateDynamicRule()
 {
-	SPSTATEHANDLE hRule;
-	HRESULT hr = grammar->GetRule(L"DYNAMIC_RULE", NULL, SPRAF_Dynamic, FALSE, &hRule);
+	this->context->Pause(0);
+	HRESULT hr = grammar->GetRule(MyApp::RULE_DYNAMIC, NULL, SPRAF_Dynamic, FALSE, &hRule);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -226,8 +227,6 @@ void SpeechRecognitionContext::EnableDynamicRule(std::vector<EntityItem>& list)
 		::PrintError(L"Call to GetRule Active failed", hr);
 		throw std::runtime_error(message);
 	}
-
-
 	hr = grammar->ClearRule(hRule);
 	if (FAILED(hr))
 	{
@@ -237,34 +236,42 @@ void SpeechRecognitionContext::EnableDynamicRule(std::vector<EntityItem>& list)
 		throw std::runtime_error(message);
 	}
 
-	std::vector<EntityItem>::iterator itr;
-	int counter = 0;
-	for(itr = list.begin(); itr != list.end(); itr++)
-	{
-		counter++;
-		EntityItem item = *itr;
-		std::wstring description = item.description;
-		hr = grammar->AddWordTransition(hRule, NULL,description.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
-		if (FAILED(hr))
-		{
-			this->grammar.Release();
-			const std::string message("Call to AddWordTransition Active failed");
-			::PrintError(L"Call to AddWordTransition Active failed", hr);
-			throw std::runtime_error(message);
-		}
-		std::wstringstream ss;
-		ss << counter;
-		hr = grammar->AddWordTransition(hRule, NULL, ss.str().c_str(), NULL, SPWT_LEXICAL, 1, NULL);
-		if (FAILED(hr))
-		{
-			this->grammar.Release();
-			const std::string message("Call to AddWordTransition Active failed");
-			::PrintError(L"Call to AddWordTransition Active failed", hr);
-			throw std::runtime_error(message);
-		}
-	}
-	hr = grammar->Commit(NULL);
+}
 
+void SpeechRecognitionContext::EndCreateDynamicRule()
+{
+	HRESULT hr = grammar->Commit(NULL);
+	if (FAILED(hr))
+	{
+		this->grammar.Release();
+		const std::string message("Call to Commit Active failed");
+		::PrintError(L"Call to Commit Active failed", hr);
+		throw std::runtime_error(message);
+	}
+	this->context->Resume(0);
+}
+
+
+void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, int index)
+{
+	HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
+	if (FAILED(hr))
+	{
+		this->grammar.Release();
+		const std::string message("Call to AddWordTransition Active failed");
+		::PrintError(L"Call to AddWordTransition Active failed", hr);
+		throw std::runtime_error(message);
+	}
+	std::wstringstream ss;
+	ss << index;
+	hr = grammar->AddWordTransition(hRule, NULL, ss.str().c_str(), NULL, SPWT_LEXICAL, 1, NULL);
+	if (FAILED(hr))
+	{
+		this->grammar.Release();
+		const std::string message("Call to AddWordTransition Active failed");
+		::PrintError(L"Call to AddWordTransition Active failed", hr);
+		throw std::runtime_error(message);
+	}
 }
 
 bool SpeechRecognitionContext::IsEnabled()

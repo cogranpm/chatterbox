@@ -212,7 +212,6 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClCompile Include="PublicationViewModel.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="Quiz.cpp" />
-    <ClCompile Include="QuizProvider.cpp" />
     <ClCompile Include="QuizRunHeader.cpp" />
     <ClCompile Include="QuizRunQuestion.cpp" />
     <ClCompile Include="QuizScore.cpp" />
@@ -299,7 +298,6 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClInclude Include="PublicationViewModel.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="Quiz.h" />
-    <ClInclude Include="QuizProvider.h" />
     <ClInclude Include="QuizRunHeader.h" />
     <ClInclude Include="QuizRunQuestion.h" />
     <ClInclude Include="QuizScore.h" />

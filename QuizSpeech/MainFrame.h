@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -59,6 +59,7 @@ class MainFrame : public wxFrame
 		wxButton* m_btnEditShelf;
 		wxPanel* pnlShelfList;
 		wxDataViewListCtrl* m_dvlShelf;
+		wxDataViewColumn* colShelfIndex;
 		wxDataViewColumn* m_dvlcShelfName;
 		wxPanel* pnlShelfChildren;
 		wxSplitterWindow* m_splitter2;
