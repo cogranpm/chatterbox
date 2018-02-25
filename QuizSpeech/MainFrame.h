@@ -71,6 +71,7 @@ class MainFrame : public wxFrame
 		wxButton* btnEditSubject;
 		wxPanel* pnlSubjectList;
 		wxDataViewListCtrl* m_lstSubject;
+		wxDataViewColumn* colSubjectIndex;
 		wxDataViewColumn* m_lstSubjectColTitle;
 		wxPanel* pnlPublication;
 		wxPanel* pnlPublicationHeader;
@@ -80,6 +81,7 @@ class MainFrame : public wxFrame
 		wxButton* btnEditPublication;
 		wxPanel* pnlPublicationList;
 		wxDataViewListCtrl* lstPublication;
+		wxDataViewColumn* colPublicationIndex;
 		wxDataViewColumn* lstPublicationColTitle;
 		
 		// Virtual event handlers, overide them in your derived class

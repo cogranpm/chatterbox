@@ -142,6 +142,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer14 = new wxBoxSizer( wxVERTICAL );
 	
 	m_lstSubject = new wxDataViewListCtrl( pnlSubjectList, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	colSubjectIndex = m_lstSubject->AppendTextColumn( wxT("Index") );
 	m_lstSubjectColTitle = m_lstSubject->AppendTextColumn( wxT("Title") );
 	bSizer14->Add( m_lstSubject, 1, wxALL|wxEXPAND, 5 );
 	
@@ -196,6 +197,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
 	lstPublication = new wxDataViewListCtrl( pnlPublicationList, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	colPublicationIndex = lstPublication->AppendTextColumn( wxT("Index") );
 	lstPublicationColTitle = lstPublication->AppendTextColumn( wxT("Title") );
 	bSizer11->Add( lstPublication, 1, wxALL|wxEXPAND, 5 );
 	

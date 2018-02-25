@@ -258,20 +258,27 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 		::PrintError(L"Call to Commit failed", hr);
 		throw std::runtime_error(message);
 	}
-	//hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_ACTIVE);
-	//if (FAILED(hr))
-	//{
-	//	this->grammar.Release();
-	//	const std::string message("Call toSetRuleState failed");
-	//	::PrintError(L"Call toSetRuleState failed", hr);
-	//	throw std::runtime_error(message);
-	//}
+	hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_ACTIVE);
+	if (FAILED(hr))
+	{
+		this->grammar.Release();
+		const std::string message("Call toSetRuleState failed");
+		::PrintError(L"Call toSetRuleState failed", hr);
+		throw std::runtime_error(message);
+	}
 	this->context->Resume(0);
 }
 
 
-void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, int index)
+void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, std::wstring& index)
 {
+	SPPROPERTYINFO info;
+	info.pszName = L"select shelf";
+	info.pszValue = index.c_str();
+	info.ulId = 0;
+	//info.vValue = VT_I4;
+	//info.vValue = VT_BYREF;
+	//HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, &info);
 	HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
 	if (FAILED(hr))
 	{
@@ -280,9 +287,8 @@ void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, int inde
 		::PrintError(L"Call to AddWordTransition Active failed", hr);
 		throw std::runtime_error(message);
 	}
-	std::wstringstream ss;
-	ss << index;
-	hr = grammar->AddWordTransition(hRule, NULL, ss.str().c_str(), NULL, SPWT_LEXICAL, 1, NULL);
+
+	hr = grammar->AddWordTransition(hRule, NULL, index.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -290,6 +296,16 @@ void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, int inde
 		::PrintError(L"Call to AddWordTransition Active failed", hr);
 		throw std::runtime_error(message);
 	}
+	//std::wstringstream ss;
+	//ss << index;
+	//hr = grammar->AddWordTransition(hRule, NULL, ss.str().c_str(), NULL, SPWT_LEXICAL, 1, NULL);
+	//if (FAILED(hr))
+	//{
+	//	this->grammar.Release();
+	//	const std::string message("Call to AddWordTransition Active failed");
+	//	::PrintError(L"Call to AddWordTransition Active failed", hr);
+	//	throw std::runtime_error(message);
+	//}
 }
 
 bool SpeechRecognitionContext::IsEnabled()

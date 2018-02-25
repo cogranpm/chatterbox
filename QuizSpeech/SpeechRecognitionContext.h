@@ -19,7 +19,7 @@ public:
 	void EnableRules(const std::vector<std::wstring>& ruleNames, const std::string& windowName);
 	void BeginCreateDynamicRule();
 	void EndCreateDynamicRule();
-	void CreateDynamicRule(std::wstring& display, int index);
+	void CreateDynamicRule(std::wstring& display, std::wstring& index);
 	void SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber);
 	boost::signals2::connection onCommandRecognized(type_commandrecognized::slot_function_type subscriber);
 	void CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList);

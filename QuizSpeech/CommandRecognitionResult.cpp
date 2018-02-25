@@ -100,5 +100,12 @@ void CommandRecognitionResult::Process()
 		commandPropertyList.push_back(commandProperty);
 		pProp = pProp->pNextSibling;
 	}
+	//if there are no semantic properties associated with rule, say for a dynamic rule, just throw rule name in
+	if (commandPropertyList.size() == 0)
+	{
+		CommandProperty commandProperty(L"", L"", ruleName);
+		commandPropertyList.push_back(commandProperty);
+
+	}
 	this->context->CommandRecognitionReceived(recognizedText, commandPropertyList);
 }

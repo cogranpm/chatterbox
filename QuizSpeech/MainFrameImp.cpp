@@ -266,7 +266,11 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 		{
 			this->m_dvlShelf->SelectRow(i);
 		}
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(shelfList->at(i).getTitle(), i + 1);
+		std::wstring rulePhrase(L"select shelf ");
+		rulePhrase.append(shelfList->at(i).getTitle());
+		std::wstring rulePhraseForIndexSelection(L"select shelf ");
+		rulePhraseForIndexSelection.append(index);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection);
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 
@@ -474,6 +478,7 @@ void MainFrameImp::RenderSubjects(Subject* subject)
 	for(int i = 0; i < itemsList->size(); i ++ )
 	{
 		data.clear();
+		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
 		data.push_back(itemsList->at(i).getTitle());
 		this->subjectModel->AppendItem( data, wxUIntPtr(&itemsList->at(i)));
 		if(subject != NULL && itemsList->at(i).getSubjectId() == subject->getSubjectId())
@@ -575,6 +580,7 @@ void MainFrameImp::RenderPublications(Publication* publication)
 	for(int i = 0; i < itemsList->size(); i ++ )
 	{
 		data.clear();
+		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
 		data.push_back(itemsList->at(i).getTitle());
 		this->publicationModel->AppendItem( data, wxUIntPtr(&itemsList->at(i)));
 		if(publication != NULL && itemsList->at(i).getPublicationId() == publication->getPublicationId())
