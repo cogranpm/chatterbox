@@ -219,7 +219,17 @@ void SpeechRecognitionContext::EnableRules()
 void SpeechRecognitionContext::BeginCreateDynamicRule()
 {
 	this->context->Pause(0);
-	HRESULT hr = grammar->GetRule(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRAF_Dynamic, FALSE, &hRule);
+	HRESULT hr = S_OK;
+	//hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_INACTIVE);
+	//if (FAILED(hr))
+	//{
+	//	this->grammar.Release();
+	//	const std::string message("Call toSetRuleState failed");
+	//	::PrintError(L"Call toSetRuleState failed", hr);
+	//	throw std::runtime_error(message);
+	//}
+
+	hr = grammar->GetRule(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRAF_Dynamic, FALSE, &hRule);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -244,18 +254,18 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
-		const std::string message("Call to Commit Active failed");
-		::PrintError(L"Call to Commit Active failed", hr);
+		const std::string message("Call to Commit failed");
+		::PrintError(L"Call to Commit failed", hr);
 		throw std::runtime_error(message);
 	}
-	hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_ACTIVE);
-	if (FAILED(hr))
-	{
-		this->grammar.Release();
-		const std::string message("Call to Commit Active failed");
-		::PrintError(L"Call to Commit Active failed", hr);
-		throw std::runtime_error(message);
-	}
+	//hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_ACTIVE);
+	//if (FAILED(hr))
+	//{
+	//	this->grammar.Release();
+	//	const std::string message("Call toSetRuleState failed");
+	//	::PrintError(L"Call toSetRuleState failed", hr);
+	//	throw std::runtime_error(message);
+	//}
 	this->context->Resume(0);
 }
 
