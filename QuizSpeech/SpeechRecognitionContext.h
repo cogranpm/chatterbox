@@ -17,9 +17,9 @@ public:
 	void Enable();
 	void Disable();
 	void EnableRules(const std::vector<std::wstring>& ruleNames, const std::string& windowName);
-	void BeginCreateDynamicRule();
+	void BeginCreateDynamicRule(const std::wstring& ruleName);
 	void EndCreateDynamicRule();
-	void CreateDynamicRule(std::wstring& display, std::wstring& index, std::wstring& propertyName);
+	void CreateDynamicRule(const std::wstring& display, const std::wstring& index, const std::wstring& propertyName);
 	void SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber);
 	boost::signals2::connection onCommandRecognized(type_commandrecognized::slot_function_type subscriber);
 	void CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList);
@@ -57,6 +57,7 @@ private:
 
 	/* holds dynamic rule handle whilst dynamic rules are created */
 	SPSTATEHANDLE hRule;
+	std::wstring dynamicRuleName;
 
 	//our own private copy of the client supplied rule names
 	std::vector<std::wstring>* ruleNames;

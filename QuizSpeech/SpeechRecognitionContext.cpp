@@ -216,9 +216,10 @@ void SpeechRecognitionContext::EnableRules()
 }
 
 
-void SpeechRecognitionContext::BeginCreateDynamicRule()
+void SpeechRecognitionContext::BeginCreateDynamicRule(const std::wstring& ruleName)
 {
 	this->context->Pause(0);
+	dynamicRuleName = ruleName;
 	HRESULT hr = S_OK;
 	//hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_INACTIVE);
 	//if (FAILED(hr))
@@ -229,7 +230,7 @@ void SpeechRecognitionContext::BeginCreateDynamicRule()
 	//	throw std::runtime_error(message);
 	//}
 
-	hr = grammar->GetRule(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRAF_Dynamic, FALSE, &hRule);
+	hr = grammar->GetRule(ruleName.c_str(), NULL, SPRAF_Dynamic, TRUE, &hRule);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -258,7 +259,7 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 		::PrintError(L"Call to Commit failed", hr);
 		throw std::runtime_error(message);
 	}
-	hr = this->grammar->SetRuleState(MyApp::RULE_DYNAMIC.c_str(), NULL, SPRS_ACTIVE);
+	hr = this->grammar->SetRuleState(dynamicRuleName.c_str(), NULL, SPRS_ACTIVE);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
@@ -270,7 +271,7 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 }
 
 
-void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, std::wstring& index, std::wstring& propertyName)
+void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, const std::wstring& index, const std::wstring& propertyName)
 {
 	SPPROPERTYINFO info;
 	info.pszName = L"select shelf";
@@ -288,7 +289,7 @@ void SpeechRecognitionContext::CreateDynamicRule(std::wstring& display, std::wst
 	}
 
 	SPPROPERTYINFO infoIndex;
-	infoIndex.pszName = L"select shelf";
+	infoIndex.pszName = L"select shelf index";
 	infoIndex.pszValue = index.c_str();
 	infoIndex.vValue.vt = VT_UI4;
 	hr = grammar->AddWordTransition(hRule, NULL, index.c_str(), NULL, SPWT_LEXICAL, 1, &infoIndex);

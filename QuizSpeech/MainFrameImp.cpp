@@ -254,7 +254,7 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 	this->shelfModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_SELECT_SHELF);
 	for(int i = 0; i < shelfList->size(); i ++ )
 	{
 		data.clear();
@@ -779,12 +779,13 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			return;
 		}
 	}
-	else if(boost::algorithm::equals(ruleName, MyApp::RULE_DYNAMIC))
+	else if(boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_SHELF))
 	{
 		//is it a list lookup
-		if (boost::algorithm::equals(actionName, L"select shelf"))
+		if (boost::algorithm::equals(actionName, L"select shelf index"))
 		{
-			//the actionTarget could be a number or a display
+			int index = boost::lexical_cast<int>(actionTarget);
+			m_dvlShelf->SelectRow(index);
 
 		}
 		return;
