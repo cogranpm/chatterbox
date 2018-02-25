@@ -146,7 +146,10 @@ void MainFrameImp::OnNotebookPageChanged(wxAuiNotebookEvent& event)
 	if (event.GetSelection() == MyApp::HOME_PAGE_INDEX)
 	{
 		this->m_auiShelf->SetWindowStyle(0);
-		Refresh();
+		if (initialized)
+		{
+			Refresh();
+		}
 	}
 	else
 	{
@@ -168,6 +171,7 @@ void MainFrameImp::Refresh()
 {
 	SetupSpeechHandlers();
 	/* redraw the publications in case the name changed */
+	RenderPublications(wxGetApp().GetMainFrameViewModel()->GetCurrentPublication());
 }
 
 Shelf* MainFrameImp::GetCurrentShelf()

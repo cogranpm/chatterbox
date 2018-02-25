@@ -3,7 +3,7 @@
 #include "SpeechRecognitionEngine.h"
 #include "SpeechRecognitionCallback.h"
 #include "CommandProperty.h"
-
+#include "EntityItem.h"
 
 class SpeechRecognitionContext
 {
@@ -17,6 +17,7 @@ public:
 	void Enable();
 	void Disable();
 	void EnableRules(const std::vector<std::wstring>& ruleNames, const std::string& windowName);
+	void EnableDynamicRule(std::vector<EntityItem>& list);
 	void SetupSpeechHandlers(const std::vector<std::wstring>& ruleNames, const std::string& windowName, type_commandrecognized::slot_function_type subscriber);
 	boost::signals2::connection onCommandRecognized(type_commandrecognized::slot_function_type subscriber);
 	void CommandRecognitionReceived(const std::wstring& commandText, const std::vector<CommandProperty>& commandPropertyList);
