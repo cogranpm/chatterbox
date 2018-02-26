@@ -17,12 +17,12 @@ SubjectDialog( parent ), ruleNames()
 
 SubjectDialogImp::~SubjectDialogImp()
 {
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 }
 
 void SubjectDialogImp::OnClose( wxCloseEvent& event )
 {
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	event.Skip();
 }
 
@@ -83,7 +83,7 @@ void SubjectDialogImp::OnOKButtonClick( wxCommandEvent& event )
 	}
 	else
 	{
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+		//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		event.Skip();
 	}
 }

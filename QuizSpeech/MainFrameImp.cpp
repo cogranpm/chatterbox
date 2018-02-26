@@ -35,6 +35,8 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 
 	this->m_dvlcShelfName->SetWidth(wxCOL_WIDTH_AUTOSIZE);
 	this->m_dvlcShelfName->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colShelfIndex->SetWidth(50);
+	m_dvlShelf->AllowMultiColumnSort(true);
 
 	this->lstPublicationColTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
 	this->lstPublicationColTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
@@ -281,6 +283,7 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 		m_dvlShelf->SelectRow(0);
 		OnSelectShelf(&shelfList->at(0));
 	}
+	shelfModel->Resort();
 }
 
 
@@ -477,23 +480,31 @@ void MainFrameImp::RenderSubjects(Subject* subject)
 	this->subjectModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Subject>* itemsList = wxGetApp().GetMainFrameViewModel()->getSubjectList();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_SELECT_SUBJECT);
 	for(int i = 0; i < itemsList->size(); i ++ )
 	{
 		data.clear();
-		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
+		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
+		data.push_back(index);
 		data.push_back(itemsList->at(i).getTitle());
 		this->subjectModel->AppendItem( data, wxUIntPtr(&itemsList->at(i)));
 		if(subject != NULL && itemsList->at(i).getSubjectId() == subject->getSubjectId())
 		{
 			this->m_lstSubject->SelectRow(i);
 		}
+		std::wstring rulePhrase(L"");
+		rulePhrase.append(itemsList->at(i).getTitle());
+		std::wstring rulePhraseForIndexSelection(L"");
+		rulePhraseForIndexSelection.append(index);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select subject"));
 	}	
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 	if ((m_lstSubject->GetSelectedRow() == wxNOT_FOUND) && m_lstSubject->GetItemCount() > 0)
 	{
 		m_lstSubject->SelectRow(0);
 		OnSelectSubject(&itemsList->at(0));
 	}
-
+	subjectModel->Resort();
 	/* using the list ctrl, something wrong when clicking on first item in list, is null
 	this->m_lstSubject->Hide();
 	this->m_lstSubject->DeleteAllItems();
@@ -785,7 +796,23 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 		if (boost::algorithm::equals(actionName, L"select shelf index"))
 		{
 			int index = boost::lexical_cast<int>(actionTarget);
-			m_dvlShelf->SelectRow(index - 1);
+			if (index <= m_dvlShelf->GetItemCount() && index > 0)
+			{
+				m_dvlShelf->SelectRow(index - 1);
+			}
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_SUBJECT))
+	{
+		//is it a list lookup
+		if (boost::algorithm::equals(actionName, L"select subject index"))
+		{
+			int index = boost::lexical_cast<int>(actionTarget);
+			if (index <= m_lstSubject->GetItemCount() && index > 0)
+			{
+				m_lstSubject->SelectRow(index - 1);
+			}
 		}
 		return;
 	}
