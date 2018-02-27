@@ -11,7 +11,7 @@ DataViewListStoreHelper::~DataViewListStoreHelper()
 {
 }
 
-int DataViewListStoreHelper::SortByString(wxDataViewListStore& store, const wxDataViewItem &item1, const wxDataViewItem &item2, unsigned int column, bool ascending)
+int DataViewListStoreHelper::SortByString(const wxDataViewListStore* store, const wxDataViewItem &item1, const wxDataViewItem &item2, unsigned int column, bool ascending)
 {
 	wxString display;
 	wxString display1;
@@ -19,8 +19,8 @@ int DataViewListStoreHelper::SortByString(wxDataViewListStore& store, const wxDa
 	{
 		wxVariant itemVar;
 		wxVariant itemVar1;
-		store.GetValue(itemVar, item1, column);
-		store.GetValue(itemVar1, item2, column);
+		store->GetValue(itemVar, item1, column);
+		store->GetValue(itemVar1, item2, column);
 		display = itemVar.GetString();
 		display1 = itemVar1.GetString();
 		if (ascending)

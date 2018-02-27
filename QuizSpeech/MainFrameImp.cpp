@@ -44,8 +44,8 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 
 	shelfModel = new ShelfDataViewListStore();
 	
-	subjectModel = new wxDataViewListStore();
-	publicationModel = new wxDataViewListStore();
+	subjectModel = new ShelfDataViewListStore();
+	publicationModel = new ShelfDataViewListStore();
 	this->m_dvlShelf->AssociateModel(shelfModel);
 	this->m_lstSubject->AssociateModel(subjectModel);
 	this->lstPublication->AssociateModel(publicationModel);
