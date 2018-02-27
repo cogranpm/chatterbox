@@ -264,6 +264,9 @@
     <ClCompile Include="ShelfDataViewListStore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataViewListStoreHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -522,6 +525,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShelfDataViewListStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DataViewListStoreHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

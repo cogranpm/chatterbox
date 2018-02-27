@@ -1,6 +1,5 @@
 #include "ShelfDataViewListStore.h"
-#include "Shelf.h"
-
+#include "DataViewListStoreHelper.h"
 
 ShelfDataViewListStore::ShelfDataViewListStore() :wxDataViewListStore()
 {
@@ -20,6 +19,7 @@ int ShelfDataViewListStore::Compare(const wxDataViewItem &item1, const wxDataVie
 	}
 	else if (column == 1)
 	{
+		return DataViewListStoreHelper::SortByString(*this, item1, item2, column, ascending);
 		wxString display;
 		wxString display1;
 		if (item1.IsOk())
