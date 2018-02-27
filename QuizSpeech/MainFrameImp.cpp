@@ -9,6 +9,7 @@
 #include "ActionCommandParser.h"
 #include "SAConfirmDialogImp.h"
 #include "PublicationPanelImp.h"
+#include "ShelfDataViewListStore.h"
 
 
 MainFrameImp::MainFrameImp( wxWindow* parent )
@@ -41,7 +42,8 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	this->lstPublicationColTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
 	this->lstPublicationColTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
 
-	shelfModel = new wxDataViewListStore();
+	shelfModel = new ShelfDataViewListStore();
+	
 	subjectModel = new wxDataViewListStore();
 	publicationModel = new wxDataViewListStore();
 	this->m_dvlShelf->AssociateModel(shelfModel);
