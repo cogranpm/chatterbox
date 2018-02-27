@@ -138,7 +138,7 @@ void SqliteProvider::Delete(Shelf* shelf)
 void SqliteProvider::GetAllShelves(boost::ptr_vector<Shelf>* _shelfList)
 {
 
-	wxSQLite3ResultSet set = db->ExecuteQuery(wxString("SELECT Title, ShelfId FROM Shelf ORDER BY Title;"));
+	wxSQLite3ResultSet set = db->ExecuteQuery(wxString("SELECT Title, ShelfId FROM Shelf ORDER BY UPPER(Title);"));
 	while(set.NextRow())
 	{
 		Shelf* shelf = new Shelf();
@@ -194,7 +194,7 @@ void SqliteProvider::Delete(Subject* subject)
 
 void SqliteProvider::GetSubjectsByShelf(Shelf* shelf, boost::ptr_vector<Subject>* _subjectList)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT SubjectId, Title, ShelfId FROM Subject WHERE ShelfId = ? ORDER BY Title;");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT SubjectId, Title, ShelfId FROM Subject WHERE ShelfId = ? ORDER BY UPPER(Title);");
 	stmt.Bind(1, wxLongLong(shelf->getShelfId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while(set.NextRow())
@@ -254,7 +254,7 @@ void SqliteProvider::Delete(Publication* publication)
 
 void SqliteProvider::GetPublicationsBySubject(Subject* subject, boost::ptr_vector<Publication>* publicationList)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Title, Type, SubjectId FROM Publication WHERE SubjectId = ? ORDER BY Title;");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Title, Type, SubjectId FROM Publication WHERE SubjectId = ? ORDER BY UPPER(Title);");
 	stmt.Bind(1, wxLongLong(subject->getSubjectId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while(set.NextRow())
