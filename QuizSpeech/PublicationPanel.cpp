@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Jun 28 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -118,7 +118,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
 	lstTopics = new wxDataViewListCtrl( panelTopics, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	colTopicIndex = lstTopics->AppendTextColumn( wxT("Index") );
+	colTopicIndex = lstTopics->AppendTextColumn( wxEmptyString );
 	colTopicTitle = lstTopics->AppendTextColumn( wxT("Title") );
 	bSizer6->Add( lstTopics, 1, wxALL|wxEXPAND, 5 );
 	
@@ -191,6 +191,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
 	lstNotes = new wxDataViewListCtrl( panelNotes, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	colNoteIndex = lstNotes->AppendTextColumn( wxEmptyString );
 	colNoteTitle = lstNotes->AppendTextColumn( wxT("Title") );
 	colNoteDescription = lstNotes->AppendTextColumn( wxT("Description") );
 	colNoteSegmentCount = lstNotes->AppendTextColumn( wxT("# Segments") );
@@ -211,7 +212,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	panelTopicChildNote->SetSizer( sizerTopicChildren );
 	panelTopicChildNote->Layout();
 	sizerTopicChildren->Fit( panelTopicChildNote );
-	notebookChildren->AddPage( panelTopicChildNote, wxT("Notes"), false );
+	notebookChildren->AddPage( panelTopicChildNote, wxT("Notes"), true );
 	panelTopicChildQuiz = new wxPanel( notebookChildren, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
@@ -256,7 +257,8 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer13 = new wxBoxSizer( wxVERTICAL );
 	
 	lstQuiz = new wxDataViewListCtrl( panelExercise, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_dataViewListColumn3 = lstQuiz->AppendTextColumn( wxT("Name") );
+	colQuizIndex = lstQuiz->AppendTextColumn( wxEmptyString );
+	colQuizName = lstQuiz->AppendTextColumn( wxT("Name") );
 	bSizer13->Add( lstQuiz, 1, wxEXPAND, 5 );
 	
 	
@@ -291,7 +293,8 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer161 = new wxBoxSizer( wxVERTICAL );
 	
 	lstQuizRun = new wxDataViewListCtrl( panelRun, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	colDateRun = lstQuizRun->AppendTextColumn( wxT("Date Started") );
+	colQuizRunIndex = lstQuizRun->AppendTextColumn( wxEmptyString );
+	colQuizRunDate = lstQuizRun->AppendTextColumn( wxT("Date Started") );
 	colQuizRunComplete = lstQuizRun->AppendIconTextColumn( wxT("Complete") );
 	colQuizRunName = lstQuizRun->AppendTextColumn( wxT("Name") );
 	bSizer161->Add( lstQuizRun, 1, wxALL|wxEXPAND, 5 );
@@ -313,7 +316,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	panelTopicChildQuiz->SetSizer( bSizer10 );
 	panelTopicChildQuiz->Layout();
 	bSizer10->Fit( panelTopicChildQuiz );
-	notebookChildren->AddPage( panelTopicChildQuiz, wxT("Exercises"), true );
+	notebookChildren->AddPage( panelTopicChildQuiz, wxT("Exercises"), false );
 	
 	bSizer16->Add( notebookChildren, 1, wxEXPAND, 5 );
 	

@@ -306,6 +306,7 @@ void PublicationPanelImp::RenderTopics(Topic* topic)
 			this->lstTopics->SelectRow(i);
 		}
 	}	
+	_topicModel->Resort();
 }
 
 void PublicationPanelImp::AddTopic()
@@ -863,6 +864,7 @@ void PublicationPanelImp::RenderQuizRuns()
 	{
 		data.clear();
 		wxString createdDate;
+		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
 		createdDate.Append(list->at(i).GetCreatedDate().FormatDate());
 		createdDate.Append(L" ");
 		createdDate.Append(list->at(i).GetCreatedDate().FormatTime());

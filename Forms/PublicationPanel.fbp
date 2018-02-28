@@ -1347,7 +1347,7 @@
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="dataViewListColumn" expanded="1">
-                                                        <property name="label">Index</property>
+                                                        <property name="label"></property>
                                                         <property name="name">colTopicIndex</property>
                                                         <property name="permission">protected</property>
                                                         <property name="type">Text</property>
@@ -1530,7 +1530,7 @@
                                             <object class="notebookpage" expanded="1">
                                                 <property name="bitmap"></property>
                                                 <property name="label">Notes</property>
-                                                <property name="select">0</property>
+                                                <property name="select">1</property>
                                                 <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
@@ -2241,11 +2241,11 @@
                                                                             <property name="name">bSizer9</property>
                                                                             <property name="orient">wxVERTICAL</property>
                                                                             <property name="permission">none</property>
-                                                                            <object class="sizeritem" expanded="0">
+                                                                            <object class="sizeritem" expanded="1">
                                                                                 <property name="border">5</property>
                                                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                                                 <property name="proportion">1</property>
-                                                                                <object class="wxDataViewListCtrl" expanded="0">
+                                                                                <object class="wxDataViewListCtrl" expanded="1">
                                                                                     <property name="bg"></property>
                                                                                     <property name="context_help"></property>
                                                                                     <property name="context_menu">1</property>
@@ -2307,6 +2307,12 @@
                                                                                     <event name="OnSetFocus"></event>
                                                                                     <event name="OnSize"></event>
                                                                                     <event name="OnUpdateUI"></event>
+                                                                                    <object class="dataViewListColumn" expanded="1">
+                                                                                        <property name="label"></property>
+                                                                                        <property name="name">colNoteIndex</property>
+                                                                                        <property name="permission">protected</property>
+                                                                                        <property name="type">Text</property>
+                                                                                    </object>
                                                                                     <object class="dataViewListColumn" expanded="0">
                                                                                         <property name="label">Title</property>
                                                                                         <property name="name">colNoteTitle</property>
@@ -2350,7 +2356,7 @@
                                             <object class="notebookpage" expanded="1">
                                                 <property name="bitmap"></property>
                                                 <property name="label">Exercises</property>
-                                                <property name="select">1</property>
+                                                <property name="select">0</property>
                                                 <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
@@ -3036,9 +3042,15 @@
                                                                                             <event name="OnSetFocus"></event>
                                                                                             <event name="OnSize"></event>
                                                                                             <event name="OnUpdateUI"></event>
+                                                                                            <object class="dataViewListColumn" expanded="1">
+                                                                                                <property name="label"></property>
+                                                                                                <property name="name">colQuizIndex</property>
+                                                                                                <property name="permission">protected</property>
+                                                                                                <property name="type">Text</property>
+                                                                                            </object>
                                                                                             <object class="dataViewListColumn" expanded="0">
                                                                                                 <property name="label">Name</property>
-                                                                                                <property name="name">m_dataViewListColumn3</property>
+                                                                                                <property name="name">colQuizName</property>
                                                                                                 <property name="permission">protected</property>
                                                                                                 <property name="type">Text</property>
                                                                                             </object>
@@ -3472,9 +3484,15 @@
                                                                                                     <event name="OnSetFocus"></event>
                                                                                                     <event name="OnSize"></event>
                                                                                                     <event name="OnUpdateUI"></event>
+                                                                                                    <object class="dataViewListColumn" expanded="1">
+                                                                                                        <property name="label"></property>
+                                                                                                        <property name="name">colQuizRunIndex</property>
+                                                                                                        <property name="permission">protected</property>
+                                                                                                        <property name="type">Text</property>
+                                                                                                    </object>
                                                                                                     <object class="dataViewListColumn" expanded="0">
                                                                                                         <property name="label">Date Started</property>
-                                                                                                        <property name="name">colDateRun</property>
+                                                                                                        <property name="name">colQuizRunDate</property>
                                                                                                         <property name="permission">protected</property>
                                                                                                         <property name="type">Text</property>
                                                                                                     </object>

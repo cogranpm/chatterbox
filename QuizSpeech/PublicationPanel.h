@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Jun 28 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -71,6 +71,7 @@ class pnlMain : public wxPanel
 		wxButton* btnPlay;
 		wxButton* btnStop;
 		wxDataViewListCtrl* lstNotes;
+		wxDataViewColumn* colNoteIndex;
 		wxDataViewColumn* colNoteTitle;
 		wxDataViewColumn* colNoteDescription;
 		wxDataViewColumn* colNoteSegmentCount;
@@ -84,13 +85,15 @@ class pnlMain : public wxPanel
 		wxSplitterWindow* m_splitter2;
 		wxPanel* panelExercise;
 		wxDataViewListCtrl* lstQuiz;
-		wxDataViewColumn* m_dataViewListColumn3;
+		wxDataViewColumn* colQuizIndex;
+		wxDataViewColumn* colQuizName;
 		wxPanel* panelRun;
 		wxStaticText* lblExam;
 		wxButton* btnViewQuizRun;
 		wxButton* btnDeleteQuizRun;
 		wxDataViewListCtrl* lstQuizRun;
-		wxDataViewColumn* colDateRun;
+		wxDataViewColumn* colQuizRunIndex;
+		wxDataViewColumn* colQuizRunDate;
 		wxDataViewColumn* colQuizRunComplete;
 		wxDataViewColumn* colQuizRunName;
 		
