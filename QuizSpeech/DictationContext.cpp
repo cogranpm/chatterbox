@@ -350,7 +350,7 @@ void DictationContext::SoundEnd()
 	m_soundEnd();
 }
 
-void DictationContext::DictationStopped(DICTATION_COMMANDS command)
+void DictationContext::DictationStopped(const DictationContext::DictationCommand& command)
 {
 	m_dictation_stopped(command);
 }

@@ -14,7 +14,7 @@ public:
 
 private:
 	DictationContext* context;
-	bool ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, DICTATION_COMMANDS& command);
+	bool ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, DictationCommand& command);
 	void ProcessHypothesis(ISpRecoResult* pResult, std::wstring& hypothesisText);
 };
 

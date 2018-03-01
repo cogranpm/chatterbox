@@ -10,6 +10,14 @@ class DictationContext
 
 
 public:
+
+	enum class DictationCommand
+	{
+		ACCEPT,
+		CANCEL,
+		STOP
+	};
+
 	DictationContext();
 	~DictationContext();
 	void CreateRecognitionContext(SpeechRecognitionEngine* engine);
@@ -22,7 +30,7 @@ public:
 	void WriteAudio(ISpRecoResult* pResult);
 	void RecognitionReceived(const std::wstring& text);
 	void HypothesisReceived(const std::wstring& hypothesisText);
-	void DictationStopped(DICTATION_COMMANDS command);
+	void DictationStopped(const DictationCommand& command);
 	void SoundStart();
 	void SoundEnd();
 	//void FalseRecognitionReceived();
@@ -34,7 +42,7 @@ public:
 	typedef boost::signals2::signal<void(const std::wstring&)>  type_speechrecognized;
 	boost::signals2::connection onSpeechRecognized(type_speechrecognized::slot_function_type subscriber);
 
-	typedef boost::signals2::signal<void(DICTATION_COMMANDS command)>  type_dictationstopped;
+	typedef boost::signals2::signal<void(const DictationContext::DictationCommand& command)>  type_dictationstopped;
 	boost::signals2::connection onDictationStopped(type_dictationstopped::slot_function_type subscriber);
 
 

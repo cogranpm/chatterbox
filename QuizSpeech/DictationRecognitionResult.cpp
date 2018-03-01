@@ -57,7 +57,7 @@ void DictationRecognitionResult::ProcessHypothesis(ISpRecoResult* pResult, std::
 	
 }
 
-bool DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, DICTATION_COMMANDS& command)
+bool DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, DictationContext::DictationCommand& command)
 {
 	//ISpRecoResult* pResult = event.RecoResult();
 	if (!pResult)
@@ -117,19 +117,19 @@ bool DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 
 		if (boost::algorithm::equals(actionName, L"accept"))
 		{
-			command = ACCEPT;
+			command = DictationContext::DictationCommand::ACCEPT;
 			recognitionReceived = false;
 			return false;
 		}
 		else if (boost::algorithm::equals(actionName, L"cancel"))
 		{
-			command = CANCEL;
+			command = DictationContext::DictationCommand::CANCEL;
 			recognitionReceived = false;
 			return false;
 		}
 		else if (boost::algorithm::equals(actionName, L"stop"))
 		{
-			command = STOP;
+			command = DictationContext::DictationCommand::STOP;
 			recognitionReceived = false;
 			return false;
 		}
@@ -178,7 +178,7 @@ void DictationRecognitionResult::Process()
 	ISpRecoResult* pResult = nullptr;
 	bool recognitionReceived = false;
 	bool hypothesisReceived = false;
-	DICTATION_COMMANDS command;
+	DictationContext::DictationCommand command;
 	bool isDictation;
 
 	while (event.GetFrom(context->GetContext()) == S_OK)

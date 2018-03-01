@@ -43,7 +43,7 @@ class DictationOverlayDialogImp : public OverlayDialog
 	void OnHypothesisRecognized(const std::wstring& text);
 	void OnSoundStart();
 	void OnSoundEnd();
-	void OnDictationStopped(DICTATION_COMMANDS command);
+	void OnDictationStopped(const DictationContext::DictationCommand& command);
 	void EndDication();
 	void StartDictation();
 	std::wstring& GetFullAudioPath() { return fullAudioPath; }
