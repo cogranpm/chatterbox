@@ -9,6 +9,7 @@
 #include "ExerciseRunDialogImp.h"
 #include "SAConfirmDialogImp.h"
 #include "ActionCommandParser.h"
+#include "ShelfDataViewListStore.h"
 
 PublicationPanelImp::PublicationPanelImp( wxWindow* parent, Publication* publication)
 :
@@ -87,14 +88,29 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	btnRunQuiz->SetBitmap(*wxGetApp().GetImages().start_icon);
 	btnViewQuizRun->SetBitmap(*wxGetApp().GetImages().docpreview_bmp);
 
+	//columns
+	colTopicTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+	colTopicTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colTopicIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
+	colTopicIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colNoteIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
+	colNoteIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colNoteTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colQuizIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
+	colQuizIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colQuizName->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colQuizRunIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
+	colQuizRunIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colQuizRunDate->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+
 	this->BindModel();
 	this->btnApply->Enable(false);
 	this->btnCancel->Enable(false);
 	this->_viewModel->GetPublication()->setDirty(false);
-	_topicModel = new wxDataViewListStore();
-	_noteModel = new wxDataViewListStore();
-	_quizModel = new wxDataViewListStore();
-	quizRunModel = new wxDataViewListStore();
+	_topicModel = new ShelfDataViewListStore();
+	_noteModel = new ShelfDataViewListStore();
+	_quizModel = new ShelfDataViewListStore();
+	quizRunModel = new ShelfDataViewListStore();
 	this->lstTopics->AssociateModel(_topicModel);
 	this->lstNotes->AssociateModel(_noteModel);
 	this->lstQuiz->AssociateModel(_quizModel);
@@ -443,6 +459,7 @@ void PublicationPanelImp::RenderNotes(Note* note)
 	{
 		Note* currentNote = &(list->at(i));
 		data.clear();
+		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
 		data.push_back(currentNote->GetTitle());
 		data.push_back(currentNote->GetDescription());
 		int numSegments = wxGetApp().GetProvider()->GetSegmentCount(currentNote);
@@ -701,6 +718,7 @@ void PublicationPanelImp::RenderExercises(Quiz* quiz)
 	for (int i = 0; i < list->size(); i++)
 	{
 		data.clear();
+		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
 		data.push_back(list->at(i).GetName());
 		_quizModel->AppendItem(data, wxUIntPtr(&list->at(i)));
 		if (quiz != nullptr && list->at(i).GetQuizId() == quiz->GetQuizId())

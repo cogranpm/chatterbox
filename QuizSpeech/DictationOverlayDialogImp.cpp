@@ -2,7 +2,6 @@
 #include "MyApp.h"
 #include <wx/app.h> 
 #include <wx/bitmap.h>
-#include "GlobalConstants.h"
 #include "resource.h"
 #include "AudioWorker.h"
 #include "AudioPlayerPanel.h"
@@ -18,7 +17,8 @@ DictationOverlayDialogImp::DictationOverlayDialogImp( wxWindow* parent )
 
 DictationOverlayDialogImp::DictationOverlayDialogImp(wxWindow* parent, const std::wstring& fileName)
 	:
-	OverlayDialog(parent), fileName(fileName), recognitionReceived(false), recordingState(RecordingState::recording), audioPlayerPanel(nullptr)
+	OverlayDialog(parent), fileName(fileName), recognitionReceived(false),
+	recordingState(RecordingState::recording), audioPlayerPanel(nullptr), ruleNames()
 {
 	fullAudioPath = wxGetApp().GetFileHandler().GetFullAudioPathToFile(fileName);
 }
@@ -46,7 +46,7 @@ DictationOverlayDialogImp::~DictationOverlayDialogImp()
 	{
 		dictationStoppedConnection.disconnect();
 	}
-	wxGetApp().DisconnectFromSpeech();
+	//wxGetApp().DisconnectFromSpeech();
 }
 
 void DictationOverlayDialogImp::OnInitDialog(wxInitDialogEvent& event) 
@@ -55,8 +55,6 @@ void DictationOverlayDialogImp::OnInitDialog(wxInitDialogEvent& event)
 	audioPlayerPanel = new AudioPlayerPanelImp(this, &player);
 	this->szAudioPlayer->Add(audioPlayerPanel, 1, wxALL | wxEXPAND, 0);
 	this->szAudioPlayer->Layout();
-	
-
 
 	timer.SetGauge(this->playbackGauge);
 	hypothesisTimer.SetTextControl(this->txtHypothesis);
@@ -64,21 +62,19 @@ void DictationOverlayDialogImp::OnInitDialog(wxInitDialogEvent& event)
 	this->hypothesisReceivedConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onHypothesisRecognized(boost::bind(&DictationOverlayDialogImp::OnHypothesisRecognized, this, _1));
 	this->soundStartConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onSoundStart(boost::bind(&DictationOverlayDialogImp::OnSoundStart, this));
 	this->soundEndConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onSoundStart(boost::bind(&DictationOverlayDialogImp::OnSoundEnd, this));
-	this->dictationStoppedConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onDictationStopped(boost::bind(&DictationOverlayDialogImp::OnDictationStopped, this));
+	this->dictationStoppedConnection = wxGetApp().GetSpeechListener().GetDictationContext()->onDictationStopped(boost::bind(&DictationOverlayDialogImp::OnDictationStopped, this, _1));
 
+	ruleNames.push_back(L"AUDIO_RECORD_ACTIONS");
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 
 	wxGetApp().GetSpeechListener().StartDictation(fullAudioPath);
 }
 
 void DictationOverlayDialogImp::EnableAllRules()
 {
-	std::vector<std::wstring> ruleNames;
-	ruleNames.push_back(L"AUDIO_RECORD_ACTIONS");
-	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames, this->GetName().ToStdString(),
+		boost::bind(&DictationOverlayDialogImp::OnCommandRecognized, this, _1, _2));
 	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
-	boost::signals2::connection* commandConnection = wxGetApp().GetCommandReceivedConnection();
-	*(commandConnection) = wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->onCommandRecognized(boost::bind(&DictationOverlayDialogImp::OnCommandRecognized, this, _1, _2));
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 
 }
 
@@ -140,11 +136,23 @@ void DictationOverlayDialogImp::OnSoundEnd()
 	timer.Start(1000);
 }
 
-void DictationOverlayDialogImp::OnDictationStopped()
+void DictationOverlayDialogImp::OnDictationStopped(DICTATION_COMMANDS command)
 {
 	if (recordingState == RecordingState::recording)
 	{
-		EndDication();
+		switch (command)
+		{
+		case STOP:
+			EndDication();
+			break;
+		case ACCEPT:
+			OnOK();
+			break;
+		case CANCEL:
+			OnCancel();
+			break;
+		}
+		
 	}
 }
 
@@ -161,7 +169,7 @@ void DictationOverlayDialogImp::EndDication()
 
 void DictationOverlayDialogImp::StartDictation()
 {
-	wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
+	//wxGetApp().DisconnectSpeechHandler(wxGetApp().GetCommandReceivedConnection());
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disable();
 	this->txtPhrase->Clear();
 	recordingState = RecordingState::recording;
@@ -191,18 +199,27 @@ void DictationOverlayDialogImp::StopOnButtonClick( wxCommandEvent& event )
 
 void DictationOverlayDialogImp::OnOKButtonClick( wxCommandEvent& event )
 {
+	OnOK();
+}
+
+void DictationOverlayDialogImp::OnCancelButtonClick(wxCommandEvent& event)
+{
+	OnCancel();
+}
+
+void DictationOverlayDialogImp::OnOK()
+{
 	wxGetApp().GetSpeechListener().StopDictation();
 	bool result = this->txtPhrase->GetValidator()->TransferFromWindow();
 	EndDialog(wxID_OK);
 }
 
-void DictationOverlayDialogImp::OnCancelButtonClick(wxCommandEvent& event)
+
+void DictationOverlayDialogImp::OnCancel()
 {
 	wxGetApp().GetSpeechListener().StopDictation();
 	EndDialog(wxID_CANCEL);
 }
-
-
 
 void DictationOverlayDialogImp::GetRecognizedText(std::wstring& buffer)
 {

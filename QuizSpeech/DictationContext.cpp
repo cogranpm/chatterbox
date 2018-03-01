@@ -1,5 +1,4 @@
 #include "DictationContext.h"
-#include "GlobalConstants.h"
 #include "FileHandler.h"
 #include "MyApp.h"
 
@@ -351,9 +350,9 @@ void DictationContext::SoundEnd()
 	m_soundEnd();
 }
 
-void DictationContext::DictationStopped()
+void DictationContext::DictationStopped(DICTATION_COMMANDS command)
 {
-	m_dictation_stopped();
+	m_dictation_stopped(command);
 }
 
 boost::signals2::connection DictationContext::onSpeechRecognized(type_speechrecognized::slot_function_type subscriber)

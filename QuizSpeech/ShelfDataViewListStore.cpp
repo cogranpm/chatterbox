@@ -15,7 +15,7 @@ int ShelfDataViewListStore::Compare(const wxDataViewItem &item1, const wxDataVie
 
 	if (column == 0)
 	{
-		return true;
+		return DataViewListStoreHelper::SortByInt(this, item1, item2, column, ascending);
 	}
 	else if (column == 1)
 	{

@@ -33,14 +33,20 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	/* columns on list views */
 	this->m_lstSubjectColTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
 	this->m_lstSubjectColTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colSubjectIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
+	colSubjectIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
 
 	this->m_dvlcShelfName->SetWidth(wxCOL_WIDTH_AUTOSIZE);
 	this->m_dvlcShelfName->SetFlag(wxDATAVIEW_COL_SORTABLE);
-	colShelfIndex->SetWidth(50);
+	colShelfIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
+	colShelfIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
+
 	m_dvlShelf->AllowMultiColumnSort(true);
 
 	this->lstPublicationColTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
 	this->lstPublicationColTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colPublicationIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
+	colPublicationIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
 
 	shelfModel = new ShelfDataViewListStore();
 	

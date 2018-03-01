@@ -49,6 +49,7 @@ class ExerciseRunDialogImp : public ExerciseRunDialog//, AudioPlayerWrapperClien
 	void ShowComplete();
 	void HideComplete();
 	void PlayQuestion();
+	void SkipQuestion();
 	void Init();
 	QuizRunQuestion* FindSelectedQuizRunQuestion(long questionId);
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "GlobalConstants.h"
 
 class DictationContext;
 
@@ -13,7 +14,7 @@ public:
 
 private:
 	DictationContext* context;
-	void ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, bool& stopReceived);
+	bool ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, DICTATION_COMMANDS& command);
 	void ProcessHypothesis(ISpRecoResult* pResult, std::wstring& hypothesisText);
 };
 

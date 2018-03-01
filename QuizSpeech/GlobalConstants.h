@@ -20,6 +20,13 @@ namespace
 		GID_CC              // ID for the C&C grammar that's active when dictation is not
 	};
 
+	typedef enum DICTATION_COMMANDS
+	{
+		ACCEPT,
+		CANCEL,
+		STOP
+	};
+
 	const ULONGLONG GRAMMARID = 161;
 
 	void PrintError(const std::wstring& message, HRESULT code)

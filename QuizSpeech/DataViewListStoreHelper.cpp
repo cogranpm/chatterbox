@@ -35,3 +35,28 @@ int DataViewListStoreHelper::SortByString(const wxDataViewListStore* store, cons
 	}
 	return true;
 }
+
+int DataViewListStoreHelper::SortByInt(const wxDataViewListStore* store, const wxDataViewItem &item1, const wxDataViewItem &item2, unsigned int column, bool ascending)
+{
+	int intItem;
+	int intItem1;
+	if (item1.IsOk())
+	{
+		wxVariant itemVar;
+		wxVariant itemVar1;
+		store->GetValue(itemVar, item1, column);
+		store->GetValue(itemVar1, item2, column);
+		intItem = itemVar.GetInteger();
+		intItem1 = itemVar1.GetInteger();
+		if (ascending)
+		{
+			return intItem < intItem1;
+		}
+		else
+		{
+			return intItem > intItem1;
+		}
+
+	}
+	return true;
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "GlobalConstants.h"
 #include "SpeechRecognitionEngine.h"
 #include "DictationCallback.h"
 
@@ -21,7 +22,7 @@ public:
 	void WriteAudio(ISpRecoResult* pResult);
 	void RecognitionReceived(const std::wstring& text);
 	void HypothesisReceived(const std::wstring& hypothesisText);
-	void DictationStopped();
+	void DictationStopped(DICTATION_COMMANDS command);
 	void SoundStart();
 	void SoundEnd();
 	//void FalseRecognitionReceived();
@@ -33,7 +34,7 @@ public:
 	typedef boost::signals2::signal<void(const std::wstring&)>  type_speechrecognized;
 	boost::signals2::connection onSpeechRecognized(type_speechrecognized::slot_function_type subscriber);
 
-	typedef boost::signals2::signal<void()>  type_dictationstopped;
+	typedef boost::signals2::signal<void(DICTATION_COMMANDS command)>  type_dictationstopped;
 	boost::signals2::connection onDictationStopped(type_dictationstopped::slot_function_type subscriber);
 
 

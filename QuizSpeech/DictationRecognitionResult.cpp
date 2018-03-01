@@ -1,6 +1,5 @@
 #include "DictationRecognitionResult.h"
 #include "DictationContext.h"
-#include "GlobalConstants.h"
 #include "CommandProperty.h"
 #include "ActionCommandParser.h"
 #include "MyApp.h"
@@ -58,14 +57,13 @@ void DictationRecognitionResult::ProcessHypothesis(ISpRecoResult* pResult, std::
 	
 }
 
-void DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, bool& stopReceived)
+bool DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std::wstring& recognizedText, bool& recognitionReceived, DICTATION_COMMANDS& command)
 {
 	//ISpRecoResult* pResult = event.RecoResult();
-	stopReceived = false;
 	if (!pResult)
 	{
 		// We expect these events to come with reco results
-		return;
+		return false;
 	}
 	SPPHRASE* pPhrase = NULL;
 	HRESULT hr = pResult->GetPhrase(&pPhrase);
@@ -117,24 +115,23 @@ void DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 		std::wstring targetValue;
 		actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
 
-		/* not sure if allowing OK and cancel is smart because they are too common as words 
-			should enforce a phrase like stop recording 
-		*/
-		//if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
-		//{
-		//	//stopReceived = true;
-		//	//recognitionReceived = false;
-		//}
-		//else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
-		//{
-		//	//stopReceived = true;
-		//	//recognitionReceived = false;
-		//}
-		//else 
-		if (boost::algorithm::equals(actionName, L"stop"))
+		if (boost::algorithm::equals(actionName, L"accept"))
 		{
-			stopReceived = true;
+			command = ACCEPT;
 			recognitionReceived = false;
+			return false;
+		}
+		else if (boost::algorithm::equals(actionName, L"cancel"))
+		{
+			command = CANCEL;
+			recognitionReceived = false;
+			return false;
+		}
+		else if (boost::algorithm::equals(actionName, L"stop"))
+		{
+			command = STOP;
+			recognitionReceived = false;
+			return false;
 		}
 	}
 
@@ -148,7 +145,7 @@ void DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 	if (FAILED(hr))
 	{
 		//maybe need to do something here, not sure
-		return;
+		return false;
 	}
 
 	if (dwAttributes & SPAF_ONE_TRAILING_SPACE)
@@ -164,30 +161,12 @@ void DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 		dstrText.Append(L"  ");
 	}
 
-	//probably just for atl stuff- here just for reference
-	//BSTR bstrText = ::SysAllocString(dstrText);
-	//if (!bstrText)
-	//{
-	//	return;
-	//}
-	//::SysFreeString(bstrText);
 	WCHAR* text = dstrText.Copy();
 	if (text != NULL)
 	{
-
-		//if (event.eEventId == SPEI_HYPOTHESIS)
-		//{
-		//	hypothesisText.append(text);
-		//	hypothesisReceived = true;
-		//}
-		//else
-		//{
-			recognizedText.append(text);
-			recognitionReceived = true;
-			
-		//}
+		recognizedText.append(text);
+		recognitionReceived = true;
 	}
-	//this->context->WriteAudio(pResult);
 
 }
 
@@ -199,8 +178,9 @@ void DictationRecognitionResult::Process()
 	ISpRecoResult* pResult = nullptr;
 	bool recognitionReceived = false;
 	bool hypothesisReceived = false;
-	bool stopReceived = false;
-	
+	DICTATION_COMMANDS command;
+	bool isDictation;
+
 	while (event.GetFrom(context->GetContext()) == S_OK)
 	{
 		
@@ -256,8 +236,8 @@ void DictationRecognitionResult::Process()
 		case SPEI_RECOGNITION:
 		{
 			pResult = event.RecoResult();
-			ProcessRecognition(pResult, recognizedText, recognitionReceived, stopReceived);
-			if (!stopReceived)
+			isDictation = ProcessRecognition(pResult, recognizedText, recognitionReceived, command);
+			if (isDictation)
 			{
 				this->context->WriteAudio(pResult);
 			}
@@ -272,9 +252,9 @@ void DictationRecognitionResult::Process()
 	}
 
 	/* let the context object broadcast this out to listeners */
-	if (stopReceived)
+	if (!isDictation)
 	{
-		this->context->DictationStopped();
+		this->context->DictationStopped(command);
 	}
 	else
 	{
@@ -288,11 +268,6 @@ void DictationRecognitionResult::Process()
 			this->context->RecognitionReceived(recognizedText);
 			//this->context->WriteAudio(pResult);
 		}
-
-		//if (pResult != NULL)
-		//{
-		//	this->context->WriteAudio(pResult);
-		//}
 	}
 
 	event.Clear();

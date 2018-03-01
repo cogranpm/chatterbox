@@ -101,6 +101,8 @@ public:
 	static const std::string SHELF_DIALOG_WINDOW_NAME;
 	static const std::string SUBJECT_DIALOG_WINDOW_NAME;
 	static const std::string TOPIC_DIALOG_WINDOW_NAME;
+
+	static const int DEFAULT_INDEX_COLUMN_WIDTH;
 	
 private:
 	MainFrameImp *frame;

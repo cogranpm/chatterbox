@@ -61,19 +61,22 @@ const std::wstring MyApp::ENTITY_NOTESEGMENT = L"notesegment";
 
 /* window names */
 const std::string MyApp::MAIN_FRAME_WINDOW_NAME = "MainFrame";
-const std::string MyApp::PUBLICATION_PANEL_WINDOW_NAME = "PublicationPanel";;
-const std::string MyApp::AUDIOPLAYER_PANEL_WINDOW_NAME = "AudioPlayerPanel";;
-const std::string MyApp::EXERCISE_PANEL_WINDOW_NAME = "ExercisePanel";;
-const std::string MyApp::DICTATION_OVERLAY_DIALOG_WINDOW_NAME = "DictationOverlayDialog";;
-const std::string MyApp::EXERCISERUN_DIALOG_WINDOW_NAME = "ExerciseRunDialog";;
-const std::string MyApp::NOTE_DIALOG_WINDOW_NAME = "NoteDialog";;
-const std::string MyApp::NOTSEGMENT_PANEL_WINDOW_NAME = "NoteSegmentPanel";;
-const std::string MyApp::PUBLICATION_DIALOG_WINDOW_NAME = "PublicationDialog";;
-const std::string MyApp::SA_CONFIRM_DIALOG_WINDOW_NAME = "SAConfirmDialog";;
-const std::string MyApp::SEGEMENT_TEMPLATE_DIALOG_WINDOW_NAME = "SegmentTemplateDialog";;
-const std::string MyApp::SHELF_DIALOG_WINDOW_NAME = "ShelfDialog";;
-const std::string MyApp::SUBJECT_DIALOG_WINDOW_NAME = "SubjectDialog";;
-const std::string MyApp::TOPIC_DIALOG_WINDOW_NAME = "TopicDialog";;
+const std::string MyApp::PUBLICATION_PANEL_WINDOW_NAME = "PublicationPanel";
+const std::string MyApp::AUDIOPLAYER_PANEL_WINDOW_NAME = "AudioPlayerPanel";
+const std::string MyApp::EXERCISE_PANEL_WINDOW_NAME = "ExercisePanel";
+const std::string MyApp::DICTATION_OVERLAY_DIALOG_WINDOW_NAME = "DictationOverlayDialog";
+const std::string MyApp::EXERCISERUN_DIALOG_WINDOW_NAME = "ExerciseRunDialog";
+const std::string MyApp::NOTE_DIALOG_WINDOW_NAME = "NoteDialog";
+const std::string MyApp::NOTSEGMENT_PANEL_WINDOW_NAME = "NoteSegmentPanel";
+const std::string MyApp::PUBLICATION_DIALOG_WINDOW_NAME = "PublicationDialog";
+const std::string MyApp::SA_CONFIRM_DIALOG_WINDOW_NAME = "SAConfirmDialog";
+const std::string MyApp::SEGEMENT_TEMPLATE_DIALOG_WINDOW_NAME = "SegmentTemplateDialog";
+const std::string MyApp::SHELF_DIALOG_WINDOW_NAME = "ShelfDialog";
+const std::string MyApp::SUBJECT_DIALOG_WINDOW_NAME = "SubjectDialog";
+const std::string MyApp::TOPIC_DIALOG_WINDOW_NAME = "TopicDialog";
+
+
+const int MyApp::DEFAULT_INDEX_COLUMN_WIDTH = 20;
 
 //const SPSTREAMFORMAT spFormat = SPSF_22kHz16BitStereo;
 

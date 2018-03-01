@@ -1138,7 +1138,7 @@
                                                                                     <event name="OnSize"></event>
                                                                                     <event name="OnUpdateUI"></event>
                                                                                     <object class="dataViewListColumn" expanded="1">
-                                                                                        <property name="label">Index</property>
+                                                                                        <property name="label"></property>
                                                                                         <property name="name">colShelfIndex</property>
                                                                                         <property name="permission">protected</property>
                                                                                         <property name="type">Text</property>
@@ -1988,7 +1988,7 @@
                                                                                                         <event name="OnSize"></event>
                                                                                                         <event name="OnUpdateUI"></event>
                                                                                                         <object class="dataViewListColumn" expanded="1">
-                                                                                                            <property name="label">Index</property>
+                                                                                                            <property name="label"></property>
                                                                                                             <property name="name">colSubjectIndex</property>
                                                                                                             <property name="permission">protected</property>
                                                                                                             <property name="type">Text</property>
@@ -2670,7 +2670,7 @@
                                                                                                         <event name="OnSize"></event>
                                                                                                         <event name="OnUpdateUI"></event>
                                                                                                         <object class="dataViewListColumn" expanded="1">
-                                                                                                            <property name="label">Index</property>
+                                                                                                            <property name="label"></property>
                                                                                                             <property name="name">colPublicationIndex</property>
                                                                                                             <property name="permission">protected</property>
                                                                                                             <property name="type">Text</property>

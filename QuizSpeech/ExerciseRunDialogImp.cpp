@@ -93,10 +93,17 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 
 void ExerciseRunDialogImp::SkipOnButtonClick(wxCommandEvent& event)
 {
+	SkipQuestion();
+}
+
+void ExerciseRunDialogImp::SkipQuestion()
+{
 	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	currentQuestion->SetIsAnswered(false);
+	currentQuestion->SetIsCorrect(false);
 	bool retValue = Save();
 	GoNextQuestion();
+
 }
 
 

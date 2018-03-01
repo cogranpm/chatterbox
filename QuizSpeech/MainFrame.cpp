@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Jun 28 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -80,7 +80,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	m_dvlShelf = new wxDataViewListCtrl( pnlShelfList, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_SINGLE );
-	colShelfIndex = m_dvlShelf->AppendTextColumn( wxT("Index") );
+	colShelfIndex = m_dvlShelf->AppendTextColumn( wxEmptyString );
 	m_dvlcShelfName = m_dvlShelf->AppendTextColumn( wxT("Title") );
 	bSizer7->Add( m_dvlShelf, 1, wxEXPAND, 5 );
 	
@@ -142,7 +142,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer14 = new wxBoxSizer( wxVERTICAL );
 	
 	m_lstSubject = new wxDataViewListCtrl( pnlSubjectList, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	colSubjectIndex = m_lstSubject->AppendTextColumn( wxT("Index") );
+	colSubjectIndex = m_lstSubject->AppendTextColumn( wxEmptyString );
 	m_lstSubjectColTitle = m_lstSubject->AppendTextColumn( wxT("Title") );
 	bSizer14->Add( m_lstSubject, 1, wxALL|wxEXPAND, 5 );
 	
@@ -197,7 +197,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
 	lstPublication = new wxDataViewListCtrl( pnlPublicationList, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	colPublicationIndex = lstPublication->AppendTextColumn( wxT("Index") );
+	colPublicationIndex = lstPublication->AppendTextColumn( wxEmptyString );
 	lstPublicationColTitle = lstPublication->AppendTextColumn( wxT("Title") );
 	bSizer11->Add( lstPublication, 1, wxALL|wxEXPAND, 5 );
 	
