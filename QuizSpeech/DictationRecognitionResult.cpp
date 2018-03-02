@@ -74,19 +74,6 @@ bool DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 		break;
 	case GID_DICTATIONCC:
 
-		//CSpDynamicString dstrText;
-		//BYTE dwAttributes;
-		//hr = pResult->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, &dwAttributes);
-		//std::wstring commandText(dstrText.Copy());
-		//if (commandText == L"stop recording")
-		//{
-		//	/* user has told us to stop dictating based on diction command and control rules */
-		//	stopReceived = true;
-		//	recognitionReceived = false;
-		//	return;
-		//}
-
-
 		hr = pResult->GetPhrase(&pPhrase);
 		std::wstring ruleName(pPhrase->Rule.pszName);
 		std::vector<CommandProperty> commandPropertyList;

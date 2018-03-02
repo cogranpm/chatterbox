@@ -5,7 +5,7 @@
 #include "SpeechRecognitionEngine.h"
 #include "DictationCallback.h"
 
-enum DictationCommand : short;
+enum DictationCommand :short;
 
 class DictationContext
 {
@@ -24,7 +24,7 @@ public:
 	void WriteAudio(ISpRecoResult* pResult);
 	void RecognitionReceived(const std::wstring& text);
 	void HypothesisReceived(const std::wstring& hypothesisText);
-	void DictationStopped(const DictationCommand& command);
+	void DictationStopped(const DictationCommand command);
 	void SoundStart();
 	void SoundEnd();
 	//void FalseRecognitionReceived();
@@ -36,7 +36,7 @@ public:
 	typedef boost::signals2::signal<void(const std::wstring&)>  type_speechrecognized;
 	boost::signals2::connection onSpeechRecognized(type_speechrecognized::slot_function_type subscriber);
 
-	typedef boost::signals2::signal<void(const DictationCommand& command)>  type_dictationstopped;
+	typedef boost::signals2::signal<void(const short command)>  type_dictationstopped;
 	boost::signals2::connection onDictationStopped(type_dictationstopped::slot_function_type subscriber);
 
 

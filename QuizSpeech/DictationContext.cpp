@@ -350,9 +350,9 @@ void DictationContext::SoundEnd()
 	m_soundEnd();
 }
 
-void DictationContext::DictationStopped(const DictationCommand& command)
+void DictationContext::DictationStopped(const DictationCommand command)
 {
-	m_dictation_stopped(command);
+	m_dictation_stopped(static_cast<short>(command));
 }
 
 boost::signals2::connection DictationContext::onSpeechRecognized(type_speechrecognized::slot_function_type subscriber)

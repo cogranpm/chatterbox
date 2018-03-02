@@ -136,8 +136,9 @@ void DictationOverlayDialogImp::OnSoundEnd()
 	timer.Start(1000);
 }
 
-void DictationOverlayDialogImp::OnDictationStopped(const DictationCommand& command)
+void DictationOverlayDialogImp::OnDictationStopped(const short pCommand)
 {
+	DictationCommand command = static_cast<DictationCommand>(pCommand);
 	if (recordingState == RecordingState::recording)
 	{
 		switch (command)
