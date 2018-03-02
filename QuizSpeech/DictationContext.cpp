@@ -66,7 +66,7 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 	if (FAILED(hr))
 	{
 		const std::string message("Call to CreateRecoContext failed");
-		::PrintError(L"Call to CreateRecoContext failed", hr);
+		GlobalConstants::PrintError(L"Call to CreateRecoContext failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -74,7 +74,7 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 	if (FAILED(hr))
 	{
 		const std::string message("Call to GetVoice failed");
-		::PrintError(L"Call to GetVoice failed", hr);
+		GlobalConstants::PrintError(L"Call to GetVoice failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -82,7 +82,7 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetAudioOptions failed");
-		::PrintError(L"Call to SetAudioOptions failed", hr);
+		GlobalConstants::PrintError(L"Call to SetAudioOptions failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -102,16 +102,16 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetInterest failed");
-		::PrintError(L"Call to SetInterest failed", hr);
+		GlobalConstants::PrintError(L"Call to SetInterest failed", hr);
 		throw std::runtime_error(message);
 	}
 
-	hr = context->CreateGrammar(::GID_DICTATION, &grammar);
+	hr = context->CreateGrammar(SpeechConstants::GID_DICTATION, &grammar);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
 		const std::string message("Call to CreateGrammar failed");
-		::PrintError(L"Call to CreateGrammar failed", hr);
+		GlobalConstants::PrintError(L"Call to CreateGrammar failed", hr);
 		throw std::runtime_error(message);
 	}
 	
@@ -121,18 +121,18 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 	{
 		this->grammar.Release();
 		const std::string message("Call to LoadDictation failed");
-		::PrintError(L"Call to LoadDictation failed", hr);
+		GlobalConstants::PrintError(L"Call to LoadDictation failed", hr);
 		throw std::runtime_error(message);
 	}
 
 	//load command and control grammar for dictation
 	this->ccgrammar.Release();
-	hr = this->context->CreateGrammar(::GID_DICTATIONCC, &this->ccgrammar);
+	hr = this->context->CreateGrammar(SpeechConstants::GID_DICTATIONCC, &this->ccgrammar);
 	if (FAILED(hr))
 	{
 		this->ccgrammar.Release();
 		const std::string message("Call to CreateGrammar failed");
-		::PrintError(L"Call to CreateGrammar failed", hr);
+		GlobalConstants::PrintError(L"Call to CreateGrammar failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -141,7 +141,7 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 	{
 		this->ccgrammar.Release();
 		const std::string message("Call to SetGrammarState failed");
-		::PrintError(L"Call to SetGrammarState failed", hr);
+		GlobalConstants::PrintError(L"Call to SetGrammarState failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -150,7 +150,7 @@ void DictationContext::CreateRecognitionContext(SpeechRecognitionEngine* engine)
 	{
 		this->ccgrammar.Release();
 		const std::string message("Call to LoadCmdFromFile failed");
-		::PrintError(L"Call to LoadCmdFromFile failed", hr);
+		GlobalConstants::PrintError(L"Call to LoadCmdFromFile failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -165,7 +165,7 @@ void DictationContext::Enable()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetAudioOptions failed");
-		::PrintError(L"Call to SetAudioOptions failed", hr);
+		GlobalConstants::PrintError(L"Call to SetAudioOptions failed", hr);
 		throw std::runtime_error(message);
 	}
 	writingAudio = false;
@@ -191,7 +191,7 @@ void DictationContext::InnerEnable()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetNotifyCallbackInterface failed");
-		::PrintError(L"Call to SetNotifyCallbackInterface failed", hr);
+		GlobalConstants::PrintError(L"Call to SetNotifyCallbackInterface failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -200,14 +200,14 @@ void DictationContext::InnerEnable()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetDictationState failed");
-		::PrintError(L"Call to SetDictationState failed", hr);
+		GlobalConstants::PrintError(L"Call to SetDictationState failed", hr);
 		throw std::runtime_error(message);
 	}
 	hr = this->ccgrammar->SetRuleState(NULL, NULL, SPRS_ACTIVE);
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetRuleState failed");
-		::PrintError(L"Call to SetRuleState failed", hr);
+		GlobalConstants::PrintError(L"Call to SetRuleState failed", hr);
 		throw std::runtime_error(message);
 	}
 }
@@ -230,7 +230,7 @@ void DictationContext::Disable()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetNotifySink failed");
-		::PrintError(L"Call to SetNotifySink failed", hr);
+		GlobalConstants::PrintError(L"Call to SetNotifySink failed", hr);
 		writingAudio = false;
 		throw std::runtime_error(message);
 	}
@@ -239,7 +239,7 @@ void DictationContext::Disable()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetDictationState failed");
-		::PrintError(L"Call to SetDictationState failed", hr);
+		GlobalConstants::PrintError(L"Call to SetDictationState failed", hr);
 		writingAudio = false;
 		throw std::runtime_error(message);
 	}
@@ -247,7 +247,7 @@ void DictationContext::Disable()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetRuleState failed");
-		::PrintError(L"Call to SetRuleState failed", hr);
+		GlobalConstants::PrintError(L"Call to SetRuleState failed", hr);
 		writingAudio = false;
 		throw std::runtime_error(message);
 	}
@@ -255,7 +255,7 @@ void DictationContext::Disable()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetAudioOptions failed");
-		::PrintError(L"Call to SetAudioOptions failed", hr);
+		GlobalConstants::PrintError(L"Call to SetAudioOptions failed", hr);
 		writingAudio = false;
 		throw std::runtime_error(message);
 	}
@@ -278,7 +278,7 @@ void DictationContext::ChangeGrammarEnabledState(SPGRAMMARSTATE stateFlag)
 	{
 		this->grammar.Release();
 		const std::string message("Call to ChangeGrammarEnabledState failed");
-		::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
+		GlobalConstants::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -287,7 +287,7 @@ void DictationContext::ChangeGrammarEnabledState(SPGRAMMARSTATE stateFlag)
 	{
 		this->ccgrammar.Release();
 		const std::string message("Call to ChangeGrammarEnabledState failed");
-		::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
+		GlobalConstants::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
 		throw std::runtime_error(message);
 	}
 }
@@ -301,11 +301,11 @@ void DictationContext::BindAudioFile(std::wstring& audioFile)
 {
 	this->audioStream = CComPtr<ISpStream>();
 	GUID guidFormatId = GUID_NULL;
-	HRESULT hr = SpConvertStreamFormatEnum(::SPEECH_AUDIO_FORMAT, &guidFormatId, &this->waveFormat);
+	HRESULT hr = SpConvertStreamFormatEnum(SpeechConstants::SPEECH_AUDIO_FORMAT, &guidFormatId, &this->waveFormat);
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SpConvertStreamFormatEnum failed");
-		::PrintError(L"Call to SpConvertStreamFormatEnum failed", hr);
+		GlobalConstants::PrintError(L"Call to SpConvertStreamFormatEnum failed", hr);
 		throw std::runtime_error(message);
 	}
 	// Tell the reco contexts to retain its audio in this format
@@ -313,7 +313,7 @@ void DictationContext::BindAudioFile(std::wstring& audioFile)
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetAudioOptions failed");
-		::PrintError(L"Call to SetAudioOptions failed", hr);
+		GlobalConstants::PrintError(L"Call to SetAudioOptions failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -322,7 +322,7 @@ void DictationContext::BindAudioFile(std::wstring& audioFile)
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SPBindToFile failed");
-		::PrintError(L"Call to SPBindToFile failed", hr);
+		GlobalConstants::PrintError(L"Call to SPBindToFile failed", hr);
 		throw std::runtime_error(message);
 	}
 	writingAudio = true;
@@ -330,13 +330,13 @@ void DictationContext::BindAudioFile(std::wstring& audioFile)
 
 void DictationContext::RecognitionReceived(const std::wstring& text)
 {
-	::PrintError(text, S_OK);
+	GlobalConstants::PrintError(text, S_OK);
 	m_speech_recognized(text);
 }
 
 void DictationContext::HypothesisReceived(const std::wstring& hypothesisText)
 {
-	::PrintError(hypothesisText, S_OK);
+	GlobalConstants::PrintError(hypothesisText, S_OK);
 	m_speech_hypothesis(hypothesisText);
 }
 
@@ -391,7 +391,7 @@ void DictationContext::WriteAudio(ISpRecoResult* pResult)
 			HRESULT hr = pResult->GetAudio(0, 0, &cpStreamFormat);
 			if (FAILED(hr))
 			{
-				::PrintError(L"Error in GetAudio", hr);
+				GlobalConstants::PrintError(L"Error in GetAudio", hr);
 				return;
 			}
 
@@ -420,7 +420,7 @@ void DictationContext::WriteAudio(ISpRecoResult* pResult)
 					hr = this->audioStream->Write(bBuffer, cbRead, &cbWritten);
 					if (FAILED(hr))
 					{
-						::PrintError(L"Error in writeToWavFile", hr);
+						GlobalConstants::PrintError(L"Error in writeToWavFile", hr);
 					}
 				}
 				
@@ -431,7 +431,7 @@ void DictationContext::WriteAudio(ISpRecoResult* pResult)
 				//}
 				//else
 				//{
-				//	::PrintError(L"Error in writeToWavFile", hr);
+				//	GlobalConstants::PrintError(L"Error in writeToWavFile", hr);
 				//}
 				if (cbRead < 1000)
 				{

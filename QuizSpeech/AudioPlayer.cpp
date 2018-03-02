@@ -125,7 +125,7 @@ void AudioPlayer::Pause()
 	hr = this->session->Pause();
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"Pause failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"Pause failed"), hr);
 		return;
 	}
 	this->playState = AudioState::paused;
@@ -139,7 +139,7 @@ void AudioPlayer::Resume()
 	hr = this->session->Start(NULL, &varResume);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"Resume failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"Resume failed"), hr);
 		goto done;
 	}
 	this->playState = AudioState::playing;
@@ -153,7 +153,7 @@ void AudioPlayer::Stop()
 	HRESULT hr = this->session->Stop();
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"Stop failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"Stop failed"), hr);
 	}
 	this->playState = AudioState::stopped;
 }
@@ -198,14 +198,14 @@ void AudioPlayer::SetURL(const std::wstring& url)
 	hr = MFCreateMediaSession(NULL, &session);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"MFCreateMediaSession failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"MFCreateMediaSession failed"), hr);
 		return;
 	}
 	callback->SetPlayer(this);
 	hr = session->BeginGetEvent(callback, NULL);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"BeginGetEvent failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"BeginGetEvent failed"), hr);
 		return;
 	}
 
@@ -213,7 +213,7 @@ void AudioPlayer::SetURL(const std::wstring& url)
 	hr = MFCreateSourceResolver(&sourceResolver);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"MFCreateSourceResolver failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"MFCreateSourceResolver failed"), hr);
 		return;
 	}
 
@@ -228,19 +228,19 @@ void AudioPlayer::SetURL(const std::wstring& url)
 
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"CreateObjectFromURL failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"CreateObjectFromURL failed"), hr);
 		return;
 	}
 	hr = mediaSourceObject->QueryInterface(IID_PPV_ARGS(&mediaSource));
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"QueryInterface failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"QueryInterface failed"), hr);
 		return;
 	}
 	hr = mediaSource->CreatePresentationDescriptor(&presentationDescriptor);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"CreatePresentationDescriptor failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"CreatePresentationDescriptor failed"), hr);
 		return;
 	}
 	playState = AudioState::loaded;
@@ -276,14 +276,14 @@ void AudioPlayer::SetURLAsync(const std::wstring& url)
 	hr = MFCreateMediaSession(NULL, &session);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"MFCreateMediaSession failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"MFCreateMediaSession failed"), hr);
 		return;
 	}
 	callback->SetPlayer(this);
 	hr = session->BeginGetEvent(callback, NULL);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"BeginGetEvent failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"BeginGetEvent failed"), hr);
 		return;
 	}
 
@@ -291,7 +291,7 @@ void AudioPlayer::SetURLAsync(const std::wstring& url)
 	hr = MFCreateSourceResolver(&sourceResolver);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"MFCreateSourceResolver failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"MFCreateSourceResolver failed"), hr);
 		return;
 	}
 	
@@ -308,7 +308,7 @@ void AudioPlayer::SetURLAsync(const std::wstring& url)
 
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"CreateObjectFromURL failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"CreateObjectFromURL failed"), hr);
 		return;
 	}
 
@@ -325,10 +325,10 @@ double AudioPlayer::GetDuration()
 	HRESULT hr = presentationDescriptor->GetUINT64(MF_PD_DURATION, (UINT64*)&pDuration);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"GetUINT64 failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"GetUINT64 failed"), hr);
 		return 0.0;
 	}
-	return (double)(pDuration / (double)ONE_SECOND);
+	return (double)(pDuration / (double)GlobalConstants::ONE_SECOND);
 }
 
 void AudioPlayer::Play()
@@ -341,14 +341,14 @@ void AudioPlayer::Play()
 	hr = MFCreateTopology(&pTopology);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"MFCreateTopology failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"MFCreateTopology failed"), hr);
 		return;
 	}
 
 	hr = presentationDescriptor->GetStreamDescriptorCount(&cSourceStreams);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"GetStreamDescriptorCount failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"GetStreamDescriptorCount failed"), hr);
 		return;
 	}
 
@@ -365,7 +365,7 @@ void AudioPlayer::Play()
 	hr = session->SetTopology(0, pTopology);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"SetTopology failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"SetTopology failed"), hr);
 		goto done;
 	}
 
@@ -385,7 +385,7 @@ HRESULT AudioPlayer::AddBranchToPartialTopology(IMFTopology* pTopology, DWORD iS
 	HRESULT hr = presentationDescriptor->GetStreamDescriptorByIndex(iStream, &fSelected, &pSD);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"GetStreamDescriptorByIndex failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"GetStreamDescriptorByIndex failed"), hr);
 		goto done;
 	}
 	if (fSelected)
@@ -394,7 +394,7 @@ HRESULT AudioPlayer::AddBranchToPartialTopology(IMFTopology* pTopology, DWORD iS
 		hr = CreateMediaSinkActivate(pSD, &pSinkActivate);
 		if (FAILED(hr))
 		{
-			::PrintError(std::wstring(L"CreateMediaSinkActivate failed"), hr);
+			GlobalConstants::PrintError(std::wstring(L"CreateMediaSinkActivate failed"), hr);
 			goto done;
 		}
 
@@ -434,7 +434,7 @@ HRESULT AudioPlayer::CreateMediaSinkActivate(IMFStreamDescriptor *pSourceSD, IMF
 	HRESULT hr = pSourceSD->GetMediaTypeHandler(&pHandler);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"GetMediaTypeHandler failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"GetMediaTypeHandler failed"), hr);
 		goto done;
 	}
 
@@ -443,7 +443,7 @@ HRESULT AudioPlayer::CreateMediaSinkActivate(IMFStreamDescriptor *pSourceSD, IMF
 	hr = pHandler->GetMajorType(&guidMajorType);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"GetMajorType failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"GetMajorType failed"), hr);
 		goto done;
 	}
 
@@ -591,13 +591,13 @@ HRESULT AudioPlayer::SourceCallback::Invoke(IMFAsyncResult* pAsyncResult)
 	HRESULT hr = player->mediaSourceObject->QueryInterface(IID_PPV_ARGS(&player->mediaSource));
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"QueryInterface failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"QueryInterface failed"), hr);
 		return hr;
 	}
 	hr = player->mediaSource->CreatePresentationDescriptor(&player->presentationDescriptor);
 	if (FAILED(hr))
 	{
-		::PrintError(std::wstring(L"CreatePresentationDescriptor failed"), hr);
+		GlobalConstants::PrintError(std::wstring(L"CreatePresentationDescriptor failed"), hr);
 		return hr;
 	}
 	player->playState = AudioState::loaded;

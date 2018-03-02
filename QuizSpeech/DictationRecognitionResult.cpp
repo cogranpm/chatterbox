@@ -70,9 +70,9 @@ bool DictationRecognitionResult::ProcessRecognition(ISpRecoResult* pResult, std:
 
 	switch (pPhrase->ullGrammarID)
 	{
-	case GID_DICTATION:
+	case SpeechConstants::GID_DICTATION:
 		break;
-	case GID_DICTATIONCC:
+	case SpeechConstants::GID_DICTATIONCC:
 
 		hr = pResult->GetPhrase(&pPhrase);
 		std::wstring ruleName(pPhrase->Rule.pszName);
@@ -177,31 +177,31 @@ void DictationRecognitionResult::Process()
 		{
 		case SPEI_SOUND_START:
 		{
-			::PrintError(L"sound start", S_OK);
+			GlobalConstants::PrintError(L"sound start", S_OK);
 			context->SoundStart();
 			break;
 		}
 		case SPEI_SOUND_END:
 		{
-			::PrintError(std::wstring(L"end sound"), S_OK);
+			GlobalConstants::PrintError(std::wstring(L"end sound"), S_OK);
 			context->SoundEnd();
 			break;
 		}
 		case SPEI_PHRASE_START:
 		{
-			::PrintError(std::wstring(L"Phrase Start"), S_OK);
+			GlobalConstants::PrintError(std::wstring(L"Phrase Start"), S_OK);
 			//could use this as gui updater, maybe show some graphic etc
 			break;
 		}
 		case SPEI_RECO_STATE_CHANGE:
 			if (event.RecoState() == SPRST_INACTIVE)
 			{
-				::PrintError(std::wstring(L"Reco State Change"), S_OK);
+				GlobalConstants::PrintError(std::wstring(L"Reco State Change"), S_OK);
 			}
 			break;
 		case SPEI_FALSE_RECOGNITION:
 		{
-			::PrintError(std::wstring(L"false recognition"), S_OK);
+			GlobalConstants::PrintError(std::wstring(L"false recognition"), S_OK);
 			//if (pResult)
 			//{
 			//	//this->context->WriteAudio(pResult);
@@ -214,7 +214,7 @@ void DictationRecognitionResult::Process()
 			// RECOGNITION: The engine is done processing the utterance and has a result
 		case SPEI_HYPOTHESIS:
 		{
-			::PrintError(std::wstring(L"hypothesis"), S_OK);
+			GlobalConstants::PrintError(std::wstring(L"hypothesis"), S_OK);
 			hypothesisReceived = true;
 			pResult = event.RecoResult();
 			ProcessHypothesis(pResult, hypothesisText);

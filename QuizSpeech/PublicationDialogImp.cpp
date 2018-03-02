@@ -154,7 +154,7 @@ void PublicationDialogImp::OnOKButtonClick( wxCommandEvent& event )
 
 void PublicationDialogImp::TitleOnKillFocus(wxFocusEvent& event)
 { 
-	::PrintError(L"kill focus title", S_OK);
+	GlobalConstants::PrintError(L"kill focus title", S_OK);
 	//DisableWindow(true);
 	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
@@ -167,7 +167,7 @@ void PublicationDialogImp::TitleOnKillFocus(wxFocusEvent& event)
 
 void PublicationDialogImp::TitleOnSetFocus(wxFocusEvent& event)
 {
-	::PrintError(L"set focus title", S_OK);
+	GlobalConstants::PrintError(L"set focus title", S_OK);
 	//DisableWindow(true);
 	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
@@ -182,7 +182,7 @@ void PublicationDialogImp::TitleOnSetFocus(wxFocusEvent& event)
 
 void PublicationDialogImp::TypesOnKillFocus(wxFocusEvent& event)
 {
-	::PrintError(L"kill focus type", S_OK);
+	GlobalConstants::PrintError(L"kill focus type", S_OK);
 	//DisableWindow(true);
 	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
@@ -194,7 +194,7 @@ void PublicationDialogImp::TypesOnKillFocus(wxFocusEvent& event)
 
 void PublicationDialogImp::TypesOnSetFocus(wxFocusEvent& event)
 {
-	::PrintError(L"set focus type", S_OK);
+	GlobalConstants::PrintError(L"set focus type", S_OK);
 	//DisableWindow(true);
 	ruleNames.clear();
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);

@@ -25,7 +25,7 @@ void SpeechRecognitionEngine::CreateEngine()
 	if (FAILED(hr))
 	{
 		const std::string message("Could not create Speech Recognition Engine");
-		::PrintError(L"Could not create Speech Recognition Engine", hr);
+		GlobalConstants::PrintError(L"Could not create Speech Recognition Engine", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -38,7 +38,7 @@ void SpeechRecognitionEngine::CreateEngine()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SpGetDefaultTokenFromCategoryId failed");
-		::PrintError(L"Call to SpGetDefaultTokenFromCategoryId failed", hr);
+		GlobalConstants::PrintError(L"Call to SpGetDefaultTokenFromCategoryId failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -49,7 +49,7 @@ void SpeechRecognitionEngine::CreateEngine()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetInput failed");
-		::PrintError(L"Call to SetInput failed", hr);
+		GlobalConstants::PrintError(L"Call to SetInput failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -61,7 +61,7 @@ void SpeechRecognitionEngine::CreateEngine()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SpCreateDefaultObjectFromCategoryId failed");
-		::PrintError(L"Call to SpCreateDefaultObjectFromCategoryId failed", hr);
+		GlobalConstants::PrintError(L"Call to SpCreateDefaultObjectFromCategoryId failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -72,7 +72,7 @@ void SpeechRecognitionEngine::CreateEngine()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetInput failed");
-		::PrintError(L"Call to SetInput failed", hr);
+		GlobalConstants::PrintError(L"Call to SetInput failed", hr);
 		throw std::runtime_error(message);
 	}
 

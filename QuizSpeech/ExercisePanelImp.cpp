@@ -209,7 +209,7 @@ void ExercisePanelImp::RenderQuestions()
 		std::wstring title = question.GetLimitedQuestionText();
 		if (title.empty())
 		{
-			title = ::NULL_LIST_INDICATOR;
+			title = GlobalConstants::NULL_LIST_INDICATOR;
 		}
 		data.push_back(wxVariant(boost::lexical_cast<std::wstring>(i)));
 		data.push_back(wxVariant(title));

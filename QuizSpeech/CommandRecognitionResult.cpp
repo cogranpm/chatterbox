@@ -31,7 +31,7 @@ void CommandRecognitionResult::Process()
 	if (FAILED(hr))
 	{
 		const std::string message("Call to GetFrom failed");
-		::PrintError(L"Call to GetFrom failed", hr);
+		GlobalConstants::PrintError(L"Call to GetFrom failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -53,13 +53,13 @@ void CommandRecognitionResult::Process()
 		if (hr == E_POINTER)
 		{
 			const std::string message("Error in NotifyCallback GetPhrase - InvalidPointer");
-			::PrintError(L"Error in NotifyCallback GetPhrase - InvalidPointer", hr);
+			GlobalConstants::PrintError(L"Error in NotifyCallback GetPhrase - InvalidPointer", hr);
 			throw std::runtime_error(message);
 		}
 		else
 		{
 			const std::string message("Error in NotifyCallback GetPhrase");
-			::PrintError(L"Error in NotifyCallback GetPhrase", hr);
+			GlobalConstants::PrintError(L"Error in NotifyCallback GetPhrase", hr);
 			throw std::runtime_error(message);
 		}
 		return;
@@ -67,7 +67,7 @@ void CommandRecognitionResult::Process()
 	hr = recognition->GetText(SP_GETWHOLEPHRASE, SP_GETWHOLEPHRASE, TRUE, &dstrText, NULL);
 	if (S_OK != hr)
 	{
-		::PrintError(L" Error in NotifyCallback GetText", hr);
+		GlobalConstants::PrintError(L" Error in NotifyCallback GetText", hr);
 		return;
 	}
 

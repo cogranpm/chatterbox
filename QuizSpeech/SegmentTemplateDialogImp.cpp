@@ -60,7 +60,7 @@ void SegmentTemplateDialogImp::RenderSegments()
 		std::wstring title = segmentType.getTitle();
 		if (title.empty())
 		{
-			title = ::NULL_LIST_INDICATOR;
+			title = GlobalConstants::NULL_LIST_INDICATOR;
 		}
 		std::string fontDesc = segmentType.getFontDesc();
 		wxFont font(fontDesc);
@@ -73,8 +73,8 @@ void SegmentTemplateDialogImp::RenderSegments()
 		}
 		else
 		{
-			data.push_back(wxVariant(::NULL_LIST_INDICATOR));
-			data.push_back(wxVariant(::NULL_LIST_INDICATOR));
+			data.push_back(wxVariant(GlobalConstants::NULL_LIST_INDICATOR));
+			data.push_back(wxVariant(GlobalConstants::NULL_LIST_INDICATOR));
 		}
 		lstSegments->AppendItem(data, segmentTypeId);
 		data.clear();

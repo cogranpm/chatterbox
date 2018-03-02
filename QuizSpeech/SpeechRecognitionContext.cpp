@@ -40,7 +40,7 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 	if (FAILED(hr))
 	{
 		const std::string message("Call to CreateRecoContext failed");
-		::PrintError(L"Call to CreateRecoContext failed", hr);
+		GlobalConstants::PrintError(L"Call to CreateRecoContext failed", hr);
 		throw std::runtime_error(message);
 	}
 	/*ULONGLONG ullMyEvents = SPFEI(SPEI_SOUND_START) | SPFEI(SPEI_SOUND_END) |
@@ -53,17 +53,17 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 	if (FAILED(hr))
 	{
 		const std::string message("Call to SetInterest failed");
-		::PrintError(L"Call to SetInterest failed", hr);
+		GlobalConstants::PrintError(L"Call to SetInterest failed", hr);
 		throw std::runtime_error(message);
 	}
 
 	this->grammar.Release();
-	hr = this->context->CreateGrammar(::GID_CC, &this->grammar);
+	hr = this->context->CreateGrammar(SpeechConstants::GID_CC, &this->grammar);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();
 		const std::string message("Call to CreateGrammar failed");
-		::PrintError(L"Call to CreateGrammar failed", hr);
+		GlobalConstants::PrintError(L"Call to CreateGrammar failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -72,7 +72,7 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 	{
 		this->grammar.Release();
 		const std::string message("Call to SetGrammarState failed");
-		::PrintError(L"Call to SetGrammarState failed", hr);
+		GlobalConstants::PrintError(L"Call to SetGrammarState failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -81,7 +81,7 @@ void SpeechRecognitionContext::CreateRecognitionContext(SpeechRecognitionEngine*
 	{
 		this->grammar.Release();
 		const std::string message("Call to LoadCmdFromFile failed");
-		::PrintError(L"Call to LoadCmdFromFile failed", hr);
+		GlobalConstants::PrintError(L"Call to LoadCmdFromFile failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -98,7 +98,7 @@ void SpeechRecognitionContext::SetupCallback()
 	{
 		this->grammar.Release();
 		const std::string message("Call to SetNotifyCallbackInterface failed");
-		::PrintError(L"Call to SetNotifyCallbackInterface failed", hr);
+		GlobalConstants::PrintError(L"Call to SetNotifyCallbackInterface failed", hr);
 		throw std::runtime_error(message);
 	}
 }
@@ -116,7 +116,7 @@ void SpeechRecognitionContext::Disable()
 	{
 		this->grammar.Release();
 		const std::string message("Call to SetRuleState SPRS_INACTIVE failed");
-		::PrintError(L"Call to SetRuleState SPRS_INACTIVE failed", hr);
+		GlobalConstants::PrintError(L"Call to SetRuleState SPRS_INACTIVE failed", hr);
 		throw std::runtime_error(message);
 	}
 	this->ChangeGrammarEnabledState(SPGS_DISABLED);
@@ -129,7 +129,7 @@ void SpeechRecognitionContext::ChangeGrammarEnabledState(SPGRAMMARSTATE stateFla
 	{
 		this->grammar.Release();
 		const std::string message("Call to ChangeGrammarEnabledState failed");
-		::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
+		GlobalConstants::PrintError(L"Call to ChangeGrammarEnabledState failed", hr);
 		throw std::runtime_error(message);
 	}
 	
@@ -207,7 +207,7 @@ void SpeechRecognitionContext::EnableRules()
 		{
 			this->grammar.Release();
 			const std::string message("Call to SetRuleState Active failed");
-			::PrintError(L"Call to SetRuleState Active failed", hr);
+			GlobalConstants::PrintError(L"Call to SetRuleState Active failed", hr);
 			throw std::runtime_error(message);
 		}
 	}
@@ -226,7 +226,7 @@ void SpeechRecognitionContext::BeginCreateDynamicRule(const std::wstring& ruleNa
 	//{
 	//	this->grammar.Release();
 	//	const std::string message("Call toSetRuleState failed");
-	//	::PrintError(L"Call toSetRuleState failed", hr);
+	//	GlobalConstants::PrintError(L"Call toSetRuleState failed", hr);
 	//	throw std::runtime_error(message);
 	//}
 
@@ -235,7 +235,7 @@ void SpeechRecognitionContext::BeginCreateDynamicRule(const std::wstring& ruleNa
 	{
 		this->grammar.Release();
 		const std::string message("Call to GetRule Active failed");
-		::PrintError(L"Call to GetRule Active failed", hr);
+		GlobalConstants::PrintError(L"Call to GetRule Active failed", hr);
 		throw std::runtime_error(message);
 	}
 	hr = grammar->ClearRule(hRule);
@@ -243,7 +243,7 @@ void SpeechRecognitionContext::BeginCreateDynamicRule(const std::wstring& ruleNa
 	{
 		this->grammar.Release();
 		const std::string message("Call to ClearRule Active failed");
-		::PrintError(L"Call to ClearRule Active failed", hr);
+		GlobalConstants::PrintError(L"Call to ClearRule Active failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -256,7 +256,7 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 	{
 		this->grammar.Release();
 		const std::string message("Call to Commit failed");
-		::PrintError(L"Call to Commit failed", hr);
+		GlobalConstants::PrintError(L"Call to Commit failed", hr);
 		throw std::runtime_error(message);
 	}
 	hr = this->grammar->SetRuleState(dynamicRuleName.c_str(), NULL, SPRS_ACTIVE);
@@ -264,7 +264,7 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 	{
 		this->grammar.Release();
 		const std::string message("Call toSetRuleState failed");
-		::PrintError(L"Call toSetRuleState failed", hr);
+		GlobalConstants::PrintError(L"Call toSetRuleState failed", hr);
 		throw std::runtime_error(message);
 	}
 	this->context->Resume(0);
@@ -284,7 +284,7 @@ void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, co
 	{
 		this->grammar.Release();
 		const std::string message("Call to AddWordTransition Active failed");
-		::PrintError(L"Call to AddWordTransition Active failed", hr);
+		GlobalConstants::PrintError(L"Call to AddWordTransition Active failed", hr);
 		throw std::runtime_error(message);
 	}
 
@@ -299,7 +299,7 @@ void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, co
 	{
 		this->grammar.Release();
 		const std::string message("Call to AddWordTransition Active failed");
-		::PrintError(L"Call to AddWordTransition Active failed", hr);
+		GlobalConstants::PrintError(L"Call to AddWordTransition Active failed", hr);
 		throw std::runtime_error(message);
 	}
 	//std::wstringstream ss;
@@ -309,7 +309,7 @@ void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, co
 	//{
 	//	this->grammar.Release();
 	//	const std::string message("Call to AddWordTransition Active failed");
-	//	::PrintError(L"Call to AddWordTransition Active failed", hr);
+	//	GlobalConstants::PrintError(L"Call to AddWordTransition Active failed", hr);
 	//	throw std::runtime_error(message);
 	//}
 }

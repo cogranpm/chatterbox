@@ -2,25 +2,13 @@
 
 #include "stdafx.h"
 
-
-
-namespace
+namespace GlobalConstants
 {
 
 	const MFTIME ONE_SECOND = 10000000;
 	const LONG   ONE_MSEC = 1000;
-
-	const SPSTREAMFORMAT SPEECH_AUDIO_FORMAT = SPSF_16kHz16BitMono; // SPSF_8kHz8BitMono; // SPSF_22kHz16BitStereo; //SPSF_8kHz8BitMono
 	const std::wstring NULL_LIST_INDICATOR = L"-";
-	
-	typedef enum GRAMMARIDS
-	{
-		GID_DICTATION,      // ID for the dictation grammar
-		GID_DICTATIONCC,    // ID for the C&C grammar that's active during dictation
-		GID_CC              // ID for the C&C grammar that's active when dictation is not
-	};
 
-	const ULONGLONG GRAMMARID = 161;
 
 	void PrintError(const std::wstring& message, HRESULT code)
 	{

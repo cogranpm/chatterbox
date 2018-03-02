@@ -66,7 +66,7 @@ void AudioPlayerPanelImp::OnAudioURL()
 	//::Convert(Seconds_To_Convert, hour, minute, seconds);
 	wformat formattedDuration = wformat(L"%.2f seconds");
 	double duration = player->GetDuration();
-	int milliSecondsDuration = duration * ::ONE_MSEC;
+	int milliSecondsDuration = duration * GlobalConstants::ONE_MSEC;
 	this->m_gauge2->SetRange(milliSecondsDuration);
 	std::wstring durationDisplay((formattedDuration % duration).str());
 	this->txtDuration->SetLabel(durationDisplay);

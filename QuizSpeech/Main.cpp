@@ -165,7 +165,7 @@ bool MyApp::OnInit()
 		std::string  cs(e.what());
 		std::wstring ws;
 		copy(cs.begin(), cs.end(), std::back_inserter(ws));
-		::PrintError(ws, S_OK);
+		GlobalConstants::PrintError(ws, S_OK);
 		wxMessageBox(e.what(), L"Error", wxICON_ERROR);
 		return false;
 	}
