@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "CommandProperty.h"
+
 class ActionCommandParser
 {
 public:
