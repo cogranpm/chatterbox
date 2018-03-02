@@ -226,6 +226,7 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClCompile Include="ShelfDialog.cpp" />
     <ClCompile Include="ShelfDialogImp.cpp" />
     <ClCompile Include="SoundRecorder.cpp" />
+    <ClCompile Include="SpeechConstants.cpp" />
     <ClCompile Include="SpeechListener.cpp" />
     <ClCompile Include="SpeechMessageDialog.cpp" />
     <ClCompile Include="SpeechRecognitionCallback.cpp" />
@@ -315,6 +316,7 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClInclude Include="ShelfDialog.h" />
     <ClInclude Include="ShelfDialogImp.h" />
     <ClInclude Include="SoundRecorder.h" />
+    <ClInclude Include="SpeechConstants.h" />
     <ClInclude Include="SpeechListener.h" />
     <ClInclude Include="SpeechMessageDialog.h" />
     <ClInclude Include="SpeechRecognitionCallback.h" />
