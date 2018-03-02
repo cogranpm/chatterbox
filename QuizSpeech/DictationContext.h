@@ -5,18 +5,12 @@
 #include "SpeechRecognitionEngine.h"
 #include "DictationCallback.h"
 
+enum DictationCommand : short;
+
 class DictationContext
 {
 
-
 public:
-
-	enum class DictationCommand
-	{
-		ACCEPT,
-		CANCEL,
-		STOP
-	};
 
 	DictationContext();
 	~DictationContext();
@@ -42,7 +36,7 @@ public:
 	typedef boost::signals2::signal<void(const std::wstring&)>  type_speechrecognized;
 	boost::signals2::connection onSpeechRecognized(type_speechrecognized::slot_function_type subscriber);
 
-	typedef boost::signals2::signal<void(const DictationContext::DictationCommand& command)>  type_dictationstopped;
+	typedef boost::signals2::signal<void(const DictationCommand& command)>  type_dictationstopped;
 	boost::signals2::connection onDictationStopped(type_dictationstopped::slot_function_type subscriber);
 
 

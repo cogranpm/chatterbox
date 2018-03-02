@@ -136,19 +136,19 @@ void DictationOverlayDialogImp::OnSoundEnd()
 	timer.Start(1000);
 }
 
-void DictationOverlayDialogImp::OnDictationStopped(const DictationContext::DictationCommand& command)
+void DictationOverlayDialogImp::OnDictationStopped(const DictationCommand& command)
 {
 	if (recordingState == RecordingState::recording)
 	{
 		switch (command)
 		{
-		case DictationContext::DictationCommand::STOP:
+		case DictationCommand::STOP:
 			EndDication();
 			break;
-		case DictationContext::DictationCommand::ACCEPT:
+		case DictationCommand::ACCEPT:
 			OnOK();
 			break;
-		case DictationContext::DictationCommand::CANCEL:
+		case DictationCommand::CANCEL:
 			OnCancel();
 			break;
 		}
