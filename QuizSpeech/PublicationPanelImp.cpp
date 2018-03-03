@@ -239,6 +239,46 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		CloseMe();
 		return;
 	}
+	else if (boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_TOPIC))
+	{
+		//is it a list lookup
+		if (boost::algorithm::equals(actionName, L"select topic index"))
+		{
+			int index = boost::lexical_cast<int>(actionTarget);
+			if (index <= lstTopics->GetItemCount() && index > 0)
+			{
+				lstTopics->SelectRow(index - 1);
+			}
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_NOTE))
+	{
+		//is it a list lookup
+		if (boost::algorithm::equals(actionName, L"select note index"))
+		{
+			int index = boost::lexical_cast<int>(actionTarget);
+			if (index <= lstNotes->GetItemCount() && index > 0)
+			{
+				lstNotes->SelectRow(index - 1);
+			}
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_QUIZ))
+	{
+		//is it a list lookup
+		if (boost::algorithm::equals(actionName, L"select exercise index"))
+		{
+			int index = boost::lexical_cast<int>(actionTarget);
+			if (index <= lstQuiz->GetItemCount() && index > 0)
+			{
+				lstQuiz->SelectRow(index - 1);
+			}
+		}
+		return;
+	}
+
 	wxGetApp().OnCommandRecognized(phrase, commandPropertyList);
 }
 
@@ -325,17 +365,26 @@ void PublicationPanelImp::RenderTopics(Topic* topic)
 	this->_topicModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Topic>* list = this->_viewModel->GetTopicList();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_SELECT_TOPIC);
 	for(int i = 0; i < list->size(); i ++ )
 	{
 		data.clear();
-		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
+		std::wstring index = boost::lexical_cast<std::wstring>(i + 1);
+		data.push_back(index);
 		data.push_back(list->at(i).getName());
 		_topicModel->AppendItem( data, wxUIntPtr(&list->at(i)));
 		if(topic != nullptr && list->at(i).getTopicId() == topic->getTopicId())
 		{
 			this->lstTopics->SelectRow(i);
 		}
+		std::wstring rulePhrase(L"");
+		rulePhrase.append(list->at(i).getName());
+		std::wstring rulePhraseForIndexSelection(L"");
+		rulePhraseForIndexSelection.append(index);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select topic"));
+
 	}	
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 	_topicModel->Resort();
 }
 
@@ -469,11 +518,13 @@ void PublicationPanelImp::RenderNotes(Note* note)
 	this->_noteModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Note>* list = this->_viewModel->GetNoteList();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_SELECT_NOTE);
 	for(int i = 0; i < list->size(); i ++ )
 	{
 		Note* currentNote = &(list->at(i));
 		data.clear();
-		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
+		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
+		data.push_back(index);
 		data.push_back(currentNote->GetTitle());
 		data.push_back(currentNote->GetDescription());
 		int numSegments = wxGetApp().GetProvider()->GetSegmentCount(currentNote);
@@ -489,7 +540,13 @@ void PublicationPanelImp::RenderNotes(Note* note)
 		{
 			this->lstNotes->SelectRow(i);
 		}
+		std::wstring rulePhrase(L"");
+		rulePhrase.append(list->at(i).GetTitle());
+		std::wstring rulePhraseForIndexSelection(L"");
+		rulePhraseForIndexSelection.append(index);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select note"));
 	}	
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 	if (list->size() > 0)
 	{
 		btnPlayAll->Enable();
@@ -729,17 +786,25 @@ void PublicationPanelImp::RenderExercises(Quiz* quiz)
 	lstQuiz->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Quiz>* list = this->_viewModel->GetQuizList();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_SELECT_QUIZ);
 	for (int i = 0; i < list->size(); i++)
 	{
 		data.clear();
-		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
+		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
+		data.push_back(index);
 		data.push_back(list->at(i).GetName());
 		_quizModel->AppendItem(data, wxUIntPtr(&list->at(i)));
 		if (quiz != nullptr && list->at(i).GetQuizId() == quiz->GetQuizId())
 		{
 			this->lstQuiz->SelectRow(i);
 		}
+		std::wstring rulePhrase(L"");
+		rulePhrase.append(list->at(i).GetName());
+		std::wstring rulePhraseForIndexSelection(L"");
+		rulePhraseForIndexSelection.append(index);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select exercise"));
 	}
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 }
 
 void PublicationPanelImp::OnEditExercise()

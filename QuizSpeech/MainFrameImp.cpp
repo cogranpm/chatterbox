@@ -598,17 +598,26 @@ void MainFrameImp::RenderPublications(Publication* publication)
 	this->publicationModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Publication>* itemsList = wxGetApp().GetMainFrameViewModel()->getPublicationList();
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_SELECT_PUBLICATION);
 	for(int i = 0; i < itemsList->size(); i ++ )
 	{
 		data.clear();
-		data.push_back(boost::lexical_cast<std::wstring>(i + 1));
+		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
+		data.push_back(index);
 		data.push_back(itemsList->at(i).getTitle());
 		this->publicationModel->AppendItem( data, wxUIntPtr(&itemsList->at(i)));
 		if(publication != NULL && itemsList->at(i).getPublicationId() == publication->getPublicationId())
 		{
 			this->lstPublication->SelectRow(i);
 		}
+		std::wstring rulePhrase(L"");
+		rulePhrase.append(itemsList->at(i).getTitle());
+		std::wstring rulePhraseForIndexSelection(L"");
+		rulePhraseForIndexSelection.append(index);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select publication"));
+
 	}	
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 	if ((lstPublication->GetSelectedRow() == wxNOT_FOUND) && lstPublication->GetItemCount() > 0)
 	{
 		lstPublication->SelectRow(0);
@@ -820,6 +829,19 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			if (index <= m_lstSubject->GetItemCount() && index > 0)
 			{
 				m_lstSubject->SelectRow(index - 1);
+			}
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_PUBLICATION))
+	{
+		//is it a list lookup
+		if (boost::algorithm::equals(actionName, L"select publication index"))
+		{
+			int index = boost::lexical_cast<int>(actionTarget);
+			if (index <= lstPublication->GetItemCount() && index > 0)
+			{
+				lstPublication->SelectRow(index - 1);
 			}
 		}
 		return;

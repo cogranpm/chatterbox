@@ -53,6 +53,9 @@ public:
 	static const std::wstring RULE_SELECT_SHELF;
 	static const std::wstring RULE_SELECT_SUBJECT;
 	static const std::wstring RULE_SELECT_PUBLICATION;
+	static const std::wstring RULE_SELECT_TOPIC;
+	static const std::wstring RULE_SELECT_NOTE;
+	static const std::wstring RULE_SELECT_QUIZ;
 
 	/* publication panel */
 	static const std::wstring RULE_PUBLICATION_PANEL;
