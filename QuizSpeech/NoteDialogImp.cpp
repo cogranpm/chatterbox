@@ -8,6 +8,11 @@
 #include "SegmentTemplateDialogImp.h"
 #include "ActionCommandParser.h"
 
+
+wxBEGIN_EVENT_TABLE(NoteDialogImp, NoteDialog)
+	EVT_TIMER(InitFormTimer, NoteDialogImp::OnProgressTimer)
+wxEND_EVENT_TABLE()
+
 struct findSegmentHeader
 {
 	findSegmentHeader(unsigned long id) : _id(id) {};
@@ -21,7 +26,7 @@ struct findSegmentHeader
 
 NoteDialogImp::NoteDialogImp( wxWindow* parent, Note* note )
 :
-NoteDialog( parent ), viewModel(note), noteAudioPlayer(), ruleNames()// viewModel(std::make_unique<NoteViewModel>(note))
+NoteDialog( parent ), viewModel(note), noteAudioPlayer(), ruleNames(), timer(nullptr)// viewModel(std::make_unique<NoteViewModel>(note))
 {
 	
 }
@@ -71,8 +76,19 @@ void NoteDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	this->RenderNote();
 	this->lstTypes->SetSelection(0);
 	this->ChangeNoteType(0);
-	this->Maximize(true);
-	this->btnRecordTitle->SetFocus();
+	//this->Maximize(true);
+	if (viewModel.GetNote()->GetNoteId() < 1)
+	{
+		timer = new wxTimer(this, InitFormTimer);
+		timer->Start(300);
+		
+	}
+}
+
+void NoteDialogImp::OnProgressTimer(wxTimerEvent& event)
+{
+	timer->Stop();
+	RecordTitle();
 }
 
 void NoteDialogImp::RenderNoteSegmentTypes()
