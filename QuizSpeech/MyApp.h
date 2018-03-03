@@ -60,6 +60,8 @@ public:
 	/* exercise panel */
 	static const std::wstring RULE_EXERCISE_DIALOG;
 	static const std::wstring RULE_EXERCISE_CONTROLS;
+	/* exercise run dialog*/
+	static const std::wstring RULE_EXERCISERUN_DIALOG;
 	/* note dialog */
 	static const std::wstring RULE_NOTE_DIALOG;
 	static const std::wstring RULE_NOTE_CONTROLS;
@@ -72,6 +74,7 @@ public:
 	static const std::wstring COMMAND_ACTION_EDIT;
 	static const std::wstring COMMAND_ACTION_OK;
 	static const std::wstring COMMAND_ACTION_CANCEL;
+	static const std::wstring COMMAND_ACTION_CLOSE;
 	static const std::wstring CONTROL_ACTION;
 	static const std::wstring CONTROL_ACTION_FOCUS;
 	static const std::wstring CONTROL_ACTION_CLEAR;

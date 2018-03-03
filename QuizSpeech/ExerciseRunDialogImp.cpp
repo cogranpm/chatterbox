@@ -64,9 +64,14 @@ void ExerciseRunDialogImp::Init()
 
 }
 
-void ExerciseRunDialogImp::CloseOnButtonClick( wxCommandEvent& event )
+void ExerciseRunDialogImp::OnClose()
 {
 	this->Close();
+}
+
+void ExerciseRunDialogImp::CloseOnButtonClick( wxCommandEvent& event )
+{
+	OnClose();
 }
 
 
@@ -187,13 +192,49 @@ void ExerciseRunDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 
 	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
+		OnClose();
 		return;
 	}
-	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
+	else if (boost::algorithm::equals(actionName, L"recordanswer"))
 	{
+		RecordAnswer();
 		return;
 	}
-
+	else if (boost::algorithm::equals(actionName, L"playanswer"))
+	{
+		PlayAnswer();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"playcorrectanswer"))
+	{
+		PlayCorrectAnswer();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"playquestion"))
+	{
+		PlayQuestion();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"next"))
+	{
+		OnNext();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"skip"))
+	{
+		SkipQuestion();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"correct"))
+	{
+		SetResult(true);
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"incorrect"))
+	{
+		SetResult(false);
+		return;
+	}
 }
 
 
@@ -215,6 +256,8 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	wxSizerItem* panelQ = this->szCorrectAnswerPlayer->Add(playerPanelCorrectAnswer, 1, wxALL | wxEXPAND, 0);
 	wxSizerItem* panelA = this->szAnswerPlayer->Add(playerPanelAnswer, 1, wxALL | wxEXPAND, 0);
 	wxSizerItem* panelB = this->szPlayer->Add(playerPanelQuestion, 1, wxALL | wxEXPAND, 0);
+
+	ruleNames.push_back(MyApp::RULE_EXERCISERUN_DIALOG);
 	SetupSpeechHandlers();
 
 	
@@ -247,16 +290,45 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 		viewModel.SetCurrentQuestionIndex(1);
 		lstQuestions->SelectRow(0);
 		SetQuestion(viewModel.GetRunQuestions().at(0));
-		PlayQuestion();
+		LoadQuestionFile();
 	}
 
 	this->Layout();
 }
 
-void ExerciseRunDialogImp::PlayQuestion()
+void ExerciseRunDialogImp::LoadQuestionFile()
 {
 	QuizRunQuestion* currentQuestion = viewModel.GetCurrentQuestion();
 	playerQuestion.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(currentQuestion->GetQuestion().GetQuestionFile()));
+}
+
+void ExerciseRunDialogImp::PlayQuestion()
+{
+	if (playerQuestion.GetPlayState() == AudioPlayer::AudioState::loaded)
+	{
+		playerQuestion.Play();
+	}
+}
+
+void ExerciseRunDialogImp::PlayAnswer()
+{
+	if (playerAnswer.GetPlayState() == AudioPlayer::AudioState::loaded)
+	{
+		playerAnswer.Play();
+	}
+}
+
+void ExerciseRunDialogImp::PlayCorrectAnswer()
+{
+	if (playerCorrectAnswer.GetPlayState() == AudioPlayer::AudioState::loaded)
+	{
+		playerCorrectAnswer.Play();
+	}
+}
+
+void ExerciseRunDialogImp::SetResult(bool isCorrect)
+{
+	rdoEvaluation->SetSelection(!isCorrect);
 }
 
 void ExerciseRunDialogImp::RenderQuestions()
@@ -392,7 +464,7 @@ void ExerciseRunDialogImp::GoNextQuestion()
 		SetQuestion(*viewModel.GetCurrentQuestion());
 		if (!viewModel.GetCurrentQuestion()->GetIsAnswered())
 		{
-			PlayQuestion();
+			LoadQuestionFile();
 		}
 	}
 	else

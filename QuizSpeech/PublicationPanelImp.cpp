@@ -854,6 +854,7 @@ void PublicationPanelImp::RunQuiz()
 	this->_viewModel->GetQuizRunHeaderList()->clear();
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());
 	this->RenderQuizRuns();
+	SetupSpeechHandlers();
 }
 
 void PublicationPanelImp::RunQuizOnButtonClick(wxCommandEvent& event)

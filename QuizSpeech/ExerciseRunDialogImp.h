@@ -49,11 +49,16 @@ class ExerciseRunDialogImp : public ExerciseRunDialog//, AudioPlayerWrapperClien
 	void ShowComplete();
 	void HideComplete();
 	void PlayQuestion();
+	void LoadQuestionFile();
 	void SkipQuestion();
 	void Init();
 	void RecordAnswer();
+	void PlayAnswer();
+	void PlayCorrectAnswer();
 	void OnNext();
 	void SelectQuestion();
+	void OnClose();
+	void SetResult(bool isCorrect);
 	QuizRunQuestion* FindSelectedQuizRunQuestion(long questionId);
 	void SetupSpeechHandlers();
 	void OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList);

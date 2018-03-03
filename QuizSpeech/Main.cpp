@@ -29,6 +29,8 @@ const std::wstring MyApp::RULE_PUBLICATION_PANEL_CONTROLS = L"PUBLICATION_PANEL_
 /* EXERCISE PANEL */
 const std::wstring MyApp::RULE_EXERCISE_DIALOG = L"EXERCISE_DIALOG";
 const std::wstring MyApp::RULE_EXERCISE_CONTROLS = L"EXERCISE_CONTROLS";
+/* EXERCISE RUN DIALOG */
+const std::wstring MyApp::RULE_EXERCISERUN_DIALOG = L"EXERCISERUN_DIALOG";
 /* NOTE PANEL */
 const std::wstring MyApp::RULE_NOTE_DIALOG = L"NOTE_DIALOG";
 const std::wstring MyApp::RULE_NOTE_CONTROLS = L"NOTE_CONTROLS";
@@ -41,6 +43,7 @@ const std::wstring MyApp::COMMAND_ACTION_ADD = L"add";
 const std::wstring MyApp::COMMAND_ACTION_EDIT = L"edit";
 const std::wstring MyApp::COMMAND_ACTION_OK = L"ok";
 const std::wstring MyApp::COMMAND_ACTION_CANCEL = L"cancel";
+const std::wstring MyApp::COMMAND_ACTION_CLOSE = L"close";
 
 const std::wstring MyApp::CONTROL_ACTION = L"CONTROL_ACTIONS";
 const std::wstring MyApp::CONTROL_ACTION_FOCUS = L"focus";
