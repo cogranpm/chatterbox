@@ -626,6 +626,13 @@ void MainFrameImp::RenderPublications(Publication* publication)
 	}
 }
 
+void MainFrameImp::OnSelectPublication(Publication* publication)
+{
+	if (publication != NULL)
+	{
+		this->SetCurrentPublication(publication);
+	}
+}
 
 void MainFrameImp::PublicationSelectionChanged( wxDataViewEvent& event )
 {
@@ -635,10 +642,7 @@ void MainFrameImp::PublicationSelectionChanged( wxDataViewEvent& event )
 		return;
 	}
 	Publication* publication = (Publication*)this->lstPublication->GetItemData(item);
-	if(publication != NULL)
-	{
-		this->SetCurrentPublication(publication);
-	}
+	OnSelectPublication(publication);
 }
 
 void MainFrameImp::AddPublicationOnUpdateUI( wxUpdateUIEvent& event )
@@ -815,7 +819,13 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			int index = boost::lexical_cast<int>(actionTarget);
 			if (index <= m_dvlShelf->GetItemCount() && index > 0)
 			{
+				m_dvlShelf->SetFocus();
 				m_dvlShelf->SelectRow(index - 1);
+				Shelf* shelf = (Shelf*)this->m_dvlShelf->GetItemData(m_dvlShelf->GetSelection());
+				if (shelf != nullptr)
+				{
+					OnSelectShelf(shelf);
+				}
 			}
 		}
 		return;
@@ -828,7 +838,13 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			int index = boost::lexical_cast<int>(actionTarget);
 			if (index <= m_lstSubject->GetItemCount() && index > 0)
 			{
+				m_lstSubject->SetFocus();
 				m_lstSubject->SelectRow(index - 1);
+				Subject* subject = (Subject*)this->m_lstSubject->GetItemData(m_lstSubject->GetSelection());
+				if (subject != nullptr)
+				{
+					OnSelectSubject(subject);
+				}
 			}
 		}
 		return;
@@ -841,7 +857,10 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			int index = boost::lexical_cast<int>(actionTarget);
 			if (index <= lstPublication->GetItemCount() && index > 0)
 			{
+				lstPublication->SetFocus();
 				lstPublication->SelectRow(index - 1);
+				Publication* publication = (Publication*)lstPublication->GetItemData(lstPublication->GetSelection());
+				
 			}
 		}
 		return;

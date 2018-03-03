@@ -25,6 +25,7 @@ private:
 	void EditShelf();
 	Subject* GetCurrentSubject();
 	void OnSelectSubject(Subject* subject);
+	void OnSelectPublication(Publication* publication);
 	void EditSubject();
 	void AddSubject();
 	void DeleteSubject();
