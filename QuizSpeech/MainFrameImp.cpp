@@ -286,11 +286,11 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 
-	if ((m_dvlShelf->GetSelectedRow() == wxNOT_FOUND) && m_dvlShelf->GetItemCount() > 0)
-	{
-		m_dvlShelf->SelectRow(0);
-		OnSelectShelf(&shelfList->at(0));
-	}
+	//if ((m_dvlShelf->GetSelectedRow() == wxNOT_FOUND) && m_dvlShelf->GetItemCount() > 0)
+	//{
+	//	m_dvlShelf->SelectRow(0);
+	//	OnSelectShelf(&shelfList->at(0));
+	//}
 	shelfModel->Resort();
 }
 
@@ -507,11 +507,11 @@ void MainFrameImp::RenderSubjects(Subject* subject)
 		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select subject"));
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
-	if ((m_lstSubject->GetSelectedRow() == wxNOT_FOUND) && m_lstSubject->GetItemCount() > 0)
-	{
-		m_lstSubject->SelectRow(0);
-		OnSelectSubject(&itemsList->at(0));
-	}
+	//if ((m_lstSubject->GetSelectedRow() == wxNOT_FOUND) && m_lstSubject->GetItemCount() > 0)
+	//{
+	//	m_lstSubject->SelectRow(0);
+	//	OnSelectSubject(&itemsList->at(0));
+	//}
 	subjectModel->Resort();
 	/* using the list ctrl, something wrong when clicking on first item in list, is null
 	this->m_lstSubject->Hide();

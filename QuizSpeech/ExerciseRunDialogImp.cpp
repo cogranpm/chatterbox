@@ -190,7 +190,7 @@ void ExerciseRunDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 	ActionCommandParser actionParser;
 	actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
 
-	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
+	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL) || boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CLOSE))
 	{
 		OnClose();
 		return;

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "ExerciseRunDialog.h"
@@ -47,7 +47,7 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	lblQuestion = new wxStaticText( pnlEntries, wxID_ANY, wxT("Question"), wxDefaultPosition, wxDefaultSize, 0 );
 	lblQuestion->Wrap( -1 );
-	szQuestionTool->Add( lblQuestion, 0, wxALIGN_BOTTOM|wxALL, 5 );
+	szQuestionTool->Add( lblQuestion, 0, wxALIGN_CENTER|wxALL, 5 );
 	
 	pnlPlayer = new wxPanel( pnlEntries, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	szPlayer = new wxBoxSizer( wxHORIZONTAL );
@@ -56,7 +56,7 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	pnlPlayer->SetSizer( szPlayer );
 	pnlPlayer->Layout();
 	szPlayer->Fit( pnlPlayer );
-	szQuestionTool->Add( pnlPlayer, 1, wxEXPAND | wxALL, 5 );
+	szQuestionTool->Add( pnlPlayer, 1, wxALL|wxEXPAND, 5 );
 	
 	btnSkip = new wxButton( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnSkip->SetToolTip( wxT("Skip") );
@@ -64,7 +64,7 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	szQuestionTool->Add( btnSkip, 0, wxALIGN_CENTER, 5 );
 	
 	
-	szQuestion->Add( szQuestionTool, 1, wxALL|wxEXPAND, 5 );
+	szQuestion->Add( szQuestionTool, 0, wxALL|wxEXPAND, 5 );
 	
 	txtQuestion = new wxTextCtrl( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtQuestion->Enable( false );
@@ -96,7 +96,7 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	szAnswerTool->Add( pnlAnswerPlayer, 1, wxEXPAND|wxLEFT, 5 );
 	
 	
-	szAnswer->Add( szAnswerTool, 1, wxEXPAND, 5 );
+	szAnswer->Add( szAnswerTool, 0, wxEXPAND, 5 );
 	
 	txtAnswer = new wxTextCtrl( pnlEntries, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtAnswer->Enable( false );
@@ -132,7 +132,7 @@ ExerciseRunDialog::ExerciseRunDialog( wxWindow* parent, wxWindowID id, const wxS
 	bSizer25->Add( pnlCorrectAnswerPlayer, 1, wxEXPAND | wxALL, 5 );
 	
 	
-	szCorrectAnswer->Add( bSizer25, 1, wxEXPAND, 5 );
+	szCorrectAnswer->Add( bSizer25, 0, wxEXPAND, 5 );
 	
 	txtCorrectAnswer = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtCorrectAnswer->Enable( false );
