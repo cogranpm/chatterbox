@@ -3,7 +3,7 @@
 #include <wx/app.h> 
 #include "AudioPlayerPanelImp.h"
 #include "DictationOverlayClientHelper.h"
-
+#include "ActionCommandParser.h"
 
 bool IsCorrect(QuizRunQuestion& question) {
 	return question.GetIsCorrect();
@@ -41,7 +41,7 @@ ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, unsigned long quizI
 	:
 	ExerciseRunDialog(parent), viewModel(quizId),
 	playerAnswer(), playerCorrectAnswer(), playerPanelAnswer(nullptr), playerPanelCorrectAnswer(nullptr),
-	playerQuestion(), playerPanelQuestion(nullptr)
+	playerQuestion(), playerPanelQuestion(nullptr), ruleNames()
 {
 	Init();
 }
@@ -49,14 +49,14 @@ ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, unsigned long quizI
 ExerciseRunDialogImp::ExerciseRunDialogImp(wxWindow* parent, QuizRunHeader& quizRunHeader) :
 	ExerciseRunDialog(parent), viewModel(quizRunHeader), 
 	playerAnswer(), playerCorrectAnswer(), playerPanelAnswer(nullptr), playerPanelCorrectAnswer(nullptr),
-	playerQuestion(), playerPanelQuestion(nullptr)
+	playerQuestion(), playerPanelQuestion(nullptr), ruleNames()
 {
 	Init();
 }
 
 ExerciseRunDialogImp::~ExerciseRunDialogImp()
 {
-	wxGetApp().DisconnectFromSpeech();
+	//wxGetApp().DisconnectFromSpeech();
 }
 
 void ExerciseRunDialogImp::Init()
@@ -69,7 +69,8 @@ void ExerciseRunDialogImp::CloseOnButtonClick( wxCommandEvent& event )
 	this->Close();
 }
 
-void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
+
+void ExerciseRunDialogImp::RecordAnswer()
 {
 	/* show the record dialog */
 	std::wstring filePathBuffer(L"");
@@ -88,6 +89,11 @@ void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
 		playerCorrectAnswer.SetURLAsync(wxGetApp().GetFileHandler().GetFullAudioPathToFile(currentQuestion->GetQuestion().GetAnswer()->GetAnswerFile()));
 		txtCorrectAnswer->SetValue(currentQuestion->GetQuestion().GetAnswer()->GetAnswerText());
 	}
+}
+
+void ExerciseRunDialogImp::RecordOnButtonClick(wxCommandEvent& event)
+{
+	RecordAnswer();
 }
 
 
@@ -112,20 +118,21 @@ void ExerciseRunDialogImp::EvaluationOnRadioBox(wxCommandEvent& event)
 
 }
 
-void ExerciseRunDialogImp::NextOnButtonClick(wxCommandEvent& event)
+void ExerciseRunDialogImp::OnNext()
 {
 	bool updateResult = Save();
-	if (!updateResult)
-	{
-		event.Skip();
-	}
-	else
+	if (updateResult)
 	{
 		GoNextQuestion();
 	}
 }
 
-void ExerciseRunDialogImp::QuestionsSelectionChanged(wxDataViewEvent& event)
+void ExerciseRunDialogImp::NextOnButtonClick(wxCommandEvent& event)
+{
+	OnNext();
+}
+
+void ExerciseRunDialogImp::SelectQuestion()
 {
 	wxDataViewItem item = lstQuestions->GetSelection();
 	if (item.IsOk())
@@ -140,6 +147,11 @@ void ExerciseRunDialogImp::QuestionsSelectionChanged(wxDataViewEvent& event)
 			HideComplete();
 		}
 	}
+}
+
+void ExerciseRunDialogImp::QuestionsSelectionChanged(wxDataViewEvent& event)
+{
+	SelectQuestion();
 }
 
 QuizRunQuestion* ExerciseRunDialogImp::FindSelectedQuizRunQuestion(long questionId)
@@ -157,6 +169,31 @@ QuizRunQuestion* ExerciseRunDialogImp::FindSelectedQuizRunQuestion(long question
 	{
 		return nullptr;
 	}
+}
+
+void ExerciseRunDialogImp::SetupSpeechHandlers()
+{
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->SetupSpeechHandlers(ruleNames, this->GetName().ToStdString(), boost::bind(&ExerciseRunDialogImp::OnCommandRecognized, this, _1, _2));
+}
+
+void ExerciseRunDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)
+{
+	std::wstring actionName;
+	std::wstring actionTarget;
+	std::wstring targetValue;
+	std::wstring ruleName;
+	ActionCommandParser actionParser;
+	actionParser.Parse(commandPropertyList, actionName, actionTarget, targetValue, ruleName);
+
+	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
+	{
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
+	{
+		return;
+	}
+
 }
 
 
@@ -178,6 +215,8 @@ void ExerciseRunDialogImp::OnInitDialog(wxInitDialogEvent & event)
 	wxSizerItem* panelQ = this->szCorrectAnswerPlayer->Add(playerPanelCorrectAnswer, 1, wxALL | wxEXPAND, 0);
 	wxSizerItem* panelA = this->szAnswerPlayer->Add(playerPanelAnswer, 1, wxALL | wxEXPAND, 0);
 	wxSizerItem* panelB = this->szPlayer->Add(playerPanelQuestion, 1, wxALL | wxEXPAND, 0);
+	SetupSpeechHandlers();
+
 	
 	/* load the data */
 	if (viewModel.GetHeader().GetQuizRunHeaderId() > 0)
