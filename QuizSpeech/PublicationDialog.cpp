@@ -48,6 +48,8 @@ PublicationDialog::PublicationDialog( wxWindow* parent, wxWindowID id, const wxS
 	m_cboTypes->Append( wxT("Book") );
 	m_cboTypes->Append( wxT("Lecture") );
 	m_cboTypes->Append( wxT("Link") );
+	m_cboTypes->Append( wxT("List") );
+	m_cboTypes->Append( wxT("Notebook") );
 	m_cboTypes->SetSelection( 0 );
 	bSizer3->Add( m_cboTypes, 0, wxALL, 5 );
 	

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Aug  4 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -52,6 +52,8 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	cboType->Append( wxT("Book") );
 	cboType->Append( wxT("Lecture") );
 	cboType->Append( wxT("Link") );
+	cboType->Append( wxT("List") );
+	cboType->Append( wxT("Notebook") );
 	cboType->SetSelection( 0 );
 	gbSizer1->Add( cboType, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	

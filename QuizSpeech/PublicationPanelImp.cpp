@@ -10,15 +10,13 @@
 #include "SAConfirmDialogImp.h"
 #include "ActionCommandParser.h"
 #include "ShelfDataViewListStore.h"
+#include "PublicationTypeHelper.h"
 
 PublicationPanelImp::PublicationPanelImp( wxWindow* parent, Publication* publication)
 :
 pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAudioPlayer(), noteAudioPlayer(), ruleNames()
 {
-	this->cboType->SetClientObject(0, new PublicationType(0));
-	this->cboType->SetClientObject(1, new PublicationType(1));
-	this->cboType->SetClientObject(2, new PublicationType(2));
-	this->cboType->SetClientObject(3, new PublicationType(3));
+	PublicationTypeHelper::SetupPublicationTypes(cboType);
 	_title = this->_viewModel->GetPublication()->getTitle();
 	this->InitDialog();
 }
@@ -218,6 +216,22 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 	else if (boost::algorithm::equals(actionName, L"deletequizrun"))
 	{
 		DeleteQuizRun();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"exercise"))
+	{
+		if (notebookChildren->GetSelection() == wxNOT_FOUND || notebookChildren->GetSelection() < 1)
+		{
+			notebookChildren->SetSelection(1);
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"note"))
+	{
+		if (notebookChildren->GetSelection() == wxNOT_FOUND || notebookChildren->GetSelection() > 0)
+		{
+			notebookChildren->SetSelection(0);
+		}
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, L"close") || boost::algorithm::equals(actionName, L"cancel"))

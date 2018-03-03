@@ -1,5 +1,4 @@
 #include "PublicationDialogImp.h"
-#include "PublicationType.h"
 #include <wx/valtext.h>
 #include <wx/log.h> 
 #include <wx/infobar.h>
@@ -7,6 +6,7 @@
 #include "MyApp.h"
 #include "ActionCommandParser.h"
 #include "GlobalConstants.h"
+#include "PublicationTypeHelper.h"
 
 PublicationDialogImp::PublicationDialogImp( wxWindow* parent )
 :
@@ -17,15 +17,12 @@ PublicationDialog( parent ), ruleNames()
 
 PublicationDialogImp::~PublicationDialogImp()
 {
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	
 }
 
 void PublicationDialogImp::OnInitDialog( wxInitDialogEvent& event )
 {
-	this->m_cboTypes->SetClientObject(0, new PublicationType(0));
-	this->m_cboTypes->SetClientObject(1, new PublicationType(1));
-	this->m_cboTypes->SetClientObject(2, new PublicationType(2));
-	this->m_cboTypes->SetClientObject(3, new PublicationType(3));
+	PublicationTypeHelper::SetupPublicationTypes(m_cboTypes);
 
 	/* just so happens that index matches key for this combo box */
 	this->m_cboTypes->SetSelection(this->_type);
@@ -121,6 +118,14 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 		else if (boost::algorithm::equals(actionTarget, L"link"))
 		{
 			m_cboTypes->SetSelection(3);
+		}
+		else if (boost::algorithm::equals(actionTarget, L"list"))
+		{
+			m_cboTypes->SetSelection(4);
+		}
+		else if (boost::algorithm::equals(actionTarget, L"notebook"))
+		{
+			m_cboTypes->SetSelection(5);
 		}
 		return;
 	}

@@ -26,7 +26,7 @@ ExercisePanelImp::ExercisePanelImp(wxWindow* parent, Publication* publication, Q
 
 ExercisePanelImp::~ExercisePanelImp()
 {
-	wxGetApp().DisconnectFromSpeech();
+	//wxGetApp().DisconnectFromSpeech();
 }
 
 void ExercisePanelImp::SetupSpeechHandlers()

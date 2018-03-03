@@ -173,6 +173,7 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClCompile Include="CommandRecognitionResult.cpp" />
     <ClCompile Include="DataViewListStoreHelper.cpp" />
     <ClCompile Include="GlobalConstants.cpp" />
+    <ClCompile Include="PublicationTypeHelper.cpp" />
     <ClCompile Include="ShelfDataViewListStore.cpp" />
     <ClCompile Include="DictationCallback.cpp" />
     <ClCompile Include="DictationContext.cpp" />
@@ -260,6 +261,7 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClInclude Include="CommandProperty.h" />
     <ClInclude Include="CommandRecognitionResult.h" />
     <ClInclude Include="DataViewListStoreHelper.h" />
+    <ClInclude Include="PublicationTypeHelper.h" />
     <ClInclude Include="ShelfDataViewListStore.h" />
     <ClInclude Include="DictationCallback.h" />
     <ClInclude Include="DictationContext.h" />
