@@ -247,7 +247,10 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 			int index = boost::lexical_cast<int>(actionTarget);
 			if (index <= lstTopics->GetItemCount() && index > 0)
 			{
+				lstTopics->SetFocus();
 				lstTopics->SelectRow(index - 1);
+				Topic* topic = (Topic*)lstTopics->GetItemData(lstTopics->GetSelection());
+				OnSelectTopic(topic);
 			}
 		}
 		return;
@@ -260,7 +263,11 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 			int index = boost::lexical_cast<int>(actionTarget);
 			if (index <= lstNotes->GetItemCount() && index > 0)
 			{
+				lstNotes->SetFocus();
 				lstNotes->SelectRow(index - 1);
+				wxUIntPtr ptr = lstNotes->GetItemData(lstNotes->GetSelection());
+				Note* note = (Note*)ptr;
+				OnSelectNote(note);
 			}
 		}
 		return;
@@ -273,7 +280,10 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 			int index = boost::lexical_cast<int>(actionTarget);
 			if (index <= lstQuiz->GetItemCount() && index > 0)
 			{
+				lstQuiz->SetFocus();
 				lstQuiz->SelectRow(index - 1);
+				Quiz* quiz = (Quiz*)lstQuiz->GetItemData(lstQuiz->GetSelection());
+				OnSelectExercise(quiz);
 			}
 		}
 		return;
