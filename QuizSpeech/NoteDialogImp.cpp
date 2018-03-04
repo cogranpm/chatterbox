@@ -210,6 +210,11 @@ void NoteDialogImp::RecordTitle()
 	if (returnValue == wxID_OK)
 	{
 		viewModel.GetNote()->SetTitleAudioFile(filePathBuffer);
+		/* jump into record description automatically */
+		if (viewModel.GetNote()->IsNew())
+		{
+			RecordDescription();
+		}
 	}
 	SetupSpeechHandlers();
 }

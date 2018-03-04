@@ -88,7 +88,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
@@ -133,7 +133,7 @@
                 <event name="OnSetFocus"></event>
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">&amp;File</property>
                     <property name="name">menuFile</property>
                     <property name="permission">protected</property>
@@ -150,6 +150,30 @@
                         <property name="shortcut">CTRL-Q</property>
                         <property name="unchecked_bitmap"></property>
                         <event name="OnMenuSelection">menuFileQuitOnMenuSelection</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                </object>
+                <object class="wxMenu" expanded="1">
+                    <property name="label">&amp;Edit</property>
+                    <property name="name">menuEdit</property>
+                    <property name="permission">protected</property>
+                    <object class="separator" expanded="1">
+                        <property name="name">mnuEditSeperator</property>
+                        <property name="permission">none</property>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_PREFERENCES</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">&amp;Settings</property>
+                        <property name="name">menuEditSettings</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">menuEditSettingsOnMenuSelection</event>
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>

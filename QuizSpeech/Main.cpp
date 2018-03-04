@@ -6,6 +6,7 @@
 wxIMPLEMENT_APP(MyApp);
 
 const size_t MyApp::HOME_PAGE_INDEX = 0;
+const std::string MyApp::APPLICATION_NAME = "Chatterbox";
 const std::string MyApp::DATABASE_FILE_NAME = "data.db";
 const std::wstring MyApp::RULE_FILE_NAME = L"rules.xml";
 const std::wstring MyApp::RULE_FILE_NAME_DICATIONCC = L"rulescc.xml";
@@ -98,6 +99,7 @@ bool MyApp::OnInit()
 	{
 	
 		viewModel = std::make_unique<MainFrameViewModel>();
+		appConfig = std::make_unique<wxConfig>(MyApp::APPLICATION_NAME);
 
 		//initialize the database provider
 		dataProvider = std::make_unique<SqliteProvider>();
@@ -230,6 +232,11 @@ MainFrameViewModel* MyApp::GetMainFrameViewModel()
 	return viewModel.get();
 }
 
+wxConfig* MyApp::GetAppConfig()
+{
+	return appConfig.get();
+}
+
 ApplicationImages& MyApp::GetImages()
 {
 	return *images;
@@ -248,3 +255,8 @@ int MyApp::OnExit()
 	return 0;
 }
 
+
+void MyApp::LoadDefaultSettings()
+{
+
+}

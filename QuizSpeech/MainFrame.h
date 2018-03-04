@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __MAINFRAME_H__
@@ -47,6 +47,7 @@ class MainFrame : public wxFrame
 	protected:
 		wxMenuBar* m_menubar1;
 		wxMenu* menuFile;
+		wxMenu* menuEdit;
 		wxStatusBar* m_statusBar1;
 		wxAuiNotebook* m_auiShelf;
 		wxPanel* m_panelNotes;
@@ -86,6 +87,7 @@ class MainFrame : public wxFrame
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void menuFileQuitOnMenuSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuEditSettingsOnMenuSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void AddShelfOnButtonClick( wxCommandEvent& event ) { event.Skip(); }

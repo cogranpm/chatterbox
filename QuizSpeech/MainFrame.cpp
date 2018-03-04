@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 28 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "MainFrame.h"
@@ -20,6 +20,15 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	menuFile->Append( menuFileQuit );
 	
 	m_menubar1->Append( menuFile, wxT("&File") ); 
+	
+	menuEdit = new wxMenu();
+	menuEdit->AppendSeparator();
+	
+	wxMenuItem* menuEditSettings;
+	menuEditSettings = new wxMenuItem( menuEdit, wxID_PREFERENCES, wxString( wxT("&Settings") ) , wxEmptyString, wxITEM_NORMAL );
+	menuEdit->Append( menuEditSettings );
+	
+	m_menubar1->Append( menuEdit, wxT("&Edit") ); 
 	
 	this->SetMenuBar( m_menubar1 );
 	
@@ -240,6 +249,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	// Connect Events
 	this->Connect( menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuFileQuitOnMenuSelection ) );
+	this->Connect( menuEditSettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuEditSettingsOnMenuSelection ) );
 	m_auiShelf->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageChanged ), NULL, this );
 	m_auiShelf->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageClose ), NULL, this );
 	m_btnAddShelf->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::AddShelfOnButtonClick ), NULL, this );
@@ -269,6 +279,7 @@ MainFrame::~MainFrame()
 {
 	// Disconnect Events
 	this->Disconnect( wxID_QUIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuFileQuitOnMenuSelection ) );
+	this->Disconnect( wxID_PREFERENCES, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuEditSettingsOnMenuSelection ) );
 	m_auiShelf->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageChanged ), NULL, this );
 	m_auiShelf->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageClose ), NULL, this );
 	m_btnAddShelf->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainFrame::AddShelfOnButtonClick ), NULL, this );

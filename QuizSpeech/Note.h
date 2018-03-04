@@ -15,7 +15,7 @@ public:
 */
 	unsigned long GetNoteId() const {return _noteId;}
 	void SetNoteId(unsigned long id) {_noteId = id;}
-	
+	bool IsNew() { return !(_noteId > 0); }
 	unsigned long GetTopicId() const {return _topicId;}
 	void SetTopicId(unsigned long id) {_topicId = id;}
 

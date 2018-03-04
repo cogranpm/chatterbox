@@ -14,7 +14,7 @@
 #include "SqliteProvider.h"
 #include "ApplicationImages.h"
 #include "AudioPlayer.h"
-
+#include <wx/config.h>
 
 class MyApp: public wxApp
 {
@@ -23,9 +23,11 @@ public:
     
 	virtual bool OnInit();
 	int OnExit();
+	void LoadDefaultSettings();
 	SpeechListener& GetSpeechListener() { return sp; }
 	FileHandler& GetFileHandler() { return fh;}
 	MainFrameViewModel* GetMainFrameViewModel();
+	wxConfig* GetAppConfig();
 	MainFrameImp* GetMainFrame();
 	SqliteProvider* GetProvider() { return dataProvider.get();}
 	ApplicationImages& GetImages();
@@ -36,6 +38,7 @@ public:
 	const std::wstring GetUserDataDirectory();
 
 	//constants
+	static const std::string APPLICATION_NAME;
 	static const size_t HOME_PAGE_INDEX;
 	static const std::string DATABASE_FILE_NAME;
 	static const std::wstring RULE_FILE_NAME;
@@ -118,6 +121,7 @@ private:
 	std::unique_ptr<ApplicationImages> images;
 	boost::signals2::connection  commandReceivedConnection;
 	std::unique_ptr<MainFrameViewModel> viewModel;
+	std::unique_ptr<wxConfig> appConfig; 
 };
 
 /* allows the wxGetApp() function to be used throughout the application, allows access to this class and its members and functions */

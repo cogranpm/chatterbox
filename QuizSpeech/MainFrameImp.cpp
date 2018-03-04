@@ -10,6 +10,7 @@
 #include "SAConfirmDialogImp.h"
 #include "PublicationPanelImp.h"
 #include "ShelfDataViewListStore.h"
+#include "SettingsDialogImp.h"
 
 
 MainFrameImp::MainFrameImp( wxWindow* parent )
@@ -133,6 +134,24 @@ void MainFrameImp::SetupSpeechHandlers()
 void MainFrameImp::menuFileQuitOnMenuSelection( wxCommandEvent& event )
 {
 	this->Close();
+}
+
+void MainFrameImp::menuEditSettingsOnMenuSelection(wxCommandEvent& event)
+{
+	SettingsDialogImp dlg(this);
+	if (dlg.ShowModal() == wxID_OK)
+	{
+		
+		wxString str; 
+		if (wxGetApp().GetAppConfig()->Read("DataDirectory", &str)) 
+		{    
+			// last prompt was found in the config file/registry and its value is    // now in str    // ...
+		}
+		else 
+		{    
+			// no last prompt...
+		}
+	}
 }
 
 //this is a technique of wxAuiNotebook to disallow closing the HOME SCREEN tab
