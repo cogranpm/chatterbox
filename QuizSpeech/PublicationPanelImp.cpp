@@ -197,6 +197,11 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		OnPlayNote();
 		return;
 	}
+	else if (boost::algorithm::equals(actionName, L"stop"))
+	{
+		OnStop();
+		return;
+	}
 	else if (boost::algorithm::equals(actionName, L"deletequiz"))
 	{
 		DeleteQuiz();
