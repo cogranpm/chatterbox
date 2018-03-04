@@ -14,7 +14,7 @@
 
 PublicationPanelImp::PublicationPanelImp( wxWindow* parent, Publication* publication)
 :
-pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAudioPlayer(), noteAudioPlayer(), ruleNames()
+pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAudioPlayer(), noteAudioPlayer(), ruleNames(), isPlayingList(false)
 {
 	PublicationTypeHelper::SetupPublicationTypes(cboType);
 	_title = this->_viewModel->GetPublication()->getTitle();
@@ -91,9 +91,13 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	colTopicTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
 	colTopicIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
 	colTopicIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	
+	/*notes*/
 	colNoteIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
 	colNoteIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
 	colNoteTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
+	colNoteTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+
 	colQuizIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
 	colQuizIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
 	colQuizName->SetFlag(wxDATAVIEW_COL_SORTABLE);
@@ -186,6 +190,11 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 	else if (boost::algorithm::equals(actionName, L"editnote"))
 	{
 		OnEditNote();
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, L"playnote"))
+	{
+		OnPlayNote();
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, L"deletequiz"))
@@ -536,7 +545,7 @@ void PublicationPanelImp::RenderNotes(Note* note)
 		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
 		data.push_back(index);
 		data.push_back(currentNote->GetTitle());
-		data.push_back(currentNote->GetDescription());
+		data.push_back(currentNote->GetLimitedDescription());
 		int numSegments = wxGetApp().GetProvider()->GetSegmentCount(currentNote);
 		std::wstring segmentDisplay(L"");
 		wxGetApp().GetProvider()->GetSegmentDisplay(currentNote, segmentDisplay);
@@ -743,24 +752,51 @@ void PublicationPanelImp::OnAfterNoteDialogClosed(NoteDialogImp& dialog, Note* n
 	
 }
 
+void PublicationPanelImp::OnPlayNote()
+{
+	if (_viewModel->GetNote() != nullptr)
+	{
+		isPlayingList = false;
+		btnStop->Enable();
+		noteAudioPlayer.Start(_viewModel->GetNote());
+	}
+}
+
 void PublicationPanelImp::PlayOnButtonClick(wxCommandEvent& event) 
-{ 
-	btnStop->Enable();
-	noteAudioPlayer.Start(_viewModel->GetNote());
+{
+	OnPlayNote();
 }
 
 
 void PublicationPanelImp::PlayAllOnButtonClick(wxCommandEvent& event) 
 { 
 	btnStop->Enable();
+	isPlayingList = true;
 	noteListAudioPlayer.Start(_viewModel->GetNoteList());
+}
+
+void PublicationPanelImp::OnStop()
+{
+	if (!btnStop->IsEnabled())
+	{
+		return;
+	}
+	if (!isPlayingList)
+	{
+		noteAudioPlayer.Stop();
+	}
+	else
+	{
+		noteListAudioPlayer.Stop();
+	}
+	isPlayingList = false;
+	btnStop->Disable();
 }
 
 
 void PublicationPanelImp::StopOnButtonClick(wxCommandEvent& event) 
 { 
-	noteListAudioPlayer.Stop();
-	btnStop->Disable();
+	OnStop();
 }
 
 void PublicationPanelImp::PlayOnUpdateUI(wxUpdateUIEvent& event)

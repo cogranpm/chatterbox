@@ -22,6 +22,25 @@ public:
 	const std::wstring& GetTitle() const { return _title; }
 	void SetTitle(const std::wstring &title) { _title = title; }
 
+	const std::wstring GetLimitedDescription() const
+	{
+		if (_description.size() > 0)
+		{
+			if (_description.size() < 50)
+			{
+				return _description;
+			}
+			else
+			{
+				return _description.substr(0, 50) + L" ...";
+			}
+		}
+		else
+		{
+			return _description;
+		}
+
+	}
 	const std::wstring& GetDescription() const { return _description; }
 	void SetDescription(const std::wstring &description) { _description = description; }
 

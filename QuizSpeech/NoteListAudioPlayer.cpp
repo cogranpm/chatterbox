@@ -73,7 +73,7 @@ void NoteListAudioPlayer::SetPlayerInstance(std::wstring& file)
 		player->GetAudioPlayer().Clear();
 		delete player;
 	}
-	player = new AudioPlayerWrapper(this, file);
+	player = new AudioPlayerWrapper(this, wxGetApp().GetFileHandler().GetFullAudioPathToFile(file));
 }
 
 void NoteListAudioPlayer::PlayCompleted()

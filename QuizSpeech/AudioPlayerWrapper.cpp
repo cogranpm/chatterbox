@@ -47,9 +47,7 @@ void AudioPlayerWrapper::Stop()
 
 void AudioPlayerWrapper::OnAudioURL()
 {
-	
 	audioPlayer.Play();
-	
 }
 
 void AudioPlayerWrapper::OnAudioEnd()

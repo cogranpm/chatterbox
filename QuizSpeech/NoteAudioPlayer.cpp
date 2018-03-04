@@ -31,18 +31,7 @@ void NoteAudioPlayer::Start(NoteViewModel* viewModel)
 {
 	this->viewModel = viewModel;
 	Note* note = viewModel->GetNote();
-	if (!note->GetTitleAudioFile().empty())
-	{
-		std::wstring file(note->GetTitleAudioFile());
-		audiofiles.push(file);
-	}
-	if (!note->GetDescriptionAudioFile().empty())
-	{
-		std::wstring file(note->GetDescriptionAudioFile());
-		audiofiles.push(file);
-	}
-
-
+	
 	boost::ptr_vector<NoteSegment>* list = viewModel->GetNoteSegmentList();
 	NoteSegment* noteSegment = nullptr;
 	for (int i = 0; i < list->size(); i++)
@@ -54,6 +43,20 @@ void NoteAudioPlayer::Start(NoteViewModel* viewModel)
 			audiofiles.push(file);
 		}
 	}
+
+	if (!note->GetDescriptionAudioFile().empty())
+	{
+		std::wstring file(note->GetDescriptionAudioFile());
+		audiofiles.push(file);
+	}
+
+	if (!note->GetTitleAudioFile().empty())
+	{
+		std::wstring file(note->GetTitleAudioFile());
+		audiofiles.push(file);
+	}
+
+	
 	if (!audiofiles.empty())
 	{
 		SetPlayerInstance(audiofiles.front());
@@ -78,7 +81,7 @@ void NoteAudioPlayer::SetPlayerInstance(std::wstring& file)
 		player->GetAudioPlayer().Clear();
 		delete player;
 	}
-	player = new AudioPlayerWrapper(this, file);
+	player = new AudioPlayerWrapper(this, wxGetApp().GetFileHandler().GetFullAudioPathToFile(file));
 }
 
 void NoteAudioPlayer::PlayCompleted()
