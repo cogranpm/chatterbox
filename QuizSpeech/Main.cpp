@@ -85,6 +85,9 @@ const std::string MyApp::TOPIC_DIALOG_WINDOW_NAME = "TopicDialog";
 
 const int MyApp::DEFAULT_INDEX_COLUMN_WIDTH = 20;
 
+/* config keys */
+const std::wstring MyApp::CONFIGKEY_DATA_DIRECTORY = L"DataDirectory";
+
 //const SPSTREAMFORMAT spFormat = SPSF_22kHz16BitStereo;
 
 bool MyApp::OnInit()
@@ -104,43 +107,9 @@ bool MyApp::OnInit()
 		*/
 		wxConfigBase::Set(new wxConfig(MyApp::APPLICATION_NAME));
 		LoadDefaultSettings();
-
 		//initialize the database provider
 		dataProvider = std::make_unique<SqliteProvider>();
-
-		wxString databaseName;
-#ifdef _DEBUG
-		databaseName = wxGetCwd() + "/" + MyApp::DATABASE_FILE_NAME;
-#endif // _DEBUG
-
-#ifndef _DEBUG
-		databaseName = wxGetApp().GetUserDataDirectory() + "/" + MyApp::DATABASE_FILE_NAME;
-#endif // !_DEBUG
-
-
-		this->dataProvider->initDB(databaseName);
-		
-		//set up the current path in the FileHandler instance.
-		//note currentPath is set when MakeDirectory is called
-		std::wstring userDir;
-#ifdef _DEBUG
-		userDir = wxGetCwd();
-#endif // _DEBUG
-
-#ifndef _DEBUG
-		userDir = wxGetApp().GetUserDataDirectory();
-#endif // !_DEBUG
-
-		
-		
-		wxGetApp().GetFileHandler().SetCurrentPath(userDir);
-		//pass empty folder and it will make the current directory
-		wxGetApp().GetFileHandler().MakeDirectory(std::wstring(L""));
-		std::wstring audioDirectory = userDir + L"\\Audio\\";
-		wxGetApp().GetFileHandler().MakeDirectory(L"Audio");
-		wxGetApp().GetFileHandler().SetCurrentPath(audioDirectory);
-		wxGetApp().GetFileHandler().SetAudioPath(audioDirectory);
-
+		SetDefaultPaths();
 		//sp.setStopWord(L"orange");
 		sp.InitSpeech();
 	}
@@ -189,9 +158,27 @@ bool MyApp::OnInit()
     return true;
 }
 
-const std::wstring MyApp::GetUserDataDirectory()
+void MyApp::SetDefaultPaths()
 {
-	return ::wxStandardPaths::Get().GetUserLocalDataDir().ToStdWstring();
+	wxString databaseName;
+	//databaseName = wxGetCwd() + "/" + MyApp::DATABASE_FILE_NAME;
+	databaseName = dataDirectory + L"/" + MyApp::DATABASE_FILE_NAME;
+	this->dataProvider->initDB(databaseName);
+
+	//set up the current path in the FileHandler instance.
+	//note currentPath is set when MakeDirectory is called
+	wxGetApp().GetFileHandler().SetCurrentPath(dataDirectory);
+	//pass empty folder and it will make the current directory
+	wxGetApp().GetFileHandler().MakeDirectory(std::wstring(L""));
+	std::wstring audioDirectory = dataDirectory + L"\\Audio\\";
+	wxGetApp().GetFileHandler().MakeDirectory(L"Audio");
+	wxGetApp().GetFileHandler().SetCurrentPath(audioDirectory);
+	wxGetApp().GetFileHandler().SetAudioPath(audioDirectory);
+}
+
+const std::wstring const MyApp::GetDataDirectory()
+{
+	return dataDirectory;
 }
 
 void MyApp::OnCommandRecognized (std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList)
@@ -254,8 +241,33 @@ int MyApp::OnExit()
 	return 0;
 }
 
+const std::wstring const MyApp::GetUserDataDirectory()
+{
+	return ::wxStandardPaths::Get().GetUserLocalDataDir().ToStdWstring();
+}
 
 void MyApp::LoadDefaultSettings()
 {
+	bool isWriteOk = true;
+	wxString defaultDataDirectory;
+	wxConfigBase* config = wxConfigBase::Get();
+	if (config->Read(MyApp::CONFIGKEY_DATA_DIRECTORY, &defaultDataDirectory))
+	{
+		dataDirectory = defaultDataDirectory.ToStdWstring();
+	}
+	else
+	{
+		dataDirectory = GetUserDataDirectory();
+		isWriteOk = config->Write(MyApp::CONFIGKEY_DATA_DIRECTORY, wxString(dataDirectory));
+	}
+}
 
+void MyApp::ChangeDataDirectory(const std::wstring& newDataDirectory)
+{
+	dataDirectory = newDataDirectory;
+	wxConfigBase* config = wxConfigBase::Get();
+	bool isWriteOk = config->Write(MyApp::CONFIGKEY_DATA_DIRECTORY, wxString(dataDirectory));
+	dataProvider->Close();
+	SetDefaultPaths();
+	frame->ChangeDatabase();
 }

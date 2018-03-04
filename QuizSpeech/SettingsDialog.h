@@ -10,13 +10,14 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-#include <wx/sizer.h>
+#include <wx/string.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
-#include <wx/listctrl.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
+#include <wx/filepicker.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -31,10 +32,17 @@ class DlgSettings : public wxDialog
 	private:
 	
 	protected:
-		wxListCtrl* m_listCtrl1;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStaticText* m_staticText1;
+		wxDirPickerCtrl* dataDirPicker;
+		wxStdDialogButtonSizer* stdButtonSizer;
+		wxButton* stdButtonSizerOK;
+		wxButton* stdButtonSizerCancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void DataDirectoryOnDirChanged( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		

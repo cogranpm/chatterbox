@@ -34,8 +34,10 @@ public:
 	void DisconnectFromSpeech();
 	boost::signals2::connection* GetCommandReceivedConnection(void);
 	void DisconnectSpeechHandler(boost::signals2::connection* connection);
-	const std::wstring GetUserDataDirectory();
-
+	const std::wstring const GetUserDataDirectory();
+	const std::wstring const GetDataDirectory();
+	void ChangeDataDirectory(const std::wstring& newDataDirectory);
+	void SetDefaultPaths();
 	//constants
 	static const std::string APPLICATION_NAME;
 	static const size_t HOME_PAGE_INDEX;
@@ -111,6 +113,9 @@ public:
 	static const std::string TOPIC_DIALOG_WINDOW_NAME;
 
 	static const int DEFAULT_INDEX_COLUMN_WIDTH;
+
+	/* config keys */
+	static const std::wstring CONFIGKEY_DATA_DIRECTORY;
 	
 private:
 	MainFrameImp *frame;
@@ -120,7 +125,7 @@ private:
 	std::unique_ptr<ApplicationImages> images;
 	boost::signals2::connection  commandReceivedConnection;
 	std::unique_ptr<MainFrameViewModel> viewModel;
-	
+	std::wstring dataDirectory;
 };
 
 /* allows the wxGetApp() function to be used throughout the application, allows access to this class and its members and functions */

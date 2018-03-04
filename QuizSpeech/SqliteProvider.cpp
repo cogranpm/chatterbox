@@ -29,6 +29,18 @@ SqliteProvider::~SqliteProvider(void)
 	}
 }
 
+void SqliteProvider::Close()
+{
+	try 
+	{ 
+		db->Close(); 
+	}
+	catch (const std::exception& e) 
+	{ 
+		/* to do : logit*/ 
+	}
+}
+
 void SqliteProvider::initDB(const wxString dbPath)
 {
 	try

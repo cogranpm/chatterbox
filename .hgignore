@@ -60,4 +60,8 @@ x64/
 *.pdb
 *.idb
 *.opensdf
+data.db
+*.wav
+QuizSpeech/Audio/
+
 

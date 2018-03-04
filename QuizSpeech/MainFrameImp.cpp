@@ -60,19 +60,15 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	subjectModel->DecRef();
 	publicationModel->DecRef();
 
-
-
-	/* load shelves from provider */
-	boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
-	shelfList->clear();
-	wxGetApp().GetProvider()->GetAllShelves(shelfList);
-	this->RenderShelves(NULL);
+	LoadShelves();
 	
 	ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
 	ruleNames.push_back(MyApp::RULE_FILE_MENU);
 	SetupSpeechHandlers();
 	initialized = true;
 }
+
+
 
 MainFrameImp::~MainFrameImp()
 {
@@ -101,6 +97,29 @@ MainFrameImp::~MainFrameImp()
 		delete this->publicationModel;
 		
 	}
+}
+
+
+void MainFrameImp::ChangeDatabase()
+{
+	size_t shelfCount = m_auiShelf->GetPageCount();
+	if (shelfCount > 1)
+	{
+		for (int i = 1; i <= shelfCount; i++)
+		{
+			m_auiShelf->GetPage(i)->Close();
+		}
+	}
+	LoadShelves();
+}
+
+void MainFrameImp::LoadShelves()
+{
+	/* load shelves from provider */
+	boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
+	shelfList->clear();
+	wxGetApp().GetProvider()->GetAllShelves(shelfList);
+	this->RenderShelves(NULL);
 }
 
 void MainFrameImp::SetupSpeechHandlers()
@@ -139,17 +158,13 @@ void MainFrameImp::menuFileQuitOnMenuSelection( wxCommandEvent& event )
 void MainFrameImp::menuEditSettingsOnMenuSelection(wxCommandEvent& event)
 {
 	SettingsDialogImp dlg(this);
+	dlg.SetDataDirectory(wxGetApp().GetDataDirectory());
 	if (dlg.ShowModal() == wxID_OK)
 	{
-		
-		wxString str; 
-		if (wxConfigBase::Get()->Read("DataDirectory", &str)) 
-		{    
-			// last prompt was found in the config file/registry and its value is    // now in str    // ...
-		}
-		else 
-		{    
-			// no last prompt...
+		if (dlg.GetDataDirectoryDirty())
+		{
+			/* open and shut the database and all that good stuff */
+			wxGetApp().ChangeDataDirectory(dlg.GetDataDirectory().ToStdWstring());
 		}
 	}
 }

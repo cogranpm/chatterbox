@@ -20,6 +20,7 @@ class SqliteProvider
 public:
 	SqliteProvider(void);
 	~SqliteProvider(void);
+	void Close();
 	void initDB(const wxString dbPath);
 	SqlIteQuizProvider& GetQuizProvider() { return *this->quizProvider; }
 	SqliteNoteSegmentTypeProvider& GetNoteSegmentTypeProvider() { return *this->noteSegmentTypeProvider; }

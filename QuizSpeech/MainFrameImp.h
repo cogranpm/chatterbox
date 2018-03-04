@@ -40,6 +40,7 @@ private:
 	void enableSubjectButtons(bool enable);
 	void SetupSpeechHandlers();
 	void Refresh();
+	void LoadShelves();
 
 	protected:
 
@@ -76,8 +77,6 @@ private:
 		void RenderSubjects(Subject* subject);
 		void RenderPublications(Publication* publication);
 
-
-
 		//speech handlers
 		void OnCommandRecognized(std::wstring& phrase, std::vector<CommandProperty> commandPropertyList);
 
@@ -85,9 +84,7 @@ private:
 		MainFrameImp( wxWindow* parent );
 		~MainFrameImp();
 		wxAuiNotebook* GetShelfNotebook();
-
-
-	
+		void ChangeDatabase();
 };
 
 #endif // __MainFrameImp__

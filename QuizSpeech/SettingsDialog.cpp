@@ -19,34 +19,42 @@ DlgSettings::DlgSettings( wxWindow* parent, wxWindowID id, const wxString& title
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
 	
+	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Data Directory"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	bSizer2->Add( m_staticText1, 0, wxALL, 5 );
 	
-	bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxVERTICAL );
-	
-	m_listCtrl1 = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_ICON );
-	bSizer3->Add( m_listCtrl1, 0, wxALL, 5 );
+	dataDirPicker = new wxDirPickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE|wxDIRP_DIR_MUST_EXIST );
+	bSizer2->Add( dataDirPicker, 5, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
+	bSizer1->Add( bSizer2, 0, wxEXPAND, 5 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	stdButtonSizer = new wxStdDialogButtonSizer();
+	stdButtonSizerOK = new wxButton( this, wxID_OK );
+	stdButtonSizer->AddButton( stdButtonSizerOK );
+	stdButtonSizerCancel = new wxButton( this, wxID_CANCEL );
+	stdButtonSizer->AddButton( stdButtonSizerCancel );
+	stdButtonSizer->Realize();
 	
-	bSizer1->Add( m_sdbSizer1, 0, wxEXPAND, 5 );
+	bSizer1->Add( stdButtonSizer, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizer1 );
 	this->Layout();
 	
 	this->Centre( wxBOTH );
+	
+	// Connect Events
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DlgSettings::OnInitDialog ) );
+	dataDirPicker->Connect( wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEventHandler( DlgSettings::DataDirectoryOnDirChanged ), NULL, this );
+	stdButtonSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgSettings::OnOKButtonClick ), NULL, this );
 }
 
 DlgSettings::~DlgSettings()
 {
+	// Disconnect Events
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DlgSettings::OnInitDialog ) );
+	dataDirPicker->Disconnect( wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEventHandler( DlgSettings::DataDirectoryOnDirChanged ), NULL, this );
+	stdButtonSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DlgSettings::OnOKButtonClick ), NULL, this );
+	
 }
