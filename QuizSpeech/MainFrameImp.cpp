@@ -143,7 +143,7 @@ void MainFrameImp::menuEditSettingsOnMenuSelection(wxCommandEvent& event)
 	{
 		
 		wxString str; 
-		if (wxGetApp().GetAppConfig()->Read("DataDirectory", &str)) 
+		if (wxConfigBase::Get()->Read("DataDirectory", &str)) 
 		{    
 			// last prompt was found in the config file/registry and its value is    // now in str    // ...
 		}

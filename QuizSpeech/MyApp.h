@@ -27,7 +27,6 @@ public:
 	SpeechListener& GetSpeechListener() { return sp; }
 	FileHandler& GetFileHandler() { return fh;}
 	MainFrameViewModel* GetMainFrameViewModel();
-	wxConfig* GetAppConfig();
 	MainFrameImp* GetMainFrame();
 	SqliteProvider* GetProvider() { return dataProvider.get();}
 	ApplicationImages& GetImages();
@@ -121,7 +120,7 @@ private:
 	std::unique_ptr<ApplicationImages> images;
 	boost::signals2::connection  commandReceivedConnection;
 	std::unique_ptr<MainFrameViewModel> viewModel;
-	std::unique_ptr<wxConfig> appConfig; 
+	
 };
 
 /* allows the wxGetApp() function to be used throughout the application, allows access to this class and its members and functions */

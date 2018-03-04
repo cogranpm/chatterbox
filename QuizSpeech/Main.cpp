@@ -99,7 +99,11 @@ bool MyApp::OnInit()
 	{
 	
 		viewModel = std::make_unique<MainFrameViewModel>();
-		appConfig = std::make_unique<wxConfig>(MyApp::APPLICATION_NAME);
+		/* if the following is set wxWidgets will use this at appropriate times internally
+		also allows user to get the config using the static get function
+		*/
+		wxConfigBase::Set(new wxConfig(MyApp::APPLICATION_NAME));
+		LoadDefaultSettings();
 
 		//initialize the database provider
 		dataProvider = std::make_unique<SqliteProvider>();
@@ -230,11 +234,6 @@ void MyApp::DisconnectFromSpeech()
 MainFrameViewModel* MyApp::GetMainFrameViewModel()
 {
 	return viewModel.get();
-}
-
-wxConfig* MyApp::GetAppConfig()
-{
-	return appConfig.get();
 }
 
 ApplicationImages& MyApp::GetImages()
