@@ -355,7 +355,7 @@ void SqliteProvider::Insert(Note* note)
 	}
 	// need something field to begin with, will get the actual timestamp from database subsequent reloads 
 	note->SetCreatedDate(wxDateTime::Now());
-	wxSQLite3Statement stmt = db->PrepareStatement("insert into Note(TopicId, Title, Description, TitleAudioFile, DescriptionAudioFile) values (?, ?, ?, ?, ?);");
+	wxSQLite3Statement stmt = db->PrepareStatement("insert into Note(TopicId, Title, Description, DescriptionAudioFile, TitleAudioFile ) values (?, ?, ?, ?, ?);");
 	stmt.Bind(1, wxLongLong(note->GetTopicId()));
 
 	if (note->GetTitle().empty())
