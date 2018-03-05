@@ -172,6 +172,8 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClCompile Include="CommandProperty.cpp" />
     <ClCompile Include="CommandRecognitionResult.cpp" />
     <ClCompile Include="DataViewListStoreHelper.cpp" />
+    <ClCompile Include="ExportDialog.cpp" />
+    <ClCompile Include="ExportDialogImp.cpp" />
     <ClCompile Include="GlobalConstants.cpp" />
     <ClCompile Include="PublicationTypeHelper.cpp" />
     <ClCompile Include="SettingsDialog.cpp" />
@@ -263,6 +265,8 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
     <ClInclude Include="CommandProperty.h" />
     <ClInclude Include="CommandRecognitionResult.h" />
     <ClInclude Include="DataViewListStoreHelper.h" />
+    <ClInclude Include="ExportDialog.h" />
+    <ClInclude Include="ExportDialogImp.h" />
     <ClInclude Include="PublicationTypeHelper.h" />
     <ClInclude Include="SettingsDialog.h" />
     <ClInclude Include="SettingsDialogImp.h" />

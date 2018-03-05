@@ -15,6 +15,10 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	
 	m_menubar1 = new wxMenuBar( 0 );
 	menuFile = new wxMenu();
+	wxMenuItem* menuFileExport;
+	menuFileExport = new wxMenuItem( menuFile, wxID_ANY, wxString( wxT("&Export") ) , wxEmptyString, wxITEM_NORMAL );
+	menuFile->Append( menuFileExport );
+	
 	wxMenuItem* menuFileQuit;
 	menuFileQuit = new wxMenuItem( menuFile, wxID_QUIT, wxString( wxT("&Quit") ) + wxT('\t') + wxT("CTRL-Q"), wxEmptyString, wxITEM_NORMAL );
 	menuFile->Append( menuFileQuit );
@@ -248,6 +252,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( menuFileExport->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::FileExportOnMenuSelection ) );
 	this->Connect( menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuFileQuitOnMenuSelection ) );
 	this->Connect( menuEditSettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuEditSettingsOnMenuSelection ) );
 	m_auiShelf->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageChanged ), NULL, this );
@@ -278,6 +283,7 @@ MainFrame::MainFrame( wxWindow* parent, wxWindowID id, const wxString& title, co
 MainFrame::~MainFrame()
 {
 	// Disconnect Events
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::FileExportOnMenuSelection ) );
 	this->Disconnect( wxID_QUIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuFileQuitOnMenuSelection ) );
 	this->Disconnect( wxID_PREFERENCES, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainFrame::menuEditSettingsOnMenuSelection ) );
 	m_auiShelf->Disconnect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( MainFrame::OnNotebookPageChanged ), NULL, this );

@@ -47,6 +47,7 @@ private:
 		//menu handlers
 		void menuFileQuitOnMenuSelection( wxCommandEvent& event );
 		void menuEditSettingsOnMenuSelection(wxCommandEvent& event);
+		void FileExportOnMenuSelection(wxCommandEvent& event);
 
 		// Handlers for MainFrame events.
 		void EditShelfOnButtonClick( wxCommandEvent& event );

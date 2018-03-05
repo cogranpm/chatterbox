@@ -86,6 +86,7 @@ class MainFrame : public wxFrame
 		wxDataViewColumn* lstPublicationColTitle;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void FileExportOnMenuSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuFileQuitOnMenuSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuEditSettingsOnMenuSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnNotebookPageChanged( wxAuiNotebookEvent& event ) { event.Skip(); }

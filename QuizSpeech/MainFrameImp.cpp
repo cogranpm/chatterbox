@@ -11,7 +11,7 @@
 #include "PublicationPanelImp.h"
 #include "ShelfDataViewListStore.h"
 #include "SettingsDialogImp.h"
-
+#include "ExportDialogImp.h"
 
 MainFrameImp::MainFrameImp( wxWindow* parent )
 :
@@ -167,6 +167,11 @@ void MainFrameImp::menuEditSettingsOnMenuSelection(wxCommandEvent& event)
 			wxGetApp().ChangeDataDirectory(dlg.GetDataDirectory().ToStdWstring());
 		}
 	}
+}
+
+void MainFrameImp::FileExportOnMenuSelection(wxCommandEvent& event)
+{
+	ExportDialogImp dlg(this);
 }
 
 //this is a technique of wxAuiNotebook to disallow closing the HOME SCREEN tab
