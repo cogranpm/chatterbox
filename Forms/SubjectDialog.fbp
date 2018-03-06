@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">SubjectDialog</property>
             <property name="pos"></property>
-            <property name="size">641,276</property>
+            <property name="size">516,240</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Subject</property>

@@ -19,8 +19,9 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
-#include <wx/sizer.h>
 #include <wx/combobox.h>
+#include <wx/gbsizer.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -59,7 +60,7 @@ class PublicationDialog : public wxDialog
 		wxString _title; 
 		wxString _comments; 
 		
-		PublicationDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Publication"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,264 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("PublicationDialog") ); 
+		PublicationDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Publication"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 516,240 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("PublicationDialog") ); 
 		~PublicationDialog();
 	
 };
