@@ -48,6 +48,13 @@ void Publication::setSubjectId(unsigned long subjectId)
 	FirePropertyChange(oldValue, _subjectId);
 }
 
+void Publication::setComments(const std::wstring &comments) 
+{ 
+	std::wstring oldValue = this->comments;
+	this->comments = comments; 
+	FirePropertyChange(oldValue, this->comments);
+}
+
 void Publication::setType(short type)
 {
 	short oldValue = _type;

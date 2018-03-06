@@ -21,23 +21,23 @@ PublicationDialog::PublicationDialog( wxWindow* parent, wxWindowID id, const wxS
 	infoCtrl->SetEffectDuration( 500 );
 	bSizer24->Add( infoCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 0, 0 );
-	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
-	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxGridBagSizer* sizerForm;
+	sizerForm = new wxGridBagSizer( 0, 0 );
+	sizerForm->SetFlexibleDirection( wxHORIZONTAL );
+	sizerForm->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	lblTitle = new wxStaticText( this, wxID_ANY, wxT("Title:"), wxDefaultPosition, wxDefaultSize, 0 );
 	lblTitle->Wrap( -1 );
-	gbSizer1->Add( lblTitle, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
+	sizerForm->Add( lblTitle, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
 	txtTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,-1 ), 0 );
 	txtTitle->SetValidator( wxTextValidator( wxFILTER_NONE, &_title ) );
 	
-	gbSizer1->Add( txtTitle, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	sizerForm->Add( txtTitle, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
 	lblType = new wxStaticText( this, wxID_ANY, wxT("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	lblType->Wrap( -1 );
-	gbSizer1->Add( lblType, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
+	sizerForm->Add( lblType, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
 	m_cboTypes = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,-1 ), 0, NULL, wxCB_READONLY|wxCB_SORT );
 	m_cboTypes->Append( wxT("Audio Visual") );
@@ -47,22 +47,22 @@ PublicationDialog::PublicationDialog( wxWindow* parent, wxWindowID id, const wxS
 	m_cboTypes->Append( wxT("List") );
 	m_cboTypes->Append( wxT("Notebook") );
 	m_cboTypes->SetSelection( 0 );
-	gbSizer1->Add( m_cboTypes, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	sizerForm->Add( m_cboTypes, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
 	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Comments:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	gbSizer1->Add( m_staticText3, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
+	sizerForm->Add( m_staticText3, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
 	txtComments = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtComments->SetValidator( wxTextValidator( wxFILTER_NONE, &_comments ) );
 	
-	gbSizer1->Add( txtComments, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
+	sizerForm->Add( txtComments, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 	
 	
-	gbSizer1->AddGrowableCol( 1 );
-	gbSizer1->AddGrowableRow( 2 );
+	sizerForm->AddGrowableCol( 1 );
+	sizerForm->AddGrowableRow( 2 );
 	
-	bSizer24->Add( gbSizer1, 1, wxALL|wxEXPAND, 5 );
+	bSizer24->Add( sizerForm, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );

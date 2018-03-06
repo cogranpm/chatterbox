@@ -30,6 +30,7 @@ void SubjectDialogImp::OnClose( wxCloseEvent& event )
 void SubjectDialogImp::OnInitDialog( wxInitDialogEvent& event )
 {
 	this->m_txtTitle->SetValue(this->_title);
+	this->txtComments->SetValue(this->_comments);
 	this->m_txtTitle->SetFocus();
 
 	ruleNames.push_back(MyApp::RULE_SUBJECT_DIALOG);
@@ -64,7 +65,14 @@ void SubjectDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Com
 	else
 	{
 		//must be free text
-		this->m_txtTitle->AppendText(phrase);
+		if (txtComments->HasFocus())
+		{
+			txtComments->AppendText(phrase);
+		}
+		else
+		{
+			this->m_txtTitle->AppendText(phrase);
+		}
 		return;
 	}
 
@@ -75,11 +83,12 @@ void SubjectDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Com
 
 void SubjectDialogImp::OnOKButtonClick( wxCommandEvent& event )
 {
-	this->m_txtTitle->GetValidator()->TransferFromWindow();
-	if(this->_title.IsEmpty())
+	m_txtTitle->GetValidator()->TransferFromWindow();
+	txtComments->GetValidator()->TransferFromWindow();
+	if(_title.IsEmpty())
 	{
-		this->m_infoCtrl->ShowMessage("Title may not be empty");
-		this->m_txtTitle->SetFocus();
+		m_infoCtrl->ShowMessage("Title may not be empty");
+		m_txtTitle->SetFocus();
 	}
 	else
 	{

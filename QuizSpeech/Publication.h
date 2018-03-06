@@ -34,7 +34,7 @@ public:
 	short getType() const {return _type;}  
 	void setType(short type);
 
-	void setComments(const std::wstring &comments) { this->comments = comments; }
+	void setComments(const std::wstring &comments);
 	const std::wstring& getComments() const { return comments; }
 
 };

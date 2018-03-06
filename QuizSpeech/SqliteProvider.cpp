@@ -145,6 +145,7 @@ void SqliteProvider::Insert(Shelf* shelf)
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	shelf->setShelfId(id);
+	shelf->SetDirty(false);
 }
 
 void SqliteProvider::Update(Shelf* shelf)
@@ -161,6 +162,7 @@ void SqliteProvider::Update(Shelf* shelf)
 	}
 	stmt.Bind(3, wxLongLong(shelf->getShelfId()));
     stmt.ExecuteUpdate();	
+	shelf->SetDirty(false);
 }
 
 
@@ -192,6 +194,7 @@ void SqliteProvider::SetShelfFromRecord(Shelf* shelf, wxSQLite3ResultSet& set)
 	{
 		shelf->setComments(set.GetAsString("Comments").ToStdWstring());
 	}
+	shelf->SetDirty(false);
 }
 
 void SqliteProvider::Insert(Subject* subject)
@@ -207,6 +210,7 @@ void SqliteProvider::Insert(Subject* subject)
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	subject->setSubjectId(id);
+	subject->SetDirty(false);
 }
 
 
@@ -227,6 +231,7 @@ void SqliteProvider::Update(Subject* subject)
 		stmt.Bind(3, wxLongLong(subject->getShelfId()));
 		stmt.Bind(4, wxLongLong(subject->getSubjectId()));
 		stmt.ExecuteUpdate();
+		subject->SetDirty(false);
 	}
 	catch(wxSQLite3Exception& e)
 	{
@@ -263,6 +268,7 @@ void SqliteProvider::SetSubjectFromRecord(Subject* subject, wxSQLite3ResultSet& 
 	{
 		subject->setComments(set.GetAsString("Comments").ToStdWstring());
 	}
+	subject->SetDirty(false);
 }
 
 void SqliteProvider::Insert(Publication* publication)
@@ -287,6 +293,7 @@ void SqliteProvider::Insert(Publication* publication)
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	publication->setPublicationId(id);
+	publication->SetDirty(false);
 }
 
 void SqliteProvider::Update(Publication* publication)
@@ -307,6 +314,7 @@ void SqliteProvider::Update(Publication* publication)
 		stmt.Bind(4, publication->getType());
 		stmt.Bind(5, wxLongLong(publication->getPublicationId()));
 		stmt.ExecuteUpdate();
+		publication->SetDirty(false);
 	}
 	catch(wxSQLite3Exception& e)
 	{
@@ -344,6 +352,7 @@ void SqliteProvider::SetPublicationFromRecord(Publication* publication, wxSQLite
 	{
 		publication->setComments(set.GetAsString("Comments").ToStdWstring());
 	}
+	publication->SetDirty(false);
 }
 
 void SqliteProvider::Insert(Topic* topic)
@@ -360,6 +369,7 @@ void SqliteProvider::Insert(Topic* topic)
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	topic->setTopicId(id);
+	
 }
 
 void SqliteProvider::Update(Topic* topic)

@@ -464,6 +464,7 @@ void MainFrameImp::AddSubject()
 	if (subjectDialog.ShowModal() == wxID_OK && !(subjectDialog._title.IsEmpty()))
 	{
 		subject->setTitle(subjectDialog._title.ToStdWstring());
+		subject->setComments(subjectDialog._comments.ToStdWstring());
 		boost::ptr_vector<Subject>* subjectList = wxGetApp().GetMainFrameViewModel()->getSubjectList();
 		wxGetApp().GetProvider()->Insert(subject);
 		subjectList->push_back(subject);
@@ -507,12 +508,13 @@ void MainFrameImp::EditSubject()
 	}
 	SubjectDialogImp subjectDialog(this);
 	subjectDialog._title = currentSubject->getTitle();
+	subjectDialog._comments = currentSubject->getComments();
 	if (subjectDialog.ShowModal() == wxID_OK && !(subjectDialog._title.IsEmpty()))
 	{
-		wxString currentTitle(currentSubject->getTitle());
-		if (!(currentTitle.IsSameAs(subjectDialog._title)))
+		currentSubject->setTitle(subjectDialog._title.ToStdWstring());
+		currentSubject->setComments(subjectDialog._comments.ToStdWstring());
+		if (currentSubject->GetDirty())
 		{
-			currentSubject->setTitle(subjectDialog._title.ToStdWstring());
 			wxGetApp().GetProvider()->Update(currentSubject);
 			this->RenderSubjects(currentSubject);
 		}
@@ -629,6 +631,7 @@ void MainFrameImp::AddPublication()
 	{
 		publication->setTitle(dialog._title.ToStdWstring());
 		publication->setType(dialog.GetType());
+		publication->setComments(dialog._comments.ToStdWstring());
 		boost::ptr_vector<Publication>* publicationList = wxGetApp().GetMainFrameViewModel()->getPublicationList();
 		wxGetApp().GetProvider()->Insert(publication);
 		publicationList->push_back(publication);

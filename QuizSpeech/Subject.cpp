@@ -39,6 +39,19 @@ Subject::~Subject(void)
 {
 }
 
+void Subject::setTitle(const std::wstring &title) 
+{ 
+	std::wstring oldValue = this->_title;
+	_title = title; 
+	FirePropertyChange(oldValue, _title);
+}
+
+void Subject::setComments(const std::wstring &comments) 
+{ 
+	std::wstring oldValue = this->comments;
+	this->comments = comments; 
+	FirePropertyChange(oldValue, this->comments);
+}
 
 
 

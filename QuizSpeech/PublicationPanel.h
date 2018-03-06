@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __PUBLICATIONPANEL_H__
@@ -49,6 +49,8 @@ class pnlMain : public wxPanel
 		wxTextCtrl* txtTitle;
 		wxStaticText* m_staticText2;
 		wxComboBox* cboType;
+		wxStaticText* lblComments;
+		wxTextCtrl* txtComments;
 		wxButton* btnApply;
 		wxButton* btnCancel;
 		wxSplitterWindow* splitterTopic;
@@ -144,6 +146,7 @@ class pnlMain : public wxPanel
 	
 	public:
 		wxString _title; 
+		wxString _comments; 
 		
 		pnlMain( wxWindow* parent, wxWindowID id = wxPublicationPanel, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1010,827 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxT("PublicationPanel") ); 
 		~pnlMain();

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "PublicationPanel.h"
@@ -23,12 +23,12 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
-	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText1 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Title"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Title:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	gbSizer1->Add( m_staticText1, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_staticText1, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
 	txtTitle = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), 0 );
 	#ifdef __WXGTK__
@@ -43,9 +43,9 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	
 	gbSizer1->Add( txtTitle, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
-	m_staticText2 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	gbSizer1->Add( m_staticText2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( m_staticText2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
 	cboType = new wxComboBox( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), 0, NULL, wxCB_READONLY|wxCB_SORT );
 	cboType->Append( wxT("Audio Visual") );
@@ -57,16 +57,36 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	cboType->SetSelection( 0 );
 	gbSizer1->Add( cboType, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
+	lblComments = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Comments:"), wxDefaultPosition, wxDefaultSize, 0 );
+	lblComments->Wrap( -1 );
+	gbSizer1->Add( lblComments, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	txtComments = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	#ifdef __WXGTK__
+	if ( !txtComments->HasFlag( wxTE_MULTILINE ) )
+	{
+	txtComments->SetMaxLength( 32000 );
+	}
+	#else
+	txtComments->SetMaxLength( 32000 );
+	#endif
+	txtComments->SetValidator( wxTextValidator( wxFILTER_NONE, &_comments ) );
+	
+	gbSizer1->Add( txtComments, wxGBPosition( 0, 3 ), wxGBSpan( 2, 2 ), wxALL|wxEXPAND, 5 );
+	
 	btnApply = new wxButton( sbSizer1->GetStaticBox(), wxID_APPLY, wxT("&Apply"), wxDefaultPosition, wxDefaultSize, 0 );
 	btnApply->Enable( false );
 	
-	gbSizer1->Add( btnApply, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( btnApply, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
 	btnCancel = new wxButton( sbSizer1->GetStaticBox(), wxID_CANCEL, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
 	btnCancel->Enable( false );
 	
-	gbSizer1->Add( btnCancel, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer1->Add( btnCancel, wxGBPosition( 1, 6 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
+	
+	gbSizer1->AddGrowableCol( 3 );
+	gbSizer1->AddGrowableRow( 0 );
 	
 	sbSizer1->Add( gbSizer1, 1, wxEXPAND, 5 );
 	

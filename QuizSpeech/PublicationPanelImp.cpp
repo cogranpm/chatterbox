@@ -18,6 +18,7 @@ pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAu
 {
 	PublicationTypeHelper::SetupPublicationTypes(cboType);
 	_title = this->_viewModel->GetPublication()->getTitle();
+	_comments = _viewModel->GetPublication()->getComments();
 	this->InitDialog();
 }
 
@@ -321,6 +322,7 @@ void PublicationPanelImp::BindModel()
 {
 	this->txtTitle->GetValidator()->TransferToWindow();
 	this->cboType->SetSelection(this->_viewModel->GetPublication()->getType());
+	txtComments->GetValidator()->TransferToWindow();
 }
 
 
@@ -336,13 +338,15 @@ void PublicationPanelImp::TypeOnCombobox( wxCommandEvent& event )
 
 void PublicationPanelImp::ApplyOnButtonClick( wxCommandEvent& event )
 {
-	if(this->txtTitle->GetValidator()->Validate(this) && this->txtTitle->GetValidator()->TransferFromWindow())
+	if(this->txtTitle->GetValidator()->Validate(this)
+		&& this->txtTitle->GetValidator()->TransferFromWindow()
+		&& txtComments->GetValidator()->TransferFromWindow())
 	{
 		this->_viewModel->GetPublication()->setTitle(this->txtTitle->GetValue().ToStdWstring());
+		_viewModel->GetPublication()->setComments(_comments);
 		PublicationType* data = dynamic_cast<PublicationType*>(this->cboType->GetClientObject(this->cboType->GetSelection()));
 		this->_viewModel->GetPublication()->setType(data->getKey());
 		wxGetApp().GetProvider()->Update(this->_viewModel->GetPublication());
-		this->_viewModel->GetPublication()->SetDirty(false);
 	}
 	else
 	{

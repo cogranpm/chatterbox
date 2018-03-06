@@ -26,6 +26,8 @@ void PublicationDialogImp::OnInitDialog( wxInitDialogEvent& event )
 
 	/* just so happens that index matches key for this combo box */
 	this->m_cboTypes->SetSelection(this->_type);
+	txtTitle->SetValue(_title);
+	txtComments->SetValue(_comments);
 
 	ruleNames.push_back(MyApp::RULE_PUBLICATION_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
@@ -68,6 +70,10 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 		{
 			/* not sure what to do */
 		}
+		else if (txtComments->HasFocus())
+		{
+			txtComments->Clear();
+		}
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_SELECT))
@@ -80,6 +86,10 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 		{
 			/* not sure what to do */
 			m_cboTypes->Dismiss();
+		}
+		if (this->txtComments->HasFocus())
+		{
+			this->txtComments->SelectAll();
 		}
 		return;
 	}
@@ -94,6 +104,11 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 	else if (boost::algorithm::equals(actionTarget, L"title"))
 	{
 		txtTitle->SetFocus();
+		return;
+	}
+	else if (boost::algorithm::equals(actionTarget, L"comments"))
+	{
+		txtComments->SetFocus();
 		return;
 	}
 	else if (boost::algorithm::equals(actionTarget, L"type"))
@@ -132,7 +147,14 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 	else
 	{
 		//must be free text
-		this->txtTitle->AppendText(phrase);
+		if (this->txtComments->HasFocus())
+		{
+			this->txtComments->AppendText(phrase);
+		}
+		else
+		{
+			this->txtTitle->AppendText(phrase);
+		}
 		return;
 	}
 	
@@ -143,6 +165,7 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 void PublicationDialogImp::OnOKButtonClick( wxCommandEvent& event )
 {
 	this->txtTitle->GetValidator()->TransferFromWindow();
+	txtComments->GetValidator()->TransferFromWindow();
 	if(this->_title.IsEmpty())
 	{
 		this->infoCtrl->ShowMessage("Title may not be empty");
@@ -150,7 +173,6 @@ void PublicationDialogImp::OnOKButtonClick( wxCommandEvent& event )
 	}
 	else
 	{
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		PublicationType* data = dynamic_cast<PublicationType*>(this->m_cboTypes->GetClientObject(this->m_cboTypes->GetSelection()));
 		this->_type = data->getKey();
 		event.Skip();
@@ -218,10 +240,12 @@ void PublicationDialogImp::DisableWindow(bool flag)
 	{
 		this->txtTitle->Enable();
 		this->m_cboTypes->Enable();
+		txtComments->Enable();
 	}
 	else
 	{
 		this->txtTitle->Disable();
 		this->m_cboTypes->Disable();
+		txtComments->Disable();
 	}
 }

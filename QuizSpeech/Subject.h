@@ -12,7 +12,7 @@ public:
 	Subject& operator=(const Subject &subject);
 	bool operator==(const Subject  &subject)   {return _subjectId == subject.getSubjectId();}
 
-	void setTitle(const std::wstring &title) {_title = title;}
+	void setTitle(const std::wstring &title);
 	const std::wstring& getTitle()const {return _title;} 
 
 	unsigned long getSubjectId() const {return _subjectId;} 
@@ -21,7 +21,7 @@ public:
 	unsigned long getShelfId() const {return _shelfId;} 
 	void setShelfId(unsigned long shelfId) { _shelfId = shelfId;}
 	
-	void setComments(const std::wstring &comments) { this->comments = comments; }
+	void setComments(const std::wstring &comments);
 	const std::wstring& getComments() const { return comments; } 
 
 private:
