@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "ShelfDialog.h"
@@ -44,6 +44,21 @@ ShelfDialog::ShelfDialog( wxWindow* parent, wxWindowID id, const wxString& title
 	
 	
 	bSizer1->Add( bSizer2, 0, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Comments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2->Wrap( -1 );
+	bSizer3->Add( m_staticText2, 0, wxALL, 5 );
+	
+	txtComments = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	txtComments->SetValidator( wxTextValidator( wxFILTER_NONE, &_comments ) );
+	
+	bSizer3->Add( txtComments, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

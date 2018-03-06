@@ -18,9 +18,9 @@ private:
 public:
 	SqliteDDLProvider(wxSQLite3Database* db);
 	~SqliteDDLProvider();
-	bool CreateTable(wxString tableName, wxString ddl);
+	bool CreateTable(const wxString& tableName, const wxString& ddl);
 	long GetLastRowID();
-	void CreateDeleteTrigger(wxString tableName, wxString childTableName, wxString foreignKeyName);
-
+	void CreateDeleteTrigger(const wxString& tableName, const wxString& childTableName, const wxString& foreignKeyName);
+	bool AddColumn(const wxString& tableName, const wxString& columnName, const wxString& columnDef);
 };
 

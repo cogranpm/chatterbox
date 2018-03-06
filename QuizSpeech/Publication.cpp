@@ -6,7 +6,8 @@ Publication::Publication(void) : Publication(0, L"")
 
 }
 
-Publication::Publication(const unsigned long subjectId, const std::wstring& title) : _subjectId(subjectId), _title(title), _publicationId(0), _type(0), _dirty(false)
+Publication::Publication(const unsigned long subjectId, const std::wstring& title) 
+	: _subjectId(subjectId), _title(title), _publicationId(0), _type(0), comments()
 {
 	
 }
@@ -35,27 +36,21 @@ Publication& Publication::operator=(const Publication &publication)
 
 void Publication::setTitle(const std::wstring &title) 
 {
-	if(title != this->_title)
-	{
-		_dirty = true;
-	}
+	std::wstring oldValue = this->_title;
 	_title = title;
+	FirePropertyChange(oldValue, _title);
 }
 
 void Publication::setSubjectId(unsigned long subjectId) 
 {
-	if(subjectId != this->_subjectId)
-	{
-		_dirty = true;
-	}
+	unsigned long oldValue = this->_subjectId;
 	_subjectId = subjectId;
+	FirePropertyChange(oldValue, _subjectId);
 }
 
 void Publication::setType(short type)
 {
-	if(type != this->_type)
-	{
-		_dirty = true;
-	}
+	short oldValue = _type;
 	this->_type = type;
+	FirePropertyChange(oldValue, _type);
 }

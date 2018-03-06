@@ -25,6 +25,7 @@ void ShelfDialogImp::OnClose( wxCloseEvent& event )
 void ShelfDialogImp::OnInitDialog( wxInitDialogEvent& event )
 {
 	this->m_txtName->SetValue(this->_title);
+	this->txtComments->SetValue(this->_comments);
 	ruleNames.push_back(MyApp::RULE_SHELF_DIALOG);
 	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
 	this->SetupSpeechHandlers();
@@ -68,7 +69,14 @@ void ShelfDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Comma
 	else
 	{
 		//must be free text
-		this->m_txtName->AppendText(phrase);
+		if (txtComments->HasFocus())
+		{
+			txtComments->AppendText(phrase);
+		}
+		else
+		{
+			this->m_txtName->AppendText(phrase);
+		}
 		return;
 	}
 
@@ -79,6 +87,7 @@ void ShelfDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Comma
 bool ShelfDialogImp::OnOK()
 {
 	this->m_txtName->GetValidator()->TransferFromWindow();
+	this->txtComments->GetValidator()->TransferFromWindow();
 	if (this->_title.IsEmpty())
 	{
 		this->m_infoCtrl->ShowMessage("Title may not be empty");

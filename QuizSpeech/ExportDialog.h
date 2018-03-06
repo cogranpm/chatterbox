@@ -33,7 +33,7 @@ class ExportDialog : public wxDialog
 	
 	protected:
 		wxStaticText* m_staticText1;
-		wxFilePickerCtrl* m_filePicker1;
+		wxFilePickerCtrl* filePicker;
 		wxStdDialogButtonSizer* sizerStdButtons;
 		wxButton* sizerStdButtonsOK;
 		wxButton* sizerStdButtonsCancel;
@@ -44,7 +44,7 @@ class ExportDialog : public wxDialog
 	
 	public:
 		
-		ExportDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Export Data"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 594,152 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		ExportDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Export Data"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 594,238 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~ExportDialog();
 	
 };

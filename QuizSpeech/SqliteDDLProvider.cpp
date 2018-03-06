@@ -11,7 +11,7 @@ SqliteDDLProvider::~SqliteDDLProvider()
 {
 }
 
-bool SqliteDDLProvider::CreateTable(wxString tableName, wxString ddl)
+bool SqliteDDLProvider::CreateTable(const wxString& tableName, const wxString& ddl)
 {
 	if (!db->TableExists(tableName))
 	{
@@ -21,7 +21,7 @@ bool SqliteDDLProvider::CreateTable(wxString tableName, wxString ddl)
 	return false;
 }
 
-void SqliteDDLProvider::CreateDeleteTrigger(wxString tableName, wxString childTableName, wxString foreignKeyName)
+void SqliteDDLProvider::CreateDeleteTrigger(const wxString& tableName, const wxString& childTableName, const wxString& foreignKeyName)
 {
 	try
 	{
@@ -57,4 +57,24 @@ long SqliteDDLProvider::GetLastRowID()
 		id = set.GetInt64(0).ToLong();
 	}
 	return id;
+}
+
+bool SqliteDDLProvider::AddColumn(const wxString& tableName, const wxString& columnName, const wxString& columnDef)
+{
+	try
+	{
+		wxString appendColumn(L"ALTER TABLE ");
+		appendColumn.append(tableName);
+		appendColumn.append(L" ADD COLUMN ");
+		appendColumn.append(columnName);
+		appendColumn.append(L" ");
+		appendColumn.append(columnDef);
+		appendColumn.append(L";");
+		db->ExecuteUpdate(appendColumn);
+		return true;
+	}
+	catch (wxSQLite3Exception &e)
+	{
+		return false;
+	}
 }

@@ -84,6 +84,23 @@ void SqliteProvider::initDB(const wxString dbPath)
 		{
 			SetVersion(1);
 		}
+		if (ver == 1)
+		{
+			/* need to add a column comment to shelf, subject and publication */
+			wxSQLite3Transaction trans(db);
+			try
+			{
+				this->ddl->AddColumn("Shelf", "Comments", "VARCHAR");
+				this->ddl->AddColumn("Subject", "Comments", "VARCHAR");
+				this->ddl->AddColumn("Publication", "Comments", "VARCHAR");
+				SetVersion(2);
+				trans.Commit();
+			}
+			catch (wxSQLite3Exception &e)
+			{
+				trans.Rollback();
+			}
+		}
 	}
 	catch (wxSQLite3Exception &e)
 	{
@@ -132,9 +149,17 @@ void SqliteProvider::Insert(Shelf* shelf)
 
 void SqliteProvider::Update(Shelf* shelf)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("update Shelf set Title = ? where ShelfId = ?;");
+	wxSQLite3Statement stmt = db->PrepareStatement("update Shelf set Title = ?, Comments = ? where ShelfId = ?;");
 	stmt.Bind(1, shelf->getTitle());
-	stmt.Bind(2, wxLongLong(shelf->getShelfId()));
+	if (shelf->getComments().empty())
+	{
+		stmt.BindNull(2);
+	}
+	else
+	{
+		stmt.Bind(2, shelf->getComments());
+	}
+	stmt.Bind(3, wxLongLong(shelf->getShelfId()));
     stmt.ExecuteUpdate();	
 }
 
@@ -150,7 +175,7 @@ void SqliteProvider::Delete(Shelf* shelf)
 void SqliteProvider::GetAllShelves(boost::ptr_vector<Shelf>* _shelfList)
 {
 
-	wxSQLite3ResultSet set = db->ExecuteQuery(wxString("SELECT Title, ShelfId FROM Shelf ORDER BY UPPER(Title);"));
+	wxSQLite3ResultSet set = db->ExecuteQuery(wxString("SELECT Title, ShelfId, Comments FROM Shelf ORDER BY UPPER(Title);"));
 	while(set.NextRow())
 	{
 		Shelf* shelf = new Shelf();
@@ -163,6 +188,10 @@ void SqliteProvider::SetShelfFromRecord(Shelf* shelf, wxSQLite3ResultSet& set)
 {
 	shelf->setShelfId(set.GetInt64("ShelfId").ToLong());
 	shelf->setTitle(set.GetAsString("Title").ToStdWstring());
+	if (!set.IsNull("Comments"))
+	{
+		shelf->setComments(set.GetAsString("Comments").ToStdWstring());
+	}
 }
 
 void SqliteProvider::Insert(Subject* subject)
@@ -185,10 +214,18 @@ void SqliteProvider::Update(Subject* subject)
 {
 	try
 	{
-		wxSQLite3Statement stmt = db->PrepareStatement("update Subject set Title = ?, ShelfId = ? where SubjectId = ?;");
+		wxSQLite3Statement stmt = db->PrepareStatement("update Subject set Title = ?, Comments = ?, ShelfId = ? where SubjectId = ?;");
 		stmt.Bind(1, subject->getTitle());
-		stmt.Bind(2, wxLongLong(subject->getShelfId()));
-		stmt.Bind(3, wxLongLong(subject->getSubjectId()));
+		if (subject->getComments().empty())
+		{
+			stmt.BindNull(2);
+		}
+		else
+		{
+			stmt.Bind(2, subject->getComments());
+		}
+		stmt.Bind(3, wxLongLong(subject->getShelfId()));
+		stmt.Bind(4, wxLongLong(subject->getSubjectId()));
 		stmt.ExecuteUpdate();
 	}
 	catch(wxSQLite3Exception& e)
@@ -206,7 +243,7 @@ void SqliteProvider::Delete(Subject* subject)
 
 void SqliteProvider::GetSubjectsByShelf(Shelf* shelf, boost::ptr_vector<Subject>* _subjectList)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT SubjectId, Title, ShelfId FROM Subject WHERE ShelfId = ? ORDER BY UPPER(Title);");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT SubjectId, Title, ShelfId, Comments FROM Subject WHERE ShelfId = ? ORDER BY UPPER(Title);");
 	stmt.Bind(1, wxLongLong(shelf->getShelfId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while(set.NextRow())
@@ -222,6 +259,10 @@ void SqliteProvider::SetSubjectFromRecord(Subject* subject, wxSQLite3ResultSet& 
 	subject->setShelfId(set.GetInt64("ShelfId").ToLong());
 	subject->setSubjectId(set.GetInt64("SubjectId").ToLong());
 	subject->setTitle(set.GetAsString("Title").ToStdWstring());
+	if (!set.IsNull("Comments"))
+	{
+		subject->setComments(set.GetAsString("Comments").ToStdWstring());
+	}
 }
 
 void SqliteProvider::Insert(Publication* publication)
@@ -231,10 +272,18 @@ void SqliteProvider::Insert(Publication* publication)
 		throw "Invalid argument, Publication had null SubjectId";
 		return;
 	}
-	wxSQLite3Statement stmt = db->PrepareStatement("insert into Publication(SubjectId, Title, Type) values (?, ?, ?);");
+	wxSQLite3Statement stmt = db->PrepareStatement("insert into Publication(SubjectId, Title, Comments, Type) values (?, ?, ?, ?);");
 	stmt.Bind(1, wxLongLong(publication->getSubjectId()));
 	stmt.Bind(2, publication->getTitle());
-	stmt.Bind(3, publication->getType());
+	if (publication->getComments().empty())
+	{
+		stmt.BindNull(3);
+	}
+	else
+	{
+		stmt.Bind(3, publication->getComments());
+	}
+	stmt.Bind(4, publication->getType());
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	publication->setPublicationId(id);
@@ -244,11 +293,19 @@ void SqliteProvider::Update(Publication* publication)
 {
 	try
 	{
-		wxSQLite3Statement stmt = db->PrepareStatement("update Publication set Title = ?, SubjectId = ?, Type = ? where PublicationId = ?;");
+		wxSQLite3Statement stmt = db->PrepareStatement("update Publication set Title = ?, Comments = ?, SubjectId = ?, Type = ? where PublicationId = ?;");
 		stmt.Bind(1, publication->getTitle());
-		stmt.Bind(2, wxLongLong(publication->getSubjectId()));
-		stmt.Bind(3, publication->getType());
-		stmt.Bind(4, wxLongLong(publication->getPublicationId()));
+		if (publication->getComments().empty())
+		{
+			stmt.BindNull(2);
+		}
+		else
+		{
+			stmt.Bind(2, publication->getComments());
+		}
+		stmt.Bind(3, wxLongLong(publication->getSubjectId()));
+		stmt.Bind(4, publication->getType());
+		stmt.Bind(5, wxLongLong(publication->getPublicationId()));
 		stmt.ExecuteUpdate();
 	}
 	catch(wxSQLite3Exception& e)
@@ -266,7 +323,7 @@ void SqliteProvider::Delete(Publication* publication)
 
 void SqliteProvider::GetPublicationsBySubject(Subject* subject, boost::ptr_vector<Publication>* publicationList)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Title, Type, SubjectId FROM Publication WHERE SubjectId = ? ORDER BY UPPER(Title);");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Title, Type, SubjectId, Comments FROM Publication WHERE SubjectId = ? ORDER BY UPPER(Title);");
 	stmt.Bind(1, wxLongLong(subject->getSubjectId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while(set.NextRow())
@@ -283,6 +340,10 @@ void SqliteProvider::SetPublicationFromRecord(Publication* publication, wxSQLite
 	publication->setPublicationId(set.GetInt64("PublicationId").ToLong());
 	publication->setTitle(set.GetAsString("Title").ToStdWstring());
 	publication->setType(set.GetInt("Type"));
+	if (!set.IsNull("Comments"))
+	{
+		publication->setComments(set.GetAsString("Comments").ToStdWstring());
+	}
 }
 
 void SqliteProvider::Insert(Topic* topic)
@@ -653,4 +714,29 @@ void SqliteProvider::CreateSampleData()
 	noteSegmentBulk.SetBody(L"Cheese: 1lb = 4 to 5 cups (packed), grated");
 	this->Insert(&noteSegmentBulk);
 	this->quizProvider->CreateSampleData(&topic);
+}
+
+void SqliteProvider::Export(const std::wstring& path)
+{
+	wxSQLite3Database db;
+	db.Open(path);
+
+	wxSQLite3Statement stmt = db.PrepareStatement("SELECT ID, NAME FROM NoteBook;");
+	wxSQLite3ResultSet set = stmt.ExecuteQuery();
+	while (set.NextRow())
+	{
+		/* map notebook to shelf */
+		unsigned long id = set.GetInt64("ID").ToLong();
+
+		/* note header maps to subject */
+
+		/* need to add a default publication - perhaps call it imported */
+
+		/* need to add a default topic, call it Topic? */
+
+		/* note detail maps to Note, need to add 2 segments for comments and source code, body maps to description in the note */
+	}
+
+
+	db.Close();
 }

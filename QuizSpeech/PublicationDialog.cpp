@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "PublicationDialog.h"
@@ -55,6 +55,21 @@ PublicationDialog::PublicationDialog( wxWindow* parent, wxWindowID id, const wxS
 	
 	
 	bSizer24->Add( bSizer3, 0, wxALL|wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText3 = new wxStaticText( this, wxID_ANY, wxT("Comments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText3->Wrap( -1 );
+	bSizer4->Add( m_staticText3, 0, wxALL, 5 );
+	
+	txtComments = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	txtComments->SetValidator( wxTextValidator( wxFILTER_NONE, &_comments ) );
+	
+	bSizer4->Add( txtComments, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizer24->Add( bSizer4, 1, wxEXPAND, 5 );
 	
 	btnStd = new wxStdDialogButtonSizer();
 	btnStdOK = new wxButton( this, wxID_OK );

@@ -17,5 +17,6 @@ public:
 	void FirePropertyChange();
 	void FirePropertyChange(std::wstring oldValue, std::wstring newValue);
 	void FirePropertyChange(long oldValue, long newValue);
+	//void FirePropertyChange(short oldValue, short newValue);
 };
 

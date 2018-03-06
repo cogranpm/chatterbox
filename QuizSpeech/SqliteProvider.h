@@ -61,6 +61,7 @@ public:
 
 	void CreateSystemData();
 	void CreateSampleData();
+	void Export(const std::wstring& path);
 
 private:
 	wxSQLite3Database* db;

@@ -32,3 +32,11 @@ void BaseEntity::FirePropertyChange(long oldValue, long newValue)
 		SetDirty(true);
 	}
 }
+
+//void BaseEntity::FirePropertyChange(short oldValue, short newValue)
+//{
+//	if (oldValue != newValue)
+//	{
+//		SetDirty(true);
+//	}
+//}

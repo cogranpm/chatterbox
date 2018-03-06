@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __SHELFDIALOG_H__
@@ -35,6 +35,8 @@ class ShelfDialog : public wxDialog
 	
 	protected:
 		wxTextCtrl* m_txtName;
+		wxStaticText* m_staticText2;
+		wxTextCtrl* txtComments;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -48,8 +50,9 @@ class ShelfDialog : public wxDialog
 	public:
 		wxInfoBar* m_infoCtrl;
 		wxString _title; 
+		wxString _comments; 
 		
-		ShelfDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Shelf"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 479,140 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("ShelfDialog") ); 
+		ShelfDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Shelf"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 516,240 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("ShelfDialog") ); 
 		~ShelfDialog();
 	
 };

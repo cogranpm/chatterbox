@@ -108,7 +108,7 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	this->BindModel();
 	this->btnApply->Enable(false);
 	this->btnCancel->Enable(false);
-	this->_viewModel->GetPublication()->setDirty(false);
+	this->_viewModel->GetPublication()->SetDirty(false);
 	_topicModel = new ShelfDataViewListStore();
 	_noteModel = new ShelfDataViewListStore();
 	_quizModel = new ShelfDataViewListStore();
@@ -326,12 +326,12 @@ void PublicationPanelImp::BindModel()
 
 void PublicationPanelImp::TitleOnText( wxCommandEvent& event ) 
 { 
-	this->_viewModel->GetPublication()->setDirty(true);
+	this->_viewModel->GetPublication()->SetDirty(true);
 }
 
 void PublicationPanelImp::TypeOnCombobox( wxCommandEvent& event ) 
 { 
-	this->_viewModel->GetPublication()->setDirty(true);
+	this->_viewModel->GetPublication()->SetDirty(true);
 }
 
 void PublicationPanelImp::ApplyOnButtonClick( wxCommandEvent& event )
@@ -342,7 +342,7 @@ void PublicationPanelImp::ApplyOnButtonClick( wxCommandEvent& event )
 		PublicationType* data = dynamic_cast<PublicationType*>(this->cboType->GetClientObject(this->cboType->GetSelection()));
 		this->_viewModel->GetPublication()->setType(data->getKey());
 		wxGetApp().GetProvider()->Update(this->_viewModel->GetPublication());
-		this->_viewModel->GetPublication()->setDirty(false);
+		this->_viewModel->GetPublication()->SetDirty(false);
 	}
 	else
 	{
@@ -354,7 +354,7 @@ void PublicationPanelImp::ApplyOnButtonClick( wxCommandEvent& event )
 
 void PublicationPanelImp::ApplyOnUpdateUI( wxUpdateUIEvent& event ) 
 {
-	if(this->_viewModel->GetPublication()->getDirty() == true)
+	if(this->_viewModel->GetPublication()->GetDirty() == true)
 	{
 		this->btnApply->Enable(true);
 	}
@@ -367,13 +367,13 @@ void PublicationPanelImp::ApplyOnUpdateUI( wxUpdateUIEvent& event )
 void PublicationPanelImp::CancelOnButtonClick( wxCommandEvent& event ) 
 { 
 	this->BindModel();
-	this->_viewModel->GetPublication()->setDirty(false);
+	this->_viewModel->GetPublication()->SetDirty(false);
 }
 
 
 void PublicationPanelImp::CancelOnUpdateUI( wxUpdateUIEvent& event ) 
 { 
-	if(this->_viewModel->GetPublication()->getDirty() == true)
+	if(this->_viewModel->GetPublication()->GetDirty() == true)
 	{
 		this->btnCancel->Enable(true);
 	}

@@ -1,7 +1,8 @@
 #pragma once
 #include <wx/datetime.h>
+#include "BaseEntity.h"
 
-class Note
+class Note : public BaseEntity
 {
 public:
 	Note(void);

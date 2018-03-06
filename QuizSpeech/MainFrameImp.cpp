@@ -172,6 +172,11 @@ void MainFrameImp::menuEditSettingsOnMenuSelection(wxCommandEvent& event)
 void MainFrameImp::FileExportOnMenuSelection(wxCommandEvent& event)
 {
 	ExportDialogImp dlg(this);
+	if (dlg.ShowModal() == wxID_OK)
+	{
+		
+
+	}
 }
 
 //this is a technique of wxAuiNotebook to disallow closing the HOME SCREEN tab
@@ -376,12 +381,15 @@ void MainFrameImp::EditShelf()
 		return;
 	}
 	shelfDialog._title = currentShelf->getTitle();
+	shelfDialog._comments = currentShelf->getComments();
 	if(shelfDialog.ShowModal() == wxID_OK && !(shelfDialog._title.IsEmpty()))
 	{
 		wxString currentTitle(currentShelf->getTitle());
-		if(!(currentTitle.IsSameAs(shelfDialog._title)))
+		wxString currentComments(currentShelf->getComments());
+		if(!(currentTitle.IsSameAs(shelfDialog._title)) || !(currentComments.IsSameAs(shelfDialog._comments)))
 		{
 			currentShelf->setTitle(shelfDialog._title.ToStdWstring());
+			currentShelf->setComments(shelfDialog._comments.ToStdWstring());
 			wxGetApp().GetProvider()->Update(currentShelf);
 			this->RenderShelves(currentShelf);
 		}
@@ -402,6 +410,7 @@ void MainFrameImp::AddShelf()
 	if (shelfDialog.ShowModal() == wxID_OK && !(shelfDialog._title.IsEmpty()))
 	{
 		newShelf->setTitle(shelfDialog._title.ToStdWstring());
+		newShelf->setComments(shelfDialog._title.ToStdWstring());
 		wxGetApp().GetProvider()->Insert(newShelf);
 		boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
 		shelfList->push_back(newShelf);

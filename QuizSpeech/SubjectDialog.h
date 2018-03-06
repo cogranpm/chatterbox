@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __SUBJECTDIALOG_H__
@@ -37,6 +37,8 @@ class SubjectDialog : public wxDialog
 		wxInfoBar* m_infoCtrl;
 		wxStaticText* m_staticText5;
 		wxTextCtrl* m_txtTitle;
+		wxStaticText* m_staticText2;
+		wxTextCtrl* txtComments;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
@@ -49,8 +51,9 @@ class SubjectDialog : public wxDialog
 		wxButton* btnStdOK;
 		wxButton* btnStdCancel;
 		wxString _title; 
+		wxString _comments; 
 		
-		SubjectDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Subject"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 524,144 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("SubjectDialog") ); 
+		SubjectDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Subject"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 542,251 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("SubjectDialog") ); 
 		~SubjectDialog();
 	
 };

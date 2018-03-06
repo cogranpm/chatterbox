@@ -1,8 +1,9 @@
 #pragma once
 
 #include "stdafx.h"
+#include "BaseEntity.h"
 
-class Publication
+class Publication : public BaseEntity
 {
 
 private:
@@ -10,8 +11,7 @@ private:
 	unsigned long _publicationId;
 	std::wstring _title;
 	short _type;
-	bool _dirty;
-
+	std::wstring comments;
 
 public:
 	Publication(void);
@@ -33,10 +33,9 @@ public:
 
 	short getType() const {return _type;}  
 	void setType(short type);
-	
-	bool getDirty() { return _dirty;} 
-	void setDirty(bool dirty) { _dirty = dirty;}
-	
+
+	void setComments(const std::wstring &comments) { this->comments = comments; }
+	const std::wstring& getComments() const { return comments; }
 
 };
 

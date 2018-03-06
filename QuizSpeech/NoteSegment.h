@@ -2,9 +2,10 @@
 
 #include "stdafx.h"
 #include <wx/datetime.h>
+#include "BaseEntity.h"
 //#include "NoteSegmentPanelImp.h"
 
-class NoteSegment
+class NoteSegment : public BaseEntity
 {
 
 public:

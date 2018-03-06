@@ -23,8 +23,8 @@ ExportDialog::ExportDialog( wxWindow* parent, wxWindowID id, const wxString& tit
 	m_staticText1->Wrap( -1 );
 	bSizer2->Add( m_staticText1, 0, wxALL, 5 );
 	
-	m_filePicker1 = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
-	bSizer2->Add( m_filePicker1, 3, wxALL|wxEXPAND, 5 );
+	filePicker = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	bSizer2->Add( filePicker, 3, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizer2->Add( 0, 0, 1, wxEXPAND, 5 );

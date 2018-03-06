@@ -7,12 +7,12 @@ Shelf::Shelf(void)
 }
 
 
-Shelf::Shelf(const std::wstring& title) : _title(title)
+Shelf::Shelf(const std::wstring& title) : Shelf(0, title)
 {
 
 }
 
-Shelf::Shelf(const unsigned long shelfId, const std::wstring& title) : _shelfId(shelfId), _title(title)
+Shelf::Shelf(const unsigned long shelfId, const std::wstring& title) : _shelfId(shelfId), _title(title), comments()
 {
 
 }

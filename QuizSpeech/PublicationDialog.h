@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __PUBLICATIONDIALOG_H__
@@ -40,6 +40,8 @@ class PublicationDialog : public wxDialog
 		wxTextCtrl* txtTitle;
 		wxStaticText* lblType;
 		wxComboBox* m_cboTypes;
+		wxStaticText* m_staticText3;
+		wxTextCtrl* txtComments;
 		wxStdDialogButtonSizer* btnStd;
 		wxButton* btnStdOK;
 		wxButton* btnStdCancel;
@@ -55,8 +57,9 @@ class PublicationDialog : public wxDialog
 	
 	public:
 		wxString _title; 
+		wxString _comments; 
 		
-		PublicationDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Publication"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 428,184 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("PublicationDialog") ); 
+		PublicationDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Publication"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,264 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("PublicationDialog") ); 
 		~PublicationDialog();
 	
 };
