@@ -19,6 +19,7 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
+#include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -53,7 +54,7 @@ class SubjectDialog : public wxDialog
 		wxString _title; 
 		wxString _comments; 
 		
-		SubjectDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Subject"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 542,251 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("SubjectDialog") ); 
+		SubjectDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Subject"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 641,276 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("SubjectDialog") ); 
 		~SubjectDialog();
 	
 };

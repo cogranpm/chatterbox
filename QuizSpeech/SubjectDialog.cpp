@@ -21,14 +21,16 @@ SubjectDialog::SubjectDialog( wxWindow* parent, wxWindowID id, const wxString& t
 	m_infoCtrl->SetEffectDuration( 500 );
 	bSizer1->Add( m_infoCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Title"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Title:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	bSizer2->Add( m_staticText5, 0, wxALL, 5 );
+	gbSizer1->Add( m_staticText5, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_txtTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,-1 ), 0 );
 	#ifdef __WXGTK__
 	if ( !m_txtTitle->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -39,25 +41,22 @@ SubjectDialog::SubjectDialog( wxWindow* parent, wxWindowID id, const wxString& t
 	#endif
 	m_txtTitle->SetValidator( wxTextValidator( wxFILTER_NONE, &_title ) );
 	
-	bSizer2->Add( m_txtTitle, 1, wxALL, 5 );
+	gbSizer1->Add( m_txtTitle, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
-	
-	bSizer1->Add( bSizer2, 0, wxALL|wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Comments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Comments:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	bSizer3->Add( m_staticText2, 0, wxALL, 5 );
+	gbSizer1->Add( m_staticText2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
 	txtComments = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	txtComments->SetValidator( wxTextValidator( wxFILTER_NONE, &_comments ) );
 	
-	bSizer3->Add( txtComments, 1, wxALL|wxEXPAND, 5 );
+	gbSizer1->Add( txtComments, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
+	gbSizer1->AddGrowableCol( 1 );
+	gbSizer1->AddGrowableRow( 1 );
+	
+	bSizer1->Add( gbSizer1, 1, wxALL|wxEXPAND, 5 );
 	
 	btnStd = new wxStdDialogButtonSizer();
 	btnStdOK = new wxButton( this, wxID_OK );
