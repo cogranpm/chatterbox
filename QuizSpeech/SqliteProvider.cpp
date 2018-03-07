@@ -729,7 +729,7 @@ void SqliteProvider::CreateSampleData()
 void SqliteProvider::Export(const std::wstring& path)
 {
 	wxSQLite3Database db;
-
+	std::map<unsigned long, Shelf> header;
 	try
 	{
 		db.Open(path);
@@ -747,6 +747,7 @@ void SqliteProvider::Export(const std::wstring& path)
 				std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
 				shelf.setComments(comments);
 			}
+			header.insert(std::make_pair(id, shelf));
 
 			/* note header maps to subject */
 

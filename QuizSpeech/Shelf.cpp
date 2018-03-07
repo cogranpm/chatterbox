@@ -18,8 +18,9 @@ Shelf::Shelf(const unsigned long shelfId, const std::wstring& title) : _shelfId(
 }
 
 Shelf::Shelf (const Shelf &shelf) {
-	
+	this->setShelfId(shelf.getShelfId());
 	this->setTitle(shelf.getTitle());
+	this->setComments(shelf.getComments());
 }
 
 Shelf& Shelf::operator=(const Shelf &shelf)
