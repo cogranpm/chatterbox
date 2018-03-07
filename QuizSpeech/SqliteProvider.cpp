@@ -817,7 +817,7 @@ void SqliteProvider::Export(const std::wstring& path)
 				}
 				if (!set.IsNull("SOURCECODE"))
 				{
-					comments = set.GetAsString("SOURCECODE").ToStdWstring();
+					sourceCode = set.GetAsString("SOURCECODE").ToStdWstring();
 				}
 
 				Note note(topic.getTopicId());
