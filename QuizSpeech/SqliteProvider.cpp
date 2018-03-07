@@ -730,6 +730,7 @@ void SqliteProvider::Export(const std::wstring& path)
 {
 	wxSQLite3Database db;
 	std::map<unsigned long, Shelf> header;
+	std::map<unsigned long, Subject> subjects;
 	try
 	{
 		db.Open(path);
@@ -747,8 +748,9 @@ void SqliteProvider::Export(const std::wstring& path)
 				std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
 				shelf.setComments(comments);
 			}
+			//Insert(&shelf);
 			header.insert(std::make_pair(id, shelf));
-
+			
 			/* note header maps to subject */
 
 			/* need to add a default publication - perhaps call it imported */
@@ -757,6 +759,34 @@ void SqliteProvider::Export(const std::wstring& path)
 
 			/* note detail maps to Note, need to add 2 segments for comments and source code, body maps to description in the note */
 		}
+
+		for (std::map<unsigned long, Shelf>::iterator it = header.begin(); it != header.end(); ++it)
+		{
+			stmt = db.PrepareStatement("SELECT ID, NAME, COMMENTS FROM NoteHeader WHERE NOTEBOOKID = ?;");
+			stmt.Bind(1, wxLongLong(it->first));
+			set = stmt.ExecuteQuery();
+			while (set.NextRow())
+			{
+				unsigned long id = set.GetInt64("ID").ToLong();
+				std::wstring name = set.GetAsString("NAME").ToStdWstring();
+				Subject subject(it->second.getShelfId(), name);
+				if (!set.IsNull("COMMENTS"))
+				{
+					std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
+					subject.setComments(comments);
+				}
+				//Insert(&subject);
+				subjects.insert(std::make_pair(id, subject));
+				GlobalConstants::PrintError(L"Subect:" + subject.getTitle(), S_OK);
+			}
+		}
+
+		/* insert a default publication for each subject */
+		for (std::map<unsigned long, Subject>::iterator it = subjects.begin(); it != subjects.end(); ++it)
+		{
+
+		}
+			
 	}
 	catch (wxSQLite3Exception& ex)
 	{

@@ -14,8 +14,11 @@ Publication::Publication(const unsigned long subjectId, const std::wstring& titl
 
 Publication::Publication(const Publication &publication) {
 	
+	this->setPublicationId(publication.getPublicationId());
 	this->setTitle(publication.getTitle());
+	this->setType(publication.getType());
 	this->setSubjectId(publication.getSubjectId());
+	this->setComments(publication.getComments());
 }
 
 

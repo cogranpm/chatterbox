@@ -18,9 +18,10 @@ Subject::Subject(const unsigned long shelfId, const std::wstring& title) : _shel
 }
 
 Subject::Subject(const Subject &subject) {
-	
+	this->setSubjectId(subject.getSubjectId());
 	this->setTitle(subject.getTitle());
 	this->setShelfId(subject.getShelfId());
+	this->setComments(subject.getComments());
 }
 
 Subject& Subject::operator=(const Subject &subject)
