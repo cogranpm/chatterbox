@@ -357,6 +357,7 @@ pnlMain::pnlMain( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlMain::OnInitDialog ) );
 	txtTitle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlMain::TitleOnText ), NULL, this );
 	cboType->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( pnlMain::TypeOnCombobox ), NULL, this );
+	txtComments->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlMain::CommentsOnText ), NULL, this );
 	btnApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::ApplyOnButtonClick ), NULL, this );
 	btnApply->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::ApplyOnUpdateUI ), NULL, this );
 	btnCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::CancelOnButtonClick ), NULL, this );
@@ -404,6 +405,7 @@ pnlMain::~pnlMain()
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlMain::OnInitDialog ) );
 	txtTitle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlMain::TitleOnText ), NULL, this );
 	cboType->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( pnlMain::TypeOnCombobox ), NULL, this );
+	txtComments->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlMain::CommentsOnText ), NULL, this );
 	btnApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::ApplyOnButtonClick ), NULL, this );
 	btnApply->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlMain::ApplyOnUpdateUI ), NULL, this );
 	btnCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlMain::CancelOnButtonClick ), NULL, this );

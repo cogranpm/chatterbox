@@ -729,24 +729,38 @@ void SqliteProvider::CreateSampleData()
 void SqliteProvider::Export(const std::wstring& path)
 {
 	wxSQLite3Database db;
-	db.Open(path);
 
-	wxSQLite3Statement stmt = db.PrepareStatement("SELECT ID, NAME FROM NoteBook;");
-	wxSQLite3ResultSet set = stmt.ExecuteQuery();
-	while (set.NextRow())
+	try
 	{
-		/* map notebook to shelf */
-		unsigned long id = set.GetInt64("ID").ToLong();
+		db.Open(path);
 
-		/* note header maps to subject */
+		wxSQLite3Statement stmt = db.PrepareStatement("SELECT ID, NAME, COMMENTS FROM NoteBook;");
+		wxSQLite3ResultSet set = stmt.ExecuteQuery();
+		while (set.NextRow())
+		{
+			/* map notebook to shelf */
+			unsigned long id = set.GetInt64("ID").ToLong();
+			std::wstring name = set.GetAsString("NAME").ToStdWstring();
+			Shelf shelf(name);
+			if (!set.IsNull("COMMENTS"))
+			{
+				std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
+				shelf.setComments(comments);
+			}
 
-		/* need to add a default publication - perhaps call it imported */
+			/* note header maps to subject */
 
-		/* need to add a default topic, call it Topic? */
+			/* need to add a default publication - perhaps call it imported */
 
-		/* note detail maps to Note, need to add 2 segments for comments and source code, body maps to description in the note */
+			/* need to add a default topic, call it Topic? */
+
+			/* note detail maps to Note, need to add 2 segments for comments and source code, body maps to description in the note */
+		}
 	}
-
+	catch (wxSQLite3Exception& ex)
+	{
+		GlobalConstants::PrintError(ex.GetMessage().ToStdWstring(), S_OK);
+	}
 
 	db.Close();
 }

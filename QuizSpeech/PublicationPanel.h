@@ -103,6 +103,7 @@ class pnlMain : public wxPanel
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void TitleOnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void TypeOnCombobox( wxCommandEvent& event ) { event.Skip(); }
+		virtual void CommentsOnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ApplyOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ApplyOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void CancelOnButtonClick( wxCommandEvent& event ) { event.Skip(); }

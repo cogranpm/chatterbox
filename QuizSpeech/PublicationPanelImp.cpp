@@ -331,6 +331,11 @@ void PublicationPanelImp::TitleOnText( wxCommandEvent& event )
 	this->_viewModel->GetPublication()->SetDirty(true);
 }
 
+void PublicationPanelImp::CommentsOnText(wxCommandEvent& event)
+{
+	this->_viewModel->GetPublication()->SetDirty(true);
+}
+
 void PublicationPanelImp::TypeOnCombobox( wxCommandEvent& event ) 
 { 
 	this->_viewModel->GetPublication()->SetDirty(true);
@@ -342,8 +347,8 @@ void PublicationPanelImp::ApplyOnButtonClick( wxCommandEvent& event )
 		&& this->txtTitle->GetValidator()->TransferFromWindow()
 		&& txtComments->GetValidator()->TransferFromWindow())
 	{
-		this->_viewModel->GetPublication()->setTitle(this->txtTitle->GetValue().ToStdWstring());
-		_viewModel->GetPublication()->setComments(_comments);
+		this->_viewModel->GetPublication()->setTitle(_title.ToStdWstring());
+		_viewModel->GetPublication()->setComments(_comments.ToStdWstring());
 		PublicationType* data = dynamic_cast<PublicationType*>(this->cboType->GetClientObject(this->cboType->GetSelection()));
 		this->_viewModel->GetPublication()->setType(data->getKey());
 		wxGetApp().GetProvider()->Update(this->_viewModel->GetPublication());

@@ -62,6 +62,7 @@ class PublicationPanelImp : public pnlMain
 	protected:
 		void OnInitDialog( wxInitDialogEvent& event );
 		void TitleOnText( wxCommandEvent& event );
+		void CommentsOnText(wxCommandEvent& event);
 		void TypeOnCombobox( wxCommandEvent& event );
 		void ApplyOnButtonClick( wxCommandEvent& event );
 		void ApplyOnUpdateUI( wxUpdateUIEvent& event ) ;
