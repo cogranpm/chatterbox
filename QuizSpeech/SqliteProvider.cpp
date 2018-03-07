@@ -748,7 +748,7 @@ void SqliteProvider::Export(const std::wstring& path)
 				std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
 				shelf.setComments(comments);
 			}
-			//Insert(&shelf);
+			Insert(&shelf);
 			header.insert(std::make_pair(id, shelf));
 			
 			/* note header maps to subject */
@@ -775,7 +775,7 @@ void SqliteProvider::Export(const std::wstring& path)
 					std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
 					subject.setComments(comments);
 				}
-				//Insert(&subject);
+				Insert(&subject);
 				subjects.insert(std::make_pair(id, subject));
 				GlobalConstants::PrintError(L"Subect:" + subject.getTitle(), S_OK);
 			}
@@ -784,7 +784,65 @@ void SqliteProvider::Export(const std::wstring& path)
 		/* insert a default publication for each subject */
 		for (std::map<unsigned long, Subject>::iterator it = subjects.begin(); it != subjects.end(); ++it)
 		{
+			Publication pub(it->second.getSubjectId(), L"Import");
+			pub.setType(5);
+			pub.setComments(L"Imported from Study Manager");
+			Insert(&pub);
+			
+			Topic topic(pub.getPublicationId(), L"Default");
+			Insert(&topic);
 
+			stmt = db.PrepareStatement("SELECT ID, NAME, BODY, SOURCECODE, COMMENTS FROM NOTEDETAIL WHERE NOTEHEADERID = ?;");
+			stmt.Bind(1, wxLongLong(it->first));
+			set = stmt.ExecuteQuery();
+			while (set.NextRow())
+			{
+				unsigned long id = set.GetInt64("ID").ToLong();
+				std::wstring name;
+				std::wstring body;
+				std::wstring sourceCode;
+				std::wstring comments;
+
+				if (!set.IsNull("NAME"))
+				{
+					name = set.GetAsString("NAME").ToStdWstring();
+				}
+				if (!set.IsNull("BODY"))
+				{
+					body = set.GetAsString("BODY").ToStdWstring();
+				}
+				if (!set.IsNull("COMMENTS"))
+				{
+					comments = set.GetAsString("COMMENTS").ToStdWstring();
+				}
+				if (!set.IsNull("SOURCECODE"))
+				{
+					comments = set.GetAsString("SOURCECODE").ToStdWstring();
+				}
+
+				Note note(topic.getTopicId());
+				note.SetTitle(name);
+				note.SetDescription(comments);
+				Insert(&note);
+
+				if (body.size() > 0)
+				{
+					NoteSegment bodySegment(note.GetNoteId());
+					bodySegment.SetBody(body);
+					bodySegment.SetTitle(L"Body");
+					Insert(&bodySegment);
+				}
+
+				if (sourceCode.size() > 0)
+				{
+					NoteSegment sourceSegment(note.GetNoteId());
+					sourceSegment.SetBody(sourceCode);
+					sourceSegment.SetTitle(L"Source Code");
+					Insert(&sourceSegment);
+				}
+
+				//GlobalConstants::PrintError(L"Note:" + note.GetTitle(), S_OK);
+			}
 		}
 			
 	}
