@@ -7,7 +7,7 @@
 #include "DictationOverlayClientHelper.h"
 #include "SegmentTemplateDialogImp.h"
 #include "ActionCommandParser.h"
-#include "SAConfirmDialog.h"
+#include "SAConfirmDialogImp.h"
 
 wxBEGIN_EVENT_TABLE(NoteDialogImp, NoteDialog)
 	EVT_TIMER(InitFormTimer, NoteDialogImp::OnProgressTimer)
@@ -206,18 +206,20 @@ void NoteDialogImp::CloseMe(wxCloseEvent* event)
 {
 	if (viewModel.GetNote()->GetDirty())
 	{
-		SAConfirmDialog dlg(this, wxString(L"Unsaved Changes"), wxString(L"You have unsaved changes, are you sure want to discard them?"));
-		if (dlg.ShowModal() != wxID_OK)
+		SAConfirmDialogImp dlg(this, wxString(L"Unsaved Changes"), wxString(L"You have unsaved changes, are you sure want to discard them?"));
+		if (dlg.ShowModal() != wxYES)
 		{
 			if (event != nullptr)
 			{
 				event->Veto();
 			}
+			SetupSpeechHandlers();
 			return;
 		}
 	}
 	
 	this->EndModal(wxID_CANCEL);
+	//this->Close();
 }
 
 void NoteDialogImp::RecordTitle()
