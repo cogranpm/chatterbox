@@ -206,7 +206,7 @@ void NoteDialogImp::CloseMe(wxCloseEvent* event)
 {
 	if (viewModel.GetNote()->GetDirty())
 	{
-		SAConfirmDialog dlg(this);
+		SAConfirmDialog dlg(this, wxString(L"Unsaved Changes"), wxString(L"You have unsaved changes, are you sure want to discard them?"));
 		if (dlg.ShowModal() != wxID_OK)
 		{
 			if (event != nullptr)
