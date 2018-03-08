@@ -101,6 +101,23 @@ void SqliteProvider::initDB(const wxString dbPath)
 				trans.Rollback();
 			}
 		}
+
+		if (ver == 2)
+		{
+			/* need to add a column comment to shelf, subject and publication */
+			wxSQLite3Transaction trans(db);
+			try
+			{
+				this->ddl->AddColumn("Topic", "Comments", "VARCHAR");
+				SetVersion(3);
+				trans.Commit();
+			}
+			catch (wxSQLite3Exception &e)
+			{
+				trans.Rollback();
+			}
+		}
+
 	}
 	catch (wxSQLite3Exception &e)
 	{
@@ -362,24 +379,38 @@ void SqliteProvider::Insert(Topic* topic)
 		throw "Invalid argument, Topic had null PublicationId";
 		return;
 	}
-	wxSQLite3Statement stmt = db->PrepareStatement("insert into Topic(PublicationId, Name) values (?, ?);");
+	wxSQLite3Statement stmt = db->PrepareStatement("insert into Topic(PublicationId, Name, Comments) values (?, ?, ?);");
 	stmt.Bind(1, wxLongLong(topic->getPublicationId()));
 	stmt.Bind(2, topic->getName());
-	
+	if (topic->getComments().empty())
+	{
+		stmt.BindNull(3);
+	}
+	else
+	{
+		stmt.Bind(3, topic->getComments());
+	}
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	topic->setTopicId(id);
-	
 }
 
 void SqliteProvider::Update(Topic* topic)
 {
 	try
 	{
-		wxSQLite3Statement stmt = db->PrepareStatement("update Topic set Name = ?, PublicationId = ? where TopicId = ?;");
+		wxSQLite3Statement stmt = db->PrepareStatement("update Topic set Name = ?, PublicationId = ?, Comments = ? where TopicId = ?;");
 		stmt.Bind(1, topic->getName());
 		stmt.Bind(2, wxLongLong(topic->getPublicationId()));
-		stmt.Bind(3, wxLongLong(topic->getTopicId()));
+		if (topic->getComments().empty())
+		{
+			stmt.BindNull(3);
+		}
+		else
+		{
+			stmt.Bind(3, topic->getComments());
+		}
+		stmt.Bind(4, wxLongLong(topic->getTopicId()));
 		stmt.ExecuteUpdate();
 	}
 	catch(wxSQLite3Exception& e)
@@ -397,7 +428,7 @@ void SqliteProvider::Delete(Topic* topic)
 
 void SqliteProvider::GetTopicsByPublication(Publication* publication, boost::ptr_vector<Topic>* topicList)
 {
-	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Name, TopicId FROM Topic WHERE PublicationId = ? ORDER BY CreatedDate ASC;");
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT PublicationId, Name, Comments, TopicId FROM Topic WHERE PublicationId = ? ORDER BY CreatedDate ASC;");
 	stmt.Bind(1, wxLongLong(publication->getPublicationId()));
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	while(set.NextRow())
@@ -413,7 +444,10 @@ void SqliteProvider::SetTopicFromRecord(Topic* topic, wxSQLite3ResultSet& set)
 	topic->setPublicationId(set.GetInt64("PublicationId").ToLong());
 	topic->setTopicId(set.GetInt64("TopicId").ToLong());
 	topic->setName(set.GetAsString("Name").ToStdWstring());
-	
+	if (!set.IsNull("Comments"))
+	{
+		topic->setComments(set.GetAsString("Comments").ToStdWstring());
+	}
 }
 
 
@@ -728,40 +762,52 @@ void SqliteProvider::CreateSampleData()
 
 void SqliteProvider::Export(const std::wstring& path)
 {
+	/* IMPORT data from previous version of application with different structure */
+
+	/* note header maps to subject */
+
+	/* need to add a default publication - perhaps call it imported */
+
+	/* need to add a default topic, call it Topic? */
+
+	/* note detail maps to Note, need to add 2 segments for comments and source code, body maps to description in the note */
+
 	wxSQLite3Database db;
-	std::map<unsigned long, Shelf> header;
-	std::map<unsigned long, Subject> subjects;
+	std::map<unsigned long, Subject> notebooks;
+	std::map<unsigned long, Topic> topics;
 	try
 	{
 		db.Open(path);
 
+		Shelf shelf(L"Study Manager");
+		Insert(&shelf);
 		wxSQLite3Statement stmt = db.PrepareStatement("SELECT ID, NAME, COMMENTS FROM NoteBook;");
 		wxSQLite3ResultSet set = stmt.ExecuteQuery();
 		while (set.NextRow())
 		{
-			/* map notebook to shelf */
+			/* map notebook to subject */
 			unsigned long id = set.GetInt64("ID").ToLong();
 			std::wstring name = set.GetAsString("NAME").ToStdWstring();
-			Shelf shelf(name);
+			Subject subject(shelf.getShelfId(), name);
 			if (!set.IsNull("COMMENTS"))
 			{
 				std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
-				shelf.setComments(comments);
+				subject.setComments(comments);
 			}
-			Insert(&shelf);
-			header.insert(std::make_pair(id, shelf));
-			
-			/* note header maps to subject */
-
-			/* need to add a default publication - perhaps call it imported */
-
-			/* need to add a default topic, call it Topic? */
-
-			/* note detail maps to Note, need to add 2 segments for comments and source code, body maps to description in the note */
+			Insert(&subject);
+			GlobalConstants::PrintError(L"Subect:" + subject.getTitle(), S_OK);
+			notebooks.insert(std::make_pair(id, subject));
 		}
 
-		for (std::map<unsigned long, Shelf>::iterator it = header.begin(); it != header.end(); ++it)
+		for (std::map<unsigned long, Subject>::iterator it = notebooks.begin(); it != notebooks.end(); ++it)
 		{
+			/* do a single publication for each subject */
+			Publication pub(it->second.getSubjectId(), L"Default");
+			pub.setType(5);
+			pub.setComments(L"Imported from Study Manager");
+			Insert(&pub);
+
+			/* create a topic for each note header */
 			stmt = db.PrepareStatement("SELECT ID, NAME, COMMENTS FROM NoteHeader WHERE NOTEBOOKID = ?;");
 			stmt.Bind(1, wxLongLong(it->first));
 			set = stmt.ExecuteQuery();
@@ -769,29 +815,20 @@ void SqliteProvider::Export(const std::wstring& path)
 			{
 				unsigned long id = set.GetInt64("ID").ToLong();
 				std::wstring name = set.GetAsString("NAME").ToStdWstring();
-				Subject subject(it->second.getShelfId(), name);
+				Topic topic(pub.getPublicationId(), name);
 				if (!set.IsNull("COMMENTS"))
 				{
 					std::wstring comments = set.GetAsString("COMMENTS").ToStdWstring();
-					subject.setComments(comments);
+					topic.setComments(comments);
 				}
-				Insert(&subject);
-				subjects.insert(std::make_pair(id, subject));
-				GlobalConstants::PrintError(L"Subect:" + subject.getTitle(), S_OK);
+				Insert(&topic);
+				topics.insert(std::make_pair(id, topic));
+				GlobalConstants::PrintError(L"Toipic:" + topic.getName(), S_OK);
 			}
 		}
 
-		/* insert a default publication for each subject */
-		for (std::map<unsigned long, Subject>::iterator it = subjects.begin(); it != subjects.end(); ++it)
+		for (std::map<unsigned long, Topic>::iterator it = topics.begin(); it != topics.end(); ++it)
 		{
-			Publication pub(it->second.getSubjectId(), L"Import");
-			pub.setType(5);
-			pub.setComments(L"Imported from Study Manager");
-			Insert(&pub);
-			
-			Topic topic(pub.getPublicationId(), L"Default");
-			Insert(&topic);
-
 			stmt = db.PrepareStatement("SELECT ID, NAME, BODY, SOURCECODE, COMMENTS FROM NOTEDETAIL WHERE NOTEHEADERID = ?;");
 			stmt.Bind(1, wxLongLong(it->first));
 			set = stmt.ExecuteQuery();
@@ -820,7 +857,7 @@ void SqliteProvider::Export(const std::wstring& path)
 					sourceCode = set.GetAsString("SOURCECODE").ToStdWstring();
 				}
 
-				Note note(topic.getTopicId());
+				Note note(it->second.getTopicId());
 				note.SetTitle(name);
 				note.SetDescription(comments);
 				Insert(&note);
@@ -841,7 +878,7 @@ void SqliteProvider::Export(const std::wstring& path)
 					Insert(&sourceSegment);
 				}
 
-				//GlobalConstants::PrintError(L"Note:" + note.GetTitle(), S_OK);
+				GlobalConstants::PrintError(L"Note:" + note.GetTitle(), S_OK);
 			}
 		}
 			

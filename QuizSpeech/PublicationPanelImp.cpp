@@ -425,9 +425,11 @@ void PublicationPanelImp::AddTopic()
 {
 	TopicDialogImp dialog(this);
 	dialog._title = wxString("");
+	dialog._comments = wxString("");
 	if (dialog.ShowModal() == wxID_OK && !(dialog._title.IsEmpty()))
 	{
 		Topic* newTopic = new Topic(_viewModel->GetPublication()->getPublicationId(), dialog._title.ToStdWstring());
+		newTopic->setComments(dialog._comments.ToStdWstring());
 		_viewModel->AddTopic(newTopic);
 		wxGetApp().GetProvider()->Insert(_viewModel->GetTopic());
 		this->RenderTopics(_viewModel->GetTopic());
@@ -479,12 +481,13 @@ void PublicationPanelImp::EditTopic()
 	}
 	TopicDialogImp dialog(this);
 	dialog._title = topic->getName();
+	dialog._comments = topic->getComments();
 	if(dialog.ShowModal() == wxID_OK && !(dialog._title.IsEmpty()))
 	{
-		wxString currentTitle(topic->getName());
-		if(!(currentTitle.IsSameAs(dialog._title)))
+		topic->setName(dialog._title.ToStdWstring());
+		topic->setComments(dialog._comments.ToStdWstring());
+		if(topic->GetDirty())
 		{
-			topic->setName(dialog._title.ToStdWstring());
 			wxGetApp().GetProvider()->Update(topic);
 			this->RenderTopics(topic);
 		}

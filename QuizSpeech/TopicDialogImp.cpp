@@ -23,7 +23,6 @@ void TopicDialogImp::OnOKButtonClick( wxCommandEvent& event )
 {
 	if (!this->OnOK())
 	{
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		event.Skip();
 	}
 }
@@ -31,6 +30,7 @@ void TopicDialogImp::OnOKButtonClick( wxCommandEvent& event )
 bool TopicDialogImp::OnOK()
 {
 	this->txtTitle->GetValidator()->TransferFromWindow();
+	txtComments->GetValidator()->TransferFromWindow();
 	if (this->_title.IsEmpty())
 	{
 		this->m_infoCtrl1->ShowMessage("Title may not be empty");
@@ -92,11 +92,20 @@ void TopicDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Comma
 		txtTitle->SetFocus();
 		return;
 	}
+	else if (boost::algorithm::equals(actionTarget, L"comments"))
+	{
+		txtComments->SetFocus();
+		return;
+	}
 	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
 	{
 		if (this->txtTitle->HasFocus())
 		{
 			this->txtTitle->Clear();
+		}
+		else if (this->txtComments->HasFocus())
+		{
+			this->txtComments->Clear();
 		}
 		return;
 	}
@@ -106,12 +115,23 @@ void TopicDialogImp::OnCommandRecognized(std::wstring& phrase, std::vector<Comma
 		{
 			this->txtTitle->SelectAll();
 		}
+		else if (this->txtComments->HasFocus())
+		{
+			this->txtComments->SelectAll();
+		}
 		return;
 	}
 	else
 	{
 		//must be free text
-		this->txtTitle->AppendText(phrase);
+		if (this->txtComments->HasFocus())
+		{
+			this->txtComments->AppendText(phrase);
+		}
+		else
+		{
+			this->txtTitle->AppendText(phrase);
+		}
 		return;
 	}
 

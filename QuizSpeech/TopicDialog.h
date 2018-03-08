@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __TOPICDIALOG_H__
@@ -19,6 +19,7 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
+#include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -35,8 +36,10 @@ class TopicDialog : public wxDialog
 	
 	protected:
 		wxInfoBar* m_infoCtrl1;
-		wxStaticText* m_staticText6;
+		wxStaticText* lblTitle;
 		wxTextCtrl* txtTitle;
+		wxStaticText* lblComments;
+		wxTextCtrl* txtComments;
 		wxStdDialogButtonSizer* m_sdbSizer2;
 		wxButton* m_sdbSizer2OK;
 		wxButton* m_sdbSizer2Cancel;
@@ -49,8 +52,9 @@ class TopicDialog : public wxDialog
 	
 	public:
 		wxString _title; 
+		wxString _comments; 
 		
-		TopicDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Topic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 473,147 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("TopicDialog") ); 
+		TopicDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Topic"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 502,238 ), long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = wxT("TopicDialog") ); 
 		~TopicDialog();
 	
 };
