@@ -58,6 +58,8 @@ void TopicDialogImp::OnInitDialog(wxInitDialogEvent& event)
 	ruleNames.push_back(MyApp::CONTROL_ACTION);
 	ruleNames.push_back(MyApp::RULE_DICTATION_ENTRY);
 	this->SetupSpeechHandlers();
+	txtTitle->GetValidator()->TransferToWindow();
+	txtComments->GetValidator()->TransferToWindow();
 }
 
 

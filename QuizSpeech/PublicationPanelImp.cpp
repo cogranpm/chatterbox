@@ -492,6 +492,7 @@ void PublicationPanelImp::EditTopic()
 			this->RenderTopics(topic);
 		}
 	}
+	SetupSpeechHandlers();
 }
 
 

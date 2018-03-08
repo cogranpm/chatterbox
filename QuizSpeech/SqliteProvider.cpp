@@ -504,6 +504,7 @@ void SqliteProvider::Insert(Note* note)
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	note->SetNoteId(id);
+	note->SetDirty(false);
 }
 
 void SqliteProvider::Update(Note* note)
@@ -550,6 +551,7 @@ void SqliteProvider::Update(Note* note)
 		}
 		stmt.Bind(6, wxLongLong(note->GetNoteId()));
 		stmt.ExecuteUpdate();	
+		note->SetDirty(false);
 	}
 	catch(wxSQLite3Exception& e)
 	{
@@ -634,6 +636,7 @@ void SqliteProvider::SetNoteFromRecord(Note* note, wxSQLite3ResultSet& set)
 	}
 	note->SetTopicId(set.GetInt64("TopicId").ToLong());
 	note->SetCreatedDate(set.GetDateTime("CreatedDate"));
+	note->SetDirty(false);
 }
 
 

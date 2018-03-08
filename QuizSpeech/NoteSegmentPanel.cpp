@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NoteSegmentPanel.h"
@@ -42,7 +42,7 @@ NoteSegmentPanel::NoteSegmentPanel( wxWindow* parent, wxWindowID id, const wxPoi
 	bSizer11->Add( btnBodyClear, 0, 0, 5 );
 	
 	
-	bodyToolbarSizer->Add( bSizer11, 1, wxEXPAND, 5 );
+	bodyToolbarSizer->Add( bSizer11, 0, wxEXPAND, 5 );
 	
 	szAudioPlayer = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -50,7 +50,7 @@ NoteSegmentPanel::NoteSegmentPanel( wxWindow* parent, wxWindowID id, const wxPoi
 	bodyToolbarSizer->Add( szAudioPlayer, 0, 0, 5 );
 	
 	
-	bodySizer->Add( bodyToolbarSizer, 0, 0, 5 );
+	bodySizer->Add( bodyToolbarSizer, 1, 0, 5 );
 	
 	
 	bSizer9->Add( bodySizer, 0, wxEXPAND|wxTOP, 5 );
@@ -59,12 +59,10 @@ NoteSegmentPanel::NoteSegmentPanel( wxWindow* parent, wxWindowID id, const wxPoi
 	bodyEntrySizer = new wxBoxSizer( wxVERTICAL );
 	
 	txtValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	txtValue->SetMinSize( wxSize( -1,150 ) );
-	
-	bodyEntrySizer->Add( txtValue, 1, wxEXPAND|wxLEFT, 5 );
+	bodyEntrySizer->Add( txtValue, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer9->Add( bodyEntrySizer, 2, wxEXPAND|wxLEFT, 5 );
+	bSizer9->Add( bodyEntrySizer, 1, wxEXPAND|wxLEFT, 5 );
 	
 	
 	bSizer4->Add( bSizer9, 1, wxEXPAND, 5 );

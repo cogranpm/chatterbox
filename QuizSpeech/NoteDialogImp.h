@@ -53,7 +53,7 @@ private:
 		void SaveSegmentTypes(SegmentTypeViewModel& viewModel);
 
 		void OnCommandRecognized(std::wstring& phrase, const std::vector<CommandProperty>& commandPropertyList);
-		void CloseMe();
+		void CloseMe(wxCloseEvent* event);
 		void RecordTitle();
 		void RecordDescription();
 		void NewSegment();
@@ -62,6 +62,7 @@ private:
 		void OnProgressTimer(wxTimerEvent& event);
 
 	protected:
+		void OnClose(wxCloseEvent& event);
 		void OnInitDialog( wxInitDialogEvent& event );
 		void AddSegmentOnButtonClick( wxCommandEvent& event );
 		void ClearSegmentOnButtonClick(wxCommandEvent& event);
@@ -70,6 +71,7 @@ private:
 
 	//	void DeleteOnButtonClick( wxCommandEvent& event );
 		void OnOKButtonClick( wxCommandEvent& event );
+		void OnCancelButtonClick(wxCommandEvent& event);
 		void TypesOnListBox(wxCommandEvent& event);
 		void TypesOnListBoxDClick(wxCommandEvent& event);
 		void UnlockTitleOnButtonClick(wxCommandEvent& event);

@@ -18,10 +18,10 @@ public:
 	void SetNoteId(unsigned long id) {_noteId = id;}
 	bool IsNew() { return !(_noteId > 0); }
 	unsigned long GetTopicId() const {return _topicId;}
-	void SetTopicId(unsigned long id) {_topicId = id;}
+	void SetTopicId(unsigned long id);
 
 	const std::wstring& GetTitle() const { return _title; }
-	void SetTitle(const std::wstring &title) { _title = title; }
+	void SetTitle(const std::wstring &title);
 
 	const std::wstring GetLimitedDescription() const
 	{
@@ -43,16 +43,16 @@ public:
 
 	}
 	const std::wstring& GetDescription() const { return _description; }
-	void SetDescription(const std::wstring &description) { _description = description; }
+	void SetDescription(const std::wstring &description);
 
 	const std::wstring& GetTitleAudioFile() const { return titleAudioFile; }
-	void SetTitleAudioFile(const std::wstring &titleAudioFile) { this->titleAudioFile = titleAudioFile; }
+	void SetTitleAudioFile(const std::wstring &titleAudioFile);
 
 	const std::wstring& GetDescriptionAudioFile() const { return descriptionAudioFile; }
-	void SetDescriptionAudioFile(const std::wstring &descriptionAudioFile) { this->descriptionAudioFile = descriptionAudioFile; }
+	void SetDescriptionAudioFile(const std::wstring &descriptionAudioFile);
 
 	const wxDateTime& GetCreatedDate() const { return _createdDate;}
-	void SetCreatedDate(const wxDateTime &createdDate){ _createdDate = createdDate;}
+	void SetCreatedDate(const wxDateTime &createdDate);
 
 private:
 	unsigned long _noteId;

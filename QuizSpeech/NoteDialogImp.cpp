@@ -7,7 +7,7 @@
 #include "DictationOverlayClientHelper.h"
 #include "SegmentTemplateDialogImp.h"
 #include "ActionCommandParser.h"
-
+#include "SAConfirmDialog.h"
 
 wxBEGIN_EVENT_TABLE(NoteDialogImp, NoteDialog)
 	EVT_TIMER(InitFormTimer, NoteDialogImp::OnProgressTimer)
@@ -85,6 +85,11 @@ void NoteDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	}
 }
 
+void NoteDialogImp::OnClose(wxCloseEvent& event)
+{
+	CloseMe(&event);
+}
+
 void NoteDialogImp::OnProgressTimer(wxTimerEvent& event)
 {
 	timer->Stop();
@@ -123,7 +128,7 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 
 	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
-		CloseMe();
+		CloseMe(nullptr);
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
@@ -192,15 +197,27 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 	}
 	else if (boost::algorithm::equals(actionName, L"close"))
 	{
-		CloseMe();
+		CloseMe(nullptr);
 		return;
 	}
 }
 
-void NoteDialogImp::CloseMe()
+void NoteDialogImp::CloseMe(wxCloseEvent* event)
 {
-	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
-	this->Close();
+	if (viewModel.GetNote()->GetDirty())
+	{
+		SAConfirmDialog dlg(this);
+		if (dlg.ShowModal() != wxID_OK)
+		{
+			if (event != nullptr)
+			{
+				event->Veto();
+			}
+			return;
+		}
+	}
+	
+	this->EndModal(wxID_CANCEL);
 }
 
 void NoteDialogImp::RecordTitle()
@@ -490,6 +507,11 @@ void NoteDialogImp::TypesOnListBox(wxCommandEvent& event)
 void NoteDialogImp::TypesOnListBoxDClick(wxCommandEvent& event)
 {
 	this->AddSelectedSegments();
+}
+
+void NoteDialogImp::OnCancelButtonClick(wxCommandEvent& event)
+{ 
+	CloseMe(nullptr);
 }
 
 void NoteDialogImp::OnOKButtonClick( wxCommandEvent& event ) 

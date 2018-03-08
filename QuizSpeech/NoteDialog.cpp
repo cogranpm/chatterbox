@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "NoteDialog.h"
@@ -232,6 +232,7 @@ NoteDialog::NoteDialog( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NoteDialog::OnClose ) );
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( NoteDialog::OnInitDialog ) );
 	btnPlayAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::PlayAllOnButtonClick ), NULL, this );
 	btnStopAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::StopAllOnButtonClick ), NULL, this );
@@ -254,6 +255,7 @@ NoteDialog::NoteDialog( wxWindow* parent, wxWindowID id, const wxString& title, 
 NoteDialog::~NoteDialog()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NoteDialog::OnClose ) );
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( NoteDialog::OnInitDialog ) );
 	btnPlayAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::PlayAllOnButtonClick ), NULL, this );
 	btnStopAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::StopAllOnButtonClick ), NULL, this );
