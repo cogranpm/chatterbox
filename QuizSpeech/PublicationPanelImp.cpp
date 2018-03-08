@@ -98,6 +98,10 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	colNoteIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
 	colNoteTitle->SetFlag(wxDATAVIEW_COL_SORTABLE);
 	colNoteTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+	colNoteDescription->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+	colNotesCreatedDate->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+	colNoteSegmentCount->SetWidth(wxCOL_WIDTH_AUTOSIZE);
+	colNoteSegmentTitle->SetWidth(wxCOL_WIDTH_AUTOSIZE);
 
 	colQuizIndex->SetWidth(MyApp::DEFAULT_INDEX_COLUMN_WIDTH);
 	colQuizIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
