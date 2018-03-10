@@ -116,7 +116,7 @@ class MainFrame : public wxFrame
 	
 	public:
 		
-		MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Main Frame"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1133,716 ), long style = wxDEFAULT_FRAME_STYLE|wxMAXIMIZE|wxTAB_TRAVERSAL, const wxString& name = wxT("MainFrame") );
+		MainFrame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Chatterbox"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1133,716 ), long style = wxDEFAULT_FRAME_STYLE|wxMAXIMIZE|wxTAB_TRAVERSAL, const wxString& name = wxT("MainFrame") );
 		
 		~MainFrame();
 		
