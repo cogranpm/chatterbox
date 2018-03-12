@@ -326,7 +326,7 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 		//std::wstring rulePhraseForIndexSelection(L"select shelf ");
 		std::wstring rulePhraseForIndexSelection(L"");
 		rulePhraseForIndexSelection.append(index);
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select shelf"));
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"shelf"));
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 
@@ -865,7 +865,7 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 	else if(boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_SHELF))
 	{
 		//is it a list lookup
-		if (boost::algorithm::equals(actionName, L"select shelf index"))
+		if (boost::algorithm::equals(actionName, L"shelf index"))
 		{
 			int index = boost::lexical_cast<int>(actionTarget);
 			if (index <= m_dvlShelf->GetItemCount() && index > 0)
