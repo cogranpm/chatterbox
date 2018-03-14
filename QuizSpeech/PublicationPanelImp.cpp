@@ -412,7 +412,8 @@ void PublicationPanelImp::RenderTopics(Topic* topic)
 		_topicModel->AppendItem( data, wxUIntPtr(&list->at(i)));
 		if(topic != nullptr && list->at(i).getTopicId() == topic->getTopicId())
 		{
-			this->lstTopics->SelectRow(i);
+			lstTopics->SelectRow(i);
+			OnSelectTopic(&list->at(i));
 		}
 		std::wstring rulePhrase(L"");
 		rulePhrase.append(list->at(i).getName());
