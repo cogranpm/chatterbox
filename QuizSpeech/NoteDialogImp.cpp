@@ -9,7 +9,7 @@
 #include "ActionCommandParser.h"
 #include "SAConfirmDialogImp.h"
 
-wxBEGIN_EVENT_TABLE(NoteDialogImp, NoteDialog)
+wxBEGIN_EVENT_TABLE(NoteDialogImp, pnlNote)
 	EVT_TIMER(InitFormTimer, NoteDialogImp::OnProgressTimer)
 wxEND_EVENT_TABLE()
 
@@ -26,7 +26,7 @@ struct findSegmentHeader
 
 NoteDialogImp::NoteDialogImp( wxWindow* parent, Note* note )
 :
-NoteDialog( parent ), viewModel(note), noteAudioPlayer(), ruleNames(), timer(nullptr)// viewModel(std::make_unique<NoteViewModel>(note))
+	pnlNote( parent ), viewModel(note), noteAudioPlayer(), ruleNames(), timer(nullptr)// viewModel(std::make_unique<NoteViewModel>(note))
 {
 	
 }
@@ -66,7 +66,7 @@ void NoteDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	this->btnStopAll->SetBitmap(*wxGetApp().GetImages().stop_icon);
 
 	this->typeInfo->SetPage(wxString("<html><body><p></p></body></html>"));
-	
+	//m_sdbSizer1Apply->Enable(false);
 	/* load all the segments for this note */
 	wxGetApp().GetProvider()->GetNoteSegmentsByNote(viewModel.GetNote(), viewModel.GetNoteSegmentList());
 	RenderNoteSegmentTypes();
@@ -81,7 +81,6 @@ void NoteDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	{
 		timer = new wxTimer(this, InitFormTimer);
 		timer->Start(300);
-		
 	}
 }
 
@@ -134,8 +133,8 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
 	{
 		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
-		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->m_sdbSizer1OK->GetId());
-		this->m_sdbSizer1OK->Command(evt);
+		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->m_sdbSizer1Apply->GetId());
+		this->m_sdbSizer1Apply->Command(evt);
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
@@ -218,7 +217,7 @@ void NoteDialogImp::CloseMe(wxCloseEvent* event)
 		}
 	}
 	
-	this->EndModal(wxID_CANCEL);
+//	this->EndModal(wxID_CANCEL);
 	//this->Close();
 }
 
@@ -531,7 +530,48 @@ void NoteDialogImp::OnOKButtonClick( wxCommandEvent& event )
 	viewModel.GetNote()->SetTitle(this->txtTitle->GetValue().ToStdWstring());
 	viewModel.GetNote()->SetDescription(this->txtDescription->GetValue().ToStdWstring());
 	/* if everything is ok */
+	OnSave();
 	event.Skip(); 
+}
+
+void NoteDialogImp::OnSave()
+{
+	/* save the note and all the segments from the view model in the dialog */
+	/* for each segment, insert */
+	if (!viewModel.GetNote()->IsNew())
+	{
+		wxGetApp().GetProvider()->Update(viewModel.GetNote());
+	}
+	else
+	{
+		wxGetApp().GetProvider()->Insert(viewModel.GetNote());
+	}
+
+	/* the dialog updates the view model */
+	boost::ptr_vector<NoteSegment>* list = viewModel.GetNoteSegmentList();
+	for (int i = 0; i < list->size(); i++)
+	{
+		NoteSegment* noteSegment = &(list->at(i));
+		noteSegment->SetNoteId(viewModel.GetNote()->GetNoteId());
+		/* process deletes first */
+		if (wxString(noteSegment->GetBody()).IsEmpty()
+			&& wxString(noteSegment->GetTitle()).IsEmpty()
+			&& !(noteSegment->IsNew()))
+		{
+			wxGetApp().GetProvider()->Delete(noteSegment);
+		}
+		else
+		{
+			if (!noteSegment->IsNew())
+			{
+				wxGetApp().GetProvider()->Update(noteSegment);
+			}
+			else
+			{
+				wxGetApp().GetProvider()->Insert(noteSegment);
+			}
+		}
+	}
 }
 
 

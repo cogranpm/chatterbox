@@ -24,15 +24,15 @@
 #include <wx/html/htmlwin.h>
 #include <wx/statbox.h>
 #include <wx/scrolwin.h>
-#include <wx/dialog.h>
+#include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class NoteDialog
+/// Class pnlNote
 ///////////////////////////////////////////////////////////////////////////////
-class NoteDialog : public wxDialog 
+class pnlNote : public wxPanel 
 {
 	private:
 	
@@ -60,11 +60,10 @@ class NoteDialog : public wxDialog
 		wxBoxSizer* panelSizer;
 		wxStaticBoxSizer* sbSegments;
 		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void PlayAllOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void StopAllOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -80,16 +79,16 @@ class NoteDialog : public wxDialog
 		virtual void EditSegmentOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void TypesOnListBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void TypesOnListBoxDClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		wxBoxSizer* szTitlePlayer;
 		wxBoxSizer* szDescriptionPlayer;
 		
-		NoteDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Notes"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 928,604 ), long style = wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER, const wxString& name = wxT("NoteDialog") ); 
-		~NoteDialog();
+		pnlNote( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+		~pnlNote();
 	
 };
 

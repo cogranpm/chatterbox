@@ -9,10 +9,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-NoteDialog::NoteDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxDialog( parent, id, title, pos, size, style, name )
+pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-	
 	dialogSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* buttonBar;
@@ -217,8 +215,8 @@ NoteDialog::NoteDialog( wxWindow* parent, wxWindowID id, const wxString& title, 
 	dialogSizer->Add( bSizer3, 2, wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
+	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
@@ -229,49 +227,45 @@ NoteDialog::NoteDialog( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->SetSizer( dialogSizer );
 	this->Layout();
 	
-	this->Centre( wxBOTH );
-	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NoteDialog::OnClose ) );
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( NoteDialog::OnInitDialog ) );
-	btnPlayAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::PlayAllOnButtonClick ), NULL, this );
-	btnStopAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::StopAllOnButtonClick ), NULL, this );
-	btnUnlockTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::UnlockTitleOnButtonClick ), NULL, this );
-	btnRecordTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::RecordTitleOnButtonClick ), NULL, this );
-	btnClearTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::ClearTitleOnButtonClick ), NULL, this );
-	btnUnlockDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::UnlockDescriptionOnButtonClick ), NULL, this );
-	btnRecordDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::RecordDescriptionOnButtonClick ), NULL, this );
-	btnClearDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::ClearDescriptionOnButtonClick ), NULL, this );
-	btnAddSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::AddSegmentOnButtonClick ), NULL, this );
-	btnClear->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::ClearSegmentOnButtonClick ), NULL, this );
-	btnNewSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::NewSegmentOnButtonClick ), NULL, this );
-	btnEditSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::EditSegmentOnButtonClick ), NULL, this );
-	lstTypes->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( NoteDialog::TypesOnListBox ), NULL, this );
-	lstTypes->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( NoteDialog::TypesOnListBoxDClick ), NULL, this );
-	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::OnCancelButtonClick ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::OnOKButtonClick ), NULL, this );
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlNote::OnInitDialog ) );
+	btnPlayAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::PlayAllOnButtonClick ), NULL, this );
+	btnStopAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::StopAllOnButtonClick ), NULL, this );
+	btnUnlockTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockTitleOnButtonClick ), NULL, this );
+	btnRecordTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordTitleOnButtonClick ), NULL, this );
+	btnClearTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearTitleOnButtonClick ), NULL, this );
+	btnUnlockDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockDescriptionOnButtonClick ), NULL, this );
+	btnRecordDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordDescriptionOnButtonClick ), NULL, this );
+	btnClearDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearDescriptionOnButtonClick ), NULL, this );
+	btnAddSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::AddSegmentOnButtonClick ), NULL, this );
+	btnClear->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearSegmentOnButtonClick ), NULL, this );
+	btnNewSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::NewSegmentOnButtonClick ), NULL, this );
+	btnEditSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::EditSegmentOnButtonClick ), NULL, this );
+	lstTypes->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( pnlNote::TypesOnListBox ), NULL, this );
+	lstTypes->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( pnlNote::TypesOnListBoxDClick ), NULL, this );
+	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnOKButtonClick ), NULL, this );
+	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnCancelButtonClick ), NULL, this );
 }
 
-NoteDialog::~NoteDialog()
+pnlNote::~pnlNote()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( NoteDialog::OnClose ) );
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( NoteDialog::OnInitDialog ) );
-	btnPlayAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::PlayAllOnButtonClick ), NULL, this );
-	btnStopAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::StopAllOnButtonClick ), NULL, this );
-	btnUnlockTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::UnlockTitleOnButtonClick ), NULL, this );
-	btnRecordTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::RecordTitleOnButtonClick ), NULL, this );
-	btnClearTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::ClearTitleOnButtonClick ), NULL, this );
-	btnUnlockDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::UnlockDescriptionOnButtonClick ), NULL, this );
-	btnRecordDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::RecordDescriptionOnButtonClick ), NULL, this );
-	btnClearDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::ClearDescriptionOnButtonClick ), NULL, this );
-	btnAddSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::AddSegmentOnButtonClick ), NULL, this );
-	btnClear->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::ClearSegmentOnButtonClick ), NULL, this );
-	btnNewSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::NewSegmentOnButtonClick ), NULL, this );
-	btnEditSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::EditSegmentOnButtonClick ), NULL, this );
-	lstTypes->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( NoteDialog::TypesOnListBox ), NULL, this );
-	lstTypes->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( NoteDialog::TypesOnListBoxDClick ), NULL, this );
-	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::OnCancelButtonClick ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( NoteDialog::OnOKButtonClick ), NULL, this );
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlNote::OnInitDialog ) );
+	btnPlayAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::PlayAllOnButtonClick ), NULL, this );
+	btnStopAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::StopAllOnButtonClick ), NULL, this );
+	btnUnlockTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockTitleOnButtonClick ), NULL, this );
+	btnRecordTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordTitleOnButtonClick ), NULL, this );
+	btnClearTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearTitleOnButtonClick ), NULL, this );
+	btnUnlockDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockDescriptionOnButtonClick ), NULL, this );
+	btnRecordDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordDescriptionOnButtonClick ), NULL, this );
+	btnClearDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearDescriptionOnButtonClick ), NULL, this );
+	btnAddSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::AddSegmentOnButtonClick ), NULL, this );
+	btnClear->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearSegmentOnButtonClick ), NULL, this );
+	btnNewSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::NewSegmentOnButtonClick ), NULL, this );
+	btnEditSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::EditSegmentOnButtonClick ), NULL, this );
+	lstTypes->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( pnlNote::TypesOnListBox ), NULL, this );
+	lstTypes->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( pnlNote::TypesOnListBoxDClick ), NULL, this );
+	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnOKButtonClick ), NULL, this );
+	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnCancelButtonClick ), NULL, this );
 	
 }

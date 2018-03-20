@@ -40,6 +40,8 @@ public:
 	bool GetDeleted() const { return _deleted;}
 	void SetDeleted(const bool deleted) { _deleted = deleted;}
 
+	bool IsNew() { return !(_noteSegmentId > 0); }
+
 private:
 	unsigned long _noteSegmentId;
 	unsigned long _noteId;

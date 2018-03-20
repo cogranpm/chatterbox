@@ -12,6 +12,7 @@
 #include "ShelfDataViewListStore.h"
 #include "PublicationTypeHelper.h"
 
+
 PublicationPanelImp::PublicationPanelImp( wxWindow* parent, Publication* publication)
 :
 pnlMain( parent ), _viewModel(new PublicationViewModel(publication)), noteListAudioPlayer(), noteAudioPlayer(), ruleNames(), isPlayingList(false)
@@ -611,14 +612,20 @@ void PublicationPanelImp::AddNote()
 	{
 		return;
 	}
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+	//wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 	Note* note = new Note(this->_viewModel->GetTopic()->getTopicId());
-	NoteDialogImp dialog(this, note);
-	if (dialog.ShowModal() == wxID_OK)
-	{
-		this->OnAfterNoteDialogClosed(dialog, note);
-	}
-	SetupSpeechHandlers();
+
+	//NoteDialogImp dialog(this, note);
+	NoteDialogImp* pnlNote = new NoteDialogImp(wxGetApp().GetMainFrame()->GetShelfNotebook(), note);
+	pnlNote->InitDialog();
+	wxGetApp().GetMainFrame()->GetShelfNotebook()->AddPage(pnlNote, "Note - ", true);
+
+
+	//if (dialog.ShowModal() == wxID_OK)
+	//{
+	//	this->OnAfterNoteDialogClosed(dialog, note);
+	//}
+	//SetupSpeechHandlers();
 }
 
 void PublicationPanelImp::AddNoteOnButtonClick( wxCommandEvent& event ) 
@@ -717,63 +724,69 @@ void PublicationPanelImp::OnEditNote()
 	{
 		return;
 	}
-	NoteDialogImp dialog(this, this->_viewModel->GetNote());
-	if(dialog.ShowModal() == wxID_OK)
-	{
-		this->OnAfterNoteDialogClosed(dialog, this->_viewModel->GetNote());
-	}
-	SetupSpeechHandlers();
+	//NoteDialogImp dialog(this, this->_viewModel->GetNote());
+
+	NoteDialogImp* pnlNote = new NoteDialogImp(wxGetApp().GetMainFrame()->GetShelfNotebook(), this->_viewModel->GetNote());
+	pnlNote->InitDialog();
+	wxGetApp().GetMainFrame()->GetShelfNotebook()->AddPage(pnlNote, "Note - " + _viewModel->GetNote()->GetTitle(), true);
+
+
+	//if(dialog.ShowModal() == wxID_OK)
+	//{
+	//	this->OnAfterNoteDialogClosed(dialog, this->_viewModel->GetNote());
+	//}
+	//SetupSpeechHandlers();
 }
 
-void PublicationPanelImp::OnAfterNoteDialogClosed(NoteDialogImp& dialog, Note* note)
-{
-	bool noteIsNew = false;
-	/* save the note and all the segments from the view model in the dialog */
-	NoteViewModel& noteViewModel = dialog.GetViewModel();
-	/* for each segment, insert */
-	if(noteViewModel.GetNote()->GetNoteId() > 0)
-	{
-		wxGetApp().GetProvider()->Update(noteViewModel.GetNote());
-	}
-	else
-	{
-		wxGetApp().GetProvider()->Insert(noteViewModel.GetNote());
-		this->_viewModel->GetNoteList()->push_back(noteViewModel.GetNote());
-		noteIsNew = true;
-	}
-
-	/* the dialog updates the view model */
-	boost::ptr_vector<NoteSegment>* list = noteViewModel.GetNoteSegmentList();
-	for(int i = 0; i < list->size(); i ++ )
-	{
-		NoteSegment* noteSegment = &(list->at(i));
-		noteSegment->SetNoteId(noteViewModel.GetNote()->GetNoteId());
-		/* process deletes first */
-		if(wxString(noteSegment->GetBody()).IsEmpty() 
-			&& wxString(noteSegment->GetTitle()).IsEmpty()
-			&& noteSegment->GetNoteSegmentId() > 0)
-		{
-			wxGetApp().GetProvider()->Delete(noteSegment);
-		}
-		else
-		{
-			if(noteSegment->GetNoteSegmentId() > 0)
-			{
-				wxGetApp().GetProvider()->Update(noteSegment);
-			}
-			else
-			{
-				wxGetApp().GetProvider()->Insert(noteSegment);
-			}
-		}
-	}	
-	if(noteIsNew)
-	{
-		this->OnSelectNote(note);
-	}
-	this->RenderNotes(note);
-	
-}
+//void PublicationPanelImp::OnAfterNoteDialogClosed(NoteDialogImp& dialog, Note* note)
+//{
+//	bool noteIsNew = false;
+//	/* save the note and all the segments from the view model in the dialog */
+//	NoteViewModel& noteViewModel = dialog.GetViewModel();
+//	/* for each segment, insert */
+//	if(noteViewModel.GetNote()->GetNoteId() > 0)
+//	{
+//		wxGetApp().GetProvider()->Update(noteViewModel.GetNote());
+//	}
+//	else
+//	{
+//		wxGetApp().GetProvider()->Insert(noteViewModel.GetNote());
+//		this->_viewModel->GetNoteList()->push_back(noteViewModel.GetNote());
+//		noteIsNew = true;
+//	}
+//
+//	/* the dialog updates the view model */
+//	boost::ptr_vector<NoteSegment>* list = noteViewModel.GetNoteSegmentList();
+//	for(int i = 0; i < list->size(); i ++ )
+//	{
+//		NoteSegment* noteSegment = &(list->at(i));
+//		noteSegment->SetNoteId(noteViewModel.GetNote()->GetNoteId());
+//		/* process deletes first */
+//		if(wxString(noteSegment->GetBody()).IsEmpty() 
+//			&& wxString(noteSegment->GetTitle()).IsEmpty()
+//			&& noteSegment->GetNoteSegmentId() > 0)
+//		{
+//			wxGetApp().GetProvider()->Delete(noteSegment);
+//		}
+//		else
+//		{
+//			if(noteSegment->GetNoteSegmentId() > 0)
+//			{
+//				wxGetApp().GetProvider()->Update(noteSegment);
+//			}
+//			else
+//			{
+//				wxGetApp().GetProvider()->Insert(noteSegment);
+//			}
+//		}
+//	}	
+//	if(noteIsNew)
+//	{
+//		this->OnSelectNote(note);
+//	}
+//	this->RenderNotes(note);
+//	
+//}
 
 void PublicationPanelImp::OnPlayNote()
 {
@@ -1014,6 +1027,12 @@ void PublicationPanelImp::Refresh()
 	this->_viewModel->GetQuizList()->clear();
 	wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizList());
 	this->RenderExercises(nullptr);
+	if (_viewModel->GetTopic() != nullptr)
+	{
+		wxGetApp().GetProvider()->GetNotesByTopic(this->_viewModel->GetTopic(), this->_viewModel->GetNoteList());
+		RenderNotes(nullptr);
+	}
+
 	SetupSpeechHandlers();
 	//this->_viewModel->GetQuizRunHeaderList()->clear();
 	//wxGetApp().GetProvider()->GetQuizProvider().GetQuizRunsByPublication(this->_viewModel->GetPublication(), this->_viewModel->GetQuizRunHeaderList());

@@ -54,6 +54,8 @@ public:
 	const wxDateTime& GetCreatedDate() const { return _createdDate;}
 	void SetCreatedDate(const wxDateTime &createdDate);
 
+
+
 private:
 	unsigned long _noteId;
 	unsigned long _topicId;
