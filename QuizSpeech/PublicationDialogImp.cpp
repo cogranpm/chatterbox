@@ -56,7 +56,6 @@ void PublicationDialogImp::OnCommandRecognized(std::wstring& phrase, const std::
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		this->Close();
 		return;
 	}
