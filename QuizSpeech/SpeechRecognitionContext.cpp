@@ -274,11 +274,15 @@ void SpeechRecognitionContext::EndCreateDynamicRule()
 void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, const std::wstring& index, const std::wstring& propertyName)
 {
 	SPPROPERTYINFO info;
-	info.pszName = propertyName.c_str();
+	std::wstring propertyNameForRule(propertyName);
+	propertyNameForRule += L" display";
+	info.pszName = propertyNameForRule.c_str();
 	info.pszValue = display.c_str();
 	info.vValue.vt = VT_UI4; //just seems to need something here
 
-	HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, &info);
+	std::wstring phrase(L"+");
+	phrase += display;
+	HRESULT hr = grammar->AddWordTransition(hRule, NULL, phrase.c_str(), NULL, SPWT_LEXICAL, 1, &info);
 	//HRESULT hr = grammar->AddWordTransition(hRule, NULL, display.c_str(), NULL, SPWT_LEXICAL, 1, NULL);
 	if (FAILED(hr))
 	{
@@ -294,7 +298,9 @@ void SpeechRecognitionContext::CreateDynamicRule(const std::wstring& display, co
 	infoIndex.pszName = indexName.c_str();
 	infoIndex.pszValue = index.c_str();
 	infoIndex.vValue.vt = VT_UI4;
-	hr = grammar->AddWordTransition(hRule, NULL, index.c_str(), NULL, SPWT_LEXICAL, 1, &infoIndex);
+	std::wstring indexPhrase(L"+");
+	indexPhrase += index;
+	hr = grammar->AddWordTransition(hRule, NULL, indexPhrase.c_str(), NULL, SPWT_LEXICAL, 1, &infoIndex);
 	if (FAILED(hr))
 	{
 		this->grammar.Release();

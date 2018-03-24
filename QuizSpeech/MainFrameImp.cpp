@@ -308,7 +308,7 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 	this->shelfModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
-	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_SELECT_SHELF);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_MAINFRAME_LOOKUP);
 	for(int i = 0; i < shelfList->size(); i ++ )
 	{
 		data.clear();
@@ -320,13 +320,9 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 		{
 			this->m_dvlShelf->SelectRow(i);
 		}
-		//std::wstring rulePhrase(L"select shelf ");
-		std::wstring rulePhrase(L"");
-		rulePhrase.append(shelfList->at(i).getTitle());
-		//std::wstring rulePhraseForIndexSelection(L"select shelf ");
-		std::wstring rulePhraseForIndexSelection(L"");
-		rulePhraseForIndexSelection.append(index);
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"shelf"));
+		
+		/* dynamic rule adding phrase for index (numeric) and title (string)*/
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(shelfList->at(i).getTitle(), index, std::wstring(L"shelf"));
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
 
@@ -542,7 +538,7 @@ void MainFrameImp::RenderSubjects(Subject* subject)
 	for(int i = 0; i < itemsList->size(); i ++ )
 	{
 		data.clear();
-		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
+		std::wstring index(boost::lexical_cast<std::wstring>(m_dvlShelf->GetItemCount() + i + 1));
 		data.push_back(index);
 		data.push_back(itemsList->at(i).getTitle());
 		this->subjectModel->AppendItem( data, wxUIntPtr(&itemsList->at(i)));
@@ -550,35 +546,10 @@ void MainFrameImp::RenderSubjects(Subject* subject)
 		{
 			this->m_lstSubject->SelectRow(i);
 		}
-		std::wstring rulePhrase(L"");
-		rulePhrase.append(itemsList->at(i).getTitle());
-		std::wstring rulePhraseForIndexSelection(L"");
-		rulePhraseForIndexSelection.append(index);
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select subject"));
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(itemsList->at(i).getTitle(), index, std::wstring(L"subject"));
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
-	//if ((m_lstSubject->GetSelectedRow() == wxNOT_FOUND) && m_lstSubject->GetItemCount() > 0)
-	//{
-	//	m_lstSubject->SelectRow(0);
-	//	OnSelectSubject(&itemsList->at(0));
-	//}
 	subjectModel->Resort();
-	/* using the list ctrl, something wrong when clicking on first item in list, is null
-	this->m_lstSubject->Hide();
-	this->m_lstSubject->DeleteAllItems();
-	boost::ptr_vector<Subject>* subjectList = wxGetApp().getMainFrameViewModel()->getSubjectList();
-	for(int i = 0; i < subjectList->size(); i ++ )
-	{
-		long tmp = this->m_lstSubject->InsertItem(i, subjectList->at(i).getTitle());
-		this->m_lstSubject->SetItem(tmp, 0, subjectList->at(i).getTitle(), 0);
-		this->m_lstSubject->SetItemData(tmp, (long)&(subjectList->at(i)));
-		if(subject != NULL && subjectList->at(i).getSubjectId() == subject->getSubjectId())
-		{
-			this->m_lstSubject->SetItemState(tmp, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-		}
-	}	
-	this->m_lstSubject->Show();
-	*/
 }
 
 void MainFrameImp::SubjectOnSelectionChanged( wxDataViewEvent& event )
@@ -592,13 +563,6 @@ void MainFrameImp::SubjectOnSelectionChanged( wxDataViewEvent& event )
 	if(subject != NULL)
 	{
 		this->OnSelectSubject(subject);
-		/*boost::ptr_vector<Subject>* subjectList = wxGetApp().getMainFrameViewModel()->getSubjectList();
-		boost::ptr_vector<Subject>::iterator i = std::find(subjectList->begin(), subjectList->end(), *subject);	
-		if(i != subjectList->end())
-		{
-			this->OnSelectSubject(&(*i));
-		}
-		*/
 	}
 }
 
@@ -653,7 +617,7 @@ void MainFrameImp::RenderPublications(Publication* publication)
 	for(int i = 0; i < itemsList->size(); i ++ )
 	{
 		data.clear();
-		std::wstring index(boost::lexical_cast<std::wstring>(i + 1));
+		std::wstring index(boost::lexical_cast<std::wstring>(m_dvlShelf->GetItemCount() + m_lstSubject->GetItemCount() + i + 1));
 		data.push_back(index);
 		data.push_back(itemsList->at(i).getTitle());
 		this->publicationModel->AppendItem( data, wxUIntPtr(&itemsList->at(i)));
@@ -661,20 +625,16 @@ void MainFrameImp::RenderPublications(Publication* publication)
 		{
 			this->lstPublication->SelectRow(i);
 		}
-		std::wstring rulePhrase(L"");
-		rulePhrase.append(itemsList->at(i).getTitle());
-		std::wstring rulePhraseForIndexSelection(L"");
-		rulePhraseForIndexSelection.append(index);
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(rulePhrase, rulePhraseForIndexSelection, std::wstring(L"select publication"));
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->CreateDynamicRule(itemsList->at(i).getTitle(), index, std::wstring(L"publication"));
 
 	}	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EndCreateDynamicRule();
-	if ((lstPublication->GetSelectedRow() == wxNOT_FOUND) && lstPublication->GetItemCount() > 0)
-	{
-		lstPublication->SelectRow(0);
-		SetCurrentPublication(&itemsList->at(0));
-		lstPublication->SetFocus();
-	}
+	//if ((lstPublication->GetSelectedRow() == wxNOT_FOUND) && lstPublication->GetItemCount() > 0)
+	//{
+	//	lstPublication->SelectRow(0);
+	//	SetCurrentPublication(&itemsList->at(0));
+	//	lstPublication->SetFocus();
+	//}
 }
 
 void MainFrameImp::OnSelectPublication(Publication* publication)
@@ -862,61 +822,129 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			return;
 		}
 	}
-	else if(boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_SHELF))
+	if (boost::algorithm::equals(ruleName, L"LIST_ACTIONS"))
 	{
-		//is it a list lookup
-		if (boost::algorithm::equals(actionName, L"shelf index"))
+		if (boost::algorithm::equals(actionName, L"enter"))
 		{
-			int index = boost::lexical_cast<int>(actionTarget);
-			if (index <= m_dvlShelf->GetItemCount() && index > 0)
+			if (m_dvlShelf->HasFocus())
 			{
-				m_dvlShelf->SetFocus();
-				m_dvlShelf->SelectRow(index - 1);
-				Shelf* shelf = (Shelf*)this->m_dvlShelf->GetItemData(m_dvlShelf->GetSelection());
-				if (shelf != nullptr)
-				{
-					OnSelectShelf(shelf);
-				}
+
+			}
+			else if (m_lstSubject->HasFocus())
+			{
+
+			}
+			else if (lstPublication->HasFocus())
+			{
+				this->EditPublication();
 			}
 		}
+		else if (boost::algorithm::equals(actionName, L"next"))
+		{
+
+		}
+		else if (boost::algorithm::equals(actionName, L"previous"))
+		{
+
+		}
+		else if (boost::algorithm::equals(actionName, L"start"))
+		{
+
+		}
+		else if (boost::algorithm::equals(actionName, L"end"))
+		{
+
+		}
+	}
+	else if(boost::algorithm::equals(ruleName, MyApp::RULE_MAINFRAME_LOOKUP))
+	{
+		ProcessShelfLookup(actionName, actionTarget);
 		return;
 	}
 	else if (boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_SUBJECT))
 	{
-		//is it a list lookup
-		if (boost::algorithm::equals(actionName, L"select subject index"))
-		{
-			int index = boost::lexical_cast<int>(actionTarget);
-			if (index <= m_lstSubject->GetItemCount() && index > 0)
-			{
-				m_lstSubject->SetFocus();
-				m_lstSubject->SelectRow(index - 1);
-				Subject* subject = (Subject*)this->m_lstSubject->GetItemData(m_lstSubject->GetSelection());
-				if (subject != nullptr)
-				{
-					OnSelectSubject(subject);
-				}
-			}
-		}
-		return;
+		ProcessSubjectLookup(actionName, actionTarget);
 	}
 	else if (boost::algorithm::equals(ruleName, MyApp::RULE_SELECT_PUBLICATION))
 	{
-		//is it a list lookup
-		if (boost::algorithm::equals(actionName, L"select publication index"))
-		{
-			int index = boost::lexical_cast<int>(actionTarget);
-			if (index <= lstPublication->GetItemCount() && index > 0)
-			{
-				lstPublication->SetFocus();
-				lstPublication->SelectRow(index - 1);
-				Publication* publication = (Publication*)lstPublication->GetItemData(lstPublication->GetSelection());
-				
-			}
-		}
+		ProcessPublicationLookup(actionName, actionTarget);
 		return;
 	}
 
 	//if frame doesn't handle the spoken command, send it to the application
 	wxGetApp().OnCommandRecognized(phrase, commandPropertyList);
+}
+
+
+void MainFrameImp::ProcessShelfLookup(const std::wstring& actionName, const std::wstring& actionTarget)
+{
+	int columnToSearch = 0;
+	if (boost::algorithm::equals(actionName, "shelf display"))
+	{
+		columnToSearch = 1;
+	}
+	for (int i = 0; i < m_dvlShelf->GetItemCount(); i++)
+	{
+		wxString itemText = m_dvlShelf->GetTextValue(i, columnToSearch);
+		if (boost::algorithm::equals(actionTarget, itemText.ToStdWstring()))
+		{
+			m_dvlShelf->SetFocus();
+			m_dvlShelf->SelectRow(i);
+			Shelf* shelf = (Shelf*)this->m_dvlShelf->GetItemData(m_dvlShelf->GetSelection());
+			if (shelf != nullptr)
+			{
+				OnSelectShelf(shelf);
+			}
+			return;
+		}
+	}
+
+}
+
+void MainFrameImp::ProcessSubjectLookup(const std::wstring& actionName, const std::wstring& actionTarget)
+{
+	int columnToSearch = 0;
+	if (boost::algorithm::equals(actionName, "subject display"))
+	{
+		columnToSearch = 1;
+	}
+	for (int i = 0; i < m_lstSubject->GetItemCount(); i++)
+	{
+		wxString itemText = m_lstSubject->GetTextValue(i, columnToSearch);
+		if (boost::algorithm::equals(actionTarget, itemText.ToStdWstring()))
+		{
+			m_lstSubject->SetFocus();
+			m_lstSubject->SelectRow(i);
+			Subject* subject = (Subject*)this->m_lstSubject->GetItemData(m_lstSubject->GetSelection());
+			if (subject != nullptr)
+			{
+				OnSelectSubject(subject);
+			}
+			return;
+		}
+	}
+}
+
+void MainFrameImp::ProcessPublicationLookup(const std::wstring& actionName, const std::wstring& actionTarget)
+{
+	int columnToSearch = 0;
+	if (boost::algorithm::equals(actionName, "publication display"))
+	{
+		columnToSearch = 1;
+	}
+	for (int i = 0; i < lstPublication->GetItemCount(); i++)
+	{
+		wxString itemText = lstPublication->GetTextValue(i, columnToSearch);
+		if (boost::algorithm::equals(actionTarget, itemText.ToStdWstring()))
+		{
+			lstPublication->SetFocus();
+			lstPublication->SelectRow(i);
+			Publication* publication = (Publication*)this->lstPublication->GetItemData(lstPublication->GetSelection());
+			if (publication != nullptr)
+			{
+				OnSelectPublication(publication);
+			}
+			return;
+		}
+	}
 }

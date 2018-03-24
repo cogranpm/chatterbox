@@ -41,6 +41,9 @@ private:
 	void SetupSpeechHandlers();
 	void Refresh();
 	void LoadShelves();
+	void ProcessShelfLookup(const std::wstring& actionName, const std::wstring& actionTarget);
+	void ProcessSubjectLookup(const std::wstring& actionName, const std::wstring& actionTarget);
+	void ProcessPublicationLookup(const std::wstring& actionName, const std::wstring& actionTarget);
 
 	protected:
 

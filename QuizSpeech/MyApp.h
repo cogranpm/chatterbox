@@ -55,7 +55,7 @@ public:
 	static const std::wstring RULE_DIALOG_ACTIONS;
 	static const std::wstring RULE_PANEL_ACTIONS;
 	static const std::wstring RULE_DICTATION_ENTRY;
-	static const std::wstring RULE_SELECT_SHELF;
+	static const std::wstring RULE_MAINFRAME_LOOKUP;
 	static const std::wstring RULE_SELECT_SUBJECT;
 	static const std::wstring RULE_SELECT_PUBLICATION;
 	static const std::wstring RULE_SELECT_TOPIC;
