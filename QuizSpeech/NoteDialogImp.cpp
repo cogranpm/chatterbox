@@ -71,12 +71,16 @@ void NoteDialogImp::OnInitDialog( wxInitDialogEvent& event )
 	wxGetApp().GetProvider()->GetNoteSegmentsByNote(viewModel.GetNote(), viewModel.GetNoteSegmentList());
 	RenderNoteSegmentTypes();
 	ruleNames.push_back(MyApp::RULE_NOTE_DIALOG);
-	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	ruleNames.push_back(MyApp::RULE_PANEL_ACTIONS);
 	this->SetupSpeechHandlers();
 	this->RenderNote();
 	this->lstTypes->SetSelection(0);
 	this->ChangeNoteType(0);
-	//this->Maximize(true);
+	//rendernote will cause text fields to update which sets the dirty flag, reset in that case
+	if (viewModel.GetNote() != nullptr)
+	{
+		viewModel.GetNote()->SetDirty(false);
+	}
 	if (viewModel.GetNote()->GetNoteId() < 1)
 	{
 		timer = new wxTimer(this, InitFormTimer);
@@ -127,14 +131,21 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 
 	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
-		CloseMe(nullptr);
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->btnCancel->GetId());
+		this->btnCancel->Command(evt);
 		return;
 	}
-	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_OK))
+	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_APPLY))
 	{
 		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
-		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->m_sdbSizer1Apply->GetId());
-		this->m_sdbSizer1Apply->Command(evt);
+		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->btnApply->GetId());
+		this->btnApply->Command(evt);
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CLOSE))
+	{
+		CloseMe(nullptr);
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
@@ -194,11 +205,7 @@ void NoteDialogImp::OnCommandRecognized(std::wstring& phrase, const std::vector<
 		DeleteSegment();
 		return;
 	}
-	else if (boost::algorithm::equals(actionName, L"close"))
-	{
-		CloseMe(nullptr);
-		return;
-	}
+
 }
 
 void NoteDialogImp::CloseMe(wxCloseEvent* event)
@@ -215,6 +222,11 @@ void NoteDialogImp::CloseMe(wxCloseEvent* event)
 			SetupSpeechHandlers();
 			return;
 		}
+	}
+	int index = wxGetApp().GetMainFrame()->GetShelfNotebook()->GetPageIndex(this);
+	if (index != wxNOT_FOUND)
+	{
+		wxGetApp().GetMainFrame()->GetShelfNotebook()->DeletePage(index);
 	}
 	
 //	this->EndModal(wxID_CANCEL);
@@ -512,7 +524,7 @@ void NoteDialogImp::TypesOnListBoxDClick(wxCommandEvent& event)
 
 void NoteDialogImp::OnCancelButtonClick(wxCommandEvent& event)
 { 
-	CloseMe(nullptr);
+	/* undo all modifications since the last save- need some kind of model snapshot since save */
 }
 
 void NoteDialogImp::OnOKButtonClick( wxCommandEvent& event ) 
@@ -655,6 +667,32 @@ void NoteDialogImp::UnlockDescriptionOnButtonClick(wxCommandEvent& event)
 		txtDescription->SetFocus();
 		this->btnUnlockDescription->SetBitmap(*wxGetApp().GetImages().lock_icon);
 	}
+}
+
+void NoteDialogImp::DescriptionOnText(wxCommandEvent& event)
+{ 
+	if (viewModel.GetNote() != nullptr)
+	{
+		viewModel.GetNote()->SetDescription(txtDescription->GetValue().ToStdWstring());
+	}
+}
+
+void NoteDialogImp::TitleOnText(wxCommandEvent& event)
+{
+	if (viewModel.GetNote() != nullptr)
+	{
+		viewModel.GetNote()->SetTitle(txtTitle->GetValue().ToStdWstring());
+	}
+}
+
+void NoteDialogImp::ApplyOnUpdateUI(wxUpdateUIEvent& event)
+{
+	(viewModel.IsDirty()) ? btnApply->Enable() : btnApply->Disable();
+}
+
+void NoteDialogImp::CancelOnUpdateUI(wxUpdateUIEvent& event)
+{
+	(viewModel.IsDirty()) ? btnCancel->Enable() : btnCancel->Disable();
 }
 
 //void NoteDialogImp::DeleteOnButtonClick( wxCommandEvent& event ) 

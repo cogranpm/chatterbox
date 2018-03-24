@@ -25,5 +25,6 @@ public:
 	boost::ptr_vector<NoteSegmentType>* GetNoteTypeSegmentsList() { return _noteSegmentTypeList; }
 	void EraseItem(NoteSegment* noteSegment);
 	bool IsNew();
+	bool IsDirty();
 };
 

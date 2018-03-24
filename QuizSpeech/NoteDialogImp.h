@@ -81,6 +81,10 @@ private:
 		void UnlockDescriptionOnButtonClick(wxCommandEvent& event);
 		void RecordDescriptionOnButtonClick(wxCommandEvent& event);
 		void ClearDescriptionOnButtonClick(wxCommandEvent& event);
+		void DescriptionOnText(wxCommandEvent& event);
+		void TitleOnText(wxCommandEvent& event);
+		void ApplyOnUpdateUI(wxUpdateUIEvent& event);
+		void CancelOnUpdateUI(wxUpdateUIEvent& event);
 
 		void PlayAllOnButtonClick(wxCommandEvent& event);
 		void StopAllOnButtonClick(wxCommandEvent& event);

@@ -17,28 +17,28 @@ public:
 
 
 	const std::wstring& GetTitle() const { return _title;}
-	void SetTitle(const std::wstring &title){ _title = title;}
+	void SetTitle(const std::wstring &title);
 		
 	const std::wstring& GetBody() const { return _body;}
-	void SetBody(const std::wstring &body){ _body = body;}
+	void SetBody(const std::wstring &body);
 		
 	const std::wstring& GetBodyFile() const { return _bodyFile;}
-	void SetBodyFile(const std::wstring &bodyFile){ _bodyFile = bodyFile;}
+	void SetBodyFile(const std::wstring &bodyFile);
 
 	unsigned long GetNoteSegmentId() const {return _noteSegmentId;}
 	void SetNoteSegmentId(unsigned long id) {_noteSegmentId = id;}
 		
 	unsigned long GetNoteId() const {return _noteId;}
-	void SetNoteId(unsigned long id) {_noteId = id;}
+	void SetNoteId(unsigned long id);
 
 	unsigned long GetNoteSegmentTypeId() const { return _noteSegmentTypeId; }
-	void SetNoteSegmentTypeId(unsigned long id) { _noteSegmentTypeId = id; }
+	void SetNoteSegmentTypeId(unsigned long id);
 
 	const wxDateTime& GetCreatedDate() const { return _createdDate;}
 	void SetCreatedDate(const wxDateTime &createdDate){ _createdDate = createdDate;}
 
 	bool GetDeleted() const { return _deleted;}
-	void SetDeleted(const bool deleted) { _deleted = deleted;}
+	void SetDeleted(const bool deleted);
 
 	bool IsNew() { return !(_noteSegmentId > 0); }
 

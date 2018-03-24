@@ -53,6 +53,7 @@ public:
 	static const std::wstring RULE_PUBLICATION_TYPES;
 	static const std::wstring RULE_PUBLICATION_CONTROLS;
 	static const std::wstring RULE_DIALOG_ACTIONS;
+	static const std::wstring RULE_PANEL_ACTIONS;
 	static const std::wstring RULE_DICTATION_ENTRY;
 	static const std::wstring RULE_SELECT_SHELF;
 	static const std::wstring RULE_SELECT_SUBJECT;
@@ -82,6 +83,7 @@ public:
 	static const std::wstring COMMAND_ACTION_OK;
 	static const std::wstring COMMAND_ACTION_CANCEL;
 	static const std::wstring COMMAND_ACTION_CLOSE;
+	static const std::wstring COMMAND_ACTION_APPLY;
 	static const std::wstring CONTROL_ACTION;
 	static const std::wstring CONTROL_ACTION_FOCUS;
 	static const std::wstring CONTROL_ACTION_CLEAR;

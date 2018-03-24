@@ -59,17 +59,18 @@ class pnlNote : public wxPanel
 		wxScrolledWindow* segmentContainer;
 		wxBoxSizer* panelSizer;
 		wxStaticBoxSizer* sbSegments;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Apply;
-		wxButton* m_sdbSizer1Cancel;
+		wxButton* btnCancel;
+		wxButton* btnApply;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void PlayAllOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void StopAllOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void TitleOnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UnlockTitleOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RecordTitleOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ClearTitleOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DescriptionOnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UnlockDescriptionOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RecordDescriptionOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ClearDescriptionOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -79,15 +80,17 @@ class pnlNote : public wxPanel
 		virtual void EditSegmentOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void TypesOnListBox( wxCommandEvent& event ) { event.Skip(); }
 		virtual void TypesOnListBoxDClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void CancelOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void ApplyOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		wxBoxSizer* szTitlePlayer;
 		wxBoxSizer* szDescriptionPlayer;
 		
-		pnlNote( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+		pnlNote( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 671,552 ), long style = wxTAB_TRAVERSAL ); 
 		~pnlNote();
 	
 };

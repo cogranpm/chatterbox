@@ -667,6 +667,7 @@ void SqliteProvider::Insert(NoteSegment* noteSegment){
     stmt.ExecuteUpdate();	
 	long id = this->ddl->GetLastRowID();
 	noteSegment->SetNoteSegmentId(id);
+	noteSegment->SetDirty(false);
 }
 
 
@@ -682,6 +683,7 @@ void SqliteProvider::Update(NoteSegment* noteSegment)
 		stmt.Bind(5, noteSegment->GetBodyFile());
 		stmt.Bind(6, wxLongLong(noteSegment->GetNoteSegmentId()));
 		stmt.ExecuteUpdate();	
+		noteSegment->SetDirty(false);
 	}
 	catch(wxSQLite3Exception& e)
 	{
@@ -725,7 +727,7 @@ void SqliteProvider::SetNoteSegmentFromRecord(NoteSegment* noteSegment, wxSQLite
 	{
 		noteSegment->SetBodyFile(set.GetString("BodyFile").ToStdWstring());
 	}
-
+	noteSegment->SetDirty(false);
 }
 
 

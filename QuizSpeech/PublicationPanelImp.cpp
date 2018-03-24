@@ -254,7 +254,7 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		}
 		return;
 	}
-	else if (boost::algorithm::equals(actionName, L"close") || boost::algorithm::equals(actionName, L"cancel"))
+	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CLOSE) || boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
 		CloseMe();
 		return;
@@ -318,7 +318,6 @@ void PublicationPanelImp::CloseMe()
 	int index = wxGetApp().GetMainFrame()->GetShelfNotebook()->GetPageIndex(this);
 	if (index != wxNOT_FOUND)
 	{
-		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
 		wxGetApp().GetMainFrame()->GetShelfNotebook()->DeletePage(index);
 	}
 }

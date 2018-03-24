@@ -19,6 +19,7 @@ const std::wstring MyApp::RULE_PUBLICATION_DIALOG = L"PUBLICATION_DIALOG";
 const std::wstring MyApp::RULE_PUBLICATION_TYPES = L"PUBLICATION_TYPES";
 const std::wstring MyApp::RULE_PUBLICATION_CONTROLS = L"PUBLICATION_CONTROLS";
 const std::wstring MyApp::RULE_DIALOG_ACTIONS = L"DIALOG_ACTIONS";
+const std::wstring MyApp::RULE_PANEL_ACTIONS = L"PANEL_ACTIONS";
 const std::wstring MyApp::RULE_DICTATION_ENTRY = L"DICTATION_ENTRY";
 const std::wstring MyApp::RULE_SELECT_SHELF = L"SELECT_SHELF";
 const std::wstring MyApp::RULE_SELECT_SUBJECT = L"SELECT_SUBJECT";
@@ -48,6 +49,7 @@ const std::wstring MyApp::COMMAND_ACTION_EDIT = L"edit";
 const std::wstring MyApp::COMMAND_ACTION_OK = L"ok";
 const std::wstring MyApp::COMMAND_ACTION_CANCEL = L"cancel";
 const std::wstring MyApp::COMMAND_ACTION_CLOSE = L"close";
+const std::wstring MyApp::COMMAND_ACTION_APPLY = L"apply";
 
 const std::wstring MyApp::CONTROL_ACTION = L"CONTROL_ACTIONS";
 const std::wstring MyApp::CONTROL_ACTION_FOCUS = L"focus";

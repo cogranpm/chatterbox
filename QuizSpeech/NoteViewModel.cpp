@@ -48,3 +48,16 @@ bool NoteViewModel::IsNew()
 {
 	return (this->GetNote()->GetNoteId() == 0);
 }
+
+bool NoteViewModel::IsDirty()
+{
+	if (this->GetNote() != nullptr && this->GetNote()->GetDirty())
+	{
+		return true;
+	}
+
+	if (_noteSegmentList == nullptr) { return false; }
+
+	auto it = std::find_if(_noteSegmentList->begin(), _noteSegmentList->end(), [](NoteSegment a) { return a.GetDirty(); });
+	return it != _noteSegmentList->end();
+}
