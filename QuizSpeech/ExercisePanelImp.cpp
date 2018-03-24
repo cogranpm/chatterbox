@@ -46,15 +46,21 @@ void ExercisePanelImp::OnCommandRecognized(std::wstring& phrase, const std::vect
 
 	if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CANCEL))
 	{
-		CloseMe();
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->btnCancel->GetId());
+		this->btnCancel->Command(evt);
 		return;
 	}
-	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
+	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_APPLY))
 	{
-		if (this->txtName->HasFocus())
-		{
-			this->txtName->Clear();
-		}
+		wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->Disconnect();
+		wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, this->btnApply->GetId());
+		this->btnApply->Command(evt);
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::COMMAND_ACTION_CLOSE))
+	{
+		CloseMe();
 		return;
 	}
 	else if (boost::algorithm::equals(actionName, L"addquestion"))
@@ -72,6 +78,34 @@ void ExercisePanelImp::OnCommandRecognized(std::wstring& phrase, const std::vect
 		CloseMe();
 		return;
 	}
+	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_CLEAR))
+	{
+		if (this->txtName->HasFocus())
+		{
+			this->txtName->Clear();
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(actionName, MyApp::CONTROL_ACTION_SELECT))
+	{
+		if (this->txtName->HasFocus())
+		{
+			this->txtName->SelectAll();
+		}
+		return;
+	}
+	else if (boost::algorithm::equals(actionTarget, L"name"))
+	{
+		txtName->SetFocus();
+		return;
+	}
+	else if(this->txtName->HasFocus())
+	{
+		
+		this->txtName->AppendText(phrase);
+		return;
+	}
+
 	wxGetApp().OnCommandRecognized(phrase, commandPropertyList);
 }
 
@@ -390,7 +424,8 @@ void ExercisePanelImp::ExercisePanelOnInitDialog( wxInitDialogEvent& event )
 	RenderQuestions();
 	RenderCurrentQuestion();
 	ruleNames.push_back(MyApp::RULE_EXERCISE_DIALOG);
-	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	ruleNames.push_back(MyApp::RULE_PANEL_ACTIONS);
+	ruleNames.push_back(MyApp::CONTROL_ACTION);
 	SetupSpeechHandlers();
 	this->Layout();
 
@@ -400,17 +435,28 @@ void ExercisePanelImp::ExercisePanelOnInitDialog( wxInitDialogEvent& event )
 
 void ExercisePanelImp::NameOnKillFocus( wxFocusEvent& event )
 {
+	ruleNames.clear();
+	ruleNames.push_back(MyApp::RULE_EXERCISE_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DICTATION_ENTRY);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	ruleNames.push_back(MyApp::CONTROL_ACTION);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 	event.Skip();
 }
 
 void ExercisePanelImp::NameOnSetFocus( wxFocusEvent& event )
 {
+	ruleNames.clear();
+	ruleNames.push_back(MyApp::RULE_EXERCISE_DIALOG);
+	ruleNames.push_back(MyApp::RULE_DIALOG_ACTIONS);
+	ruleNames.push_back(MyApp::CONTROL_ACTION);
+	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->EnableRules(ruleNames, this->GetName().ToStdString());
 	event.Skip();
 }
 
 void ExercisePanelImp::NameOnText(wxCommandEvent& event)
 {
-	viewModel.GetQuiz().SetDirty(true);
+	viewModel.GetQuiz().SetName(txtName->GetValue().ToStdWstring());
 }
 
 void ExercisePanelImp::AddQuestionOnButtonClick( wxCommandEvent& event )
