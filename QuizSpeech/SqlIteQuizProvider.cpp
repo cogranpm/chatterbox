@@ -78,6 +78,7 @@ void SqlIteQuizProvider::Update(Quiz* entity)
 	stmt.Bind(2, entity->GetName());
 	stmt.Bind(3, wxLongLong(entity->GetQuizId()));
 	stmt.ExecuteUpdate();
+	entity->SetDirty(false);
 }
 
 void SqlIteQuizProvider::Delete(Quiz* entity)
@@ -108,6 +109,7 @@ void SqlIteQuizProvider::SetQuizFromRecord(Quiz* entity, wxSQLite3ResultSet& set
 	}
 	entity->SetQuizId(set.GetInt64("QuizId").ToLong());
 	entity->SetName(set.GetAsString("Name").ToStdWstring());
+	entity->SetDirty(false);
 }
 
 
@@ -194,6 +196,7 @@ void SqlIteQuizProvider::Update(Question* entity)
 	}
 	stmt.Bind(4, wxLongLong(entity->GetQuestionId()));
 	stmt.ExecuteUpdate();
+	entity->SetDirty(false);
 	/* update the answer as well */
 	Update(entity->GetAnswer());
 }
@@ -226,6 +229,7 @@ void SqlIteQuizProvider::SetQuestionFromRecord(Question* entity, wxSQLite3Result
 		entity->SetQuestionFile(set.GetAsString("BodyFile").ToStdWstring());
 	}
 	entity->SetQuestionId(set.GetInt64("QuestionId").ToLong());
+	entity->SetDirty(false);
 	
 	/* set the Answer property of quiz immediately - one to one relationship*/
 	this->GetAnswerByQuestion(entity);
@@ -325,6 +329,7 @@ void SqlIteQuizProvider::Update(Answer* entity)
 	}
 	stmt.Bind(3, wxLongLong(entity->GetAnswerId()));
 	stmt.ExecuteUpdate();
+	entity->SetDirty(false);
 }
 
 void SqlIteQuizProvider::Delete(Answer* entity)
@@ -361,6 +366,7 @@ void SqlIteQuizProvider::SetAnswerFromRecord(Answer* entity, wxSQLite3ResultSet&
 		entity->SetAnswerFile(set.GetAsString("BodyFile").ToStdWstring());
 	}
 	entity->SetQuestionId(set.GetInt64("QuestionId").ToLong());
+	entity->SetDirty(false);
 }
 
 

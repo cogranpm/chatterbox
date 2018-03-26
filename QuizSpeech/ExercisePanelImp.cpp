@@ -423,6 +423,7 @@ void ExercisePanelImp::ExercisePanelOnInitDialog( wxInitDialogEvent& event )
 	RenderTopics();
 	RenderQuestions();
 	RenderCurrentQuestion();
+	viewModel.GetQuiz().SetDirty(false);
 	ruleNames.push_back(MyApp::RULE_EXERCISE_DIALOG);
 	ruleNames.push_back(MyApp::RULE_PANEL_ACTIONS);
 	ruleNames.push_back(MyApp::CONTROL_ACTION);
