@@ -54,13 +54,14 @@ AudioPlayer::~AudioPlayer()
 
 	if (callback != nullptr)
 	{
-		callback->Release();
+		/* cause error in release mode*/
+		//callback->Release();
 		callback = nullptr;
 	}
 
 	if (sourceCallback != nullptr)
 	{
-		sourceCallback->Release();
+		//sourceCallback->Release();
 		sourceCallback = nullptr;
 	}
 }
@@ -676,6 +677,7 @@ HRESULT AudioPlayer::EventCallback::Invoke(IMFAsyncResult* pAsyncResult)
 
 	if (meType != MESessionClosed )
 	{
+		if (player->session == NULL) { goto done; }
 		hr = player->session->BeginGetEvent(this, NULL);
 		if (FAILED(hr))
 		{
