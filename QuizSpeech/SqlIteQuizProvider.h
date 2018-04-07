@@ -39,6 +39,7 @@ public:
 	void Update(Quiz* entity);
 	void Delete(Quiz* entity);
 	void GetQuizByPublication(Publication* publication, boost::ptr_vector<Quiz>* list);
+	void GetQuizByPublicationAndTopic(Publication* publication, unsigned long topicId, boost::ptr_vector<Quiz>* list);
 	void GetQuizById(const unsigned long quizId, Quiz* quiz);
 
 	void Insert(Question* entity);

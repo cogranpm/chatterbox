@@ -137,6 +137,20 @@ void SqlIteQuizProvider::GetQuizByPublication(Publication* publication, boost::p
 	}
 }
 
+void SqlIteQuizProvider::GetQuizByPublicationAndTopic(Publication* publication, unsigned long topicId, boost::ptr_vector<Quiz>* list)
+{
+	wxSQLite3Statement stmt = db->PrepareStatement("SELECT * FROM Quiz WHERE PublicationId = ? and (TopicId = ? or TopicId IS NULL) ORDER BY CreatedDate DESC;");
+	stmt.Bind(1, wxLongLong(publication->getPublicationId()));
+	stmt.Bind(2, wxLongLong(topicId));
+	wxSQLite3ResultSet set = stmt.ExecuteQuery();
+	while (set.NextRow())
+	{
+		Quiz* quiz = new Quiz(publication->getPublicationId());
+		this->SetQuizFromRecord(quiz, set);
+		list->push_back(quiz);
+	}
+}
+
 
 void SqlIteQuizProvider::Insert(Question* entity)
 {

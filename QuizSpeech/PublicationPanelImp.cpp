@@ -525,6 +525,9 @@ void PublicationPanelImp::OnSelectTopic(Topic* topic)
 	if(topic != nullptr)
 	{
 		wxGetApp().GetProvider()->GetNotesByTopic(this->_viewModel->GetTopic(), this->_viewModel->GetNoteList());
+		this->_viewModel->GetQuizList()->clear();
+		wxGetApp().GetProvider()->GetQuizProvider().GetQuizByPublicationAndTopic(this->_viewModel->GetPublication(), topic->getTopicId(), this->_viewModel->GetQuizList());
+		this->RenderExercises(nullptr);
 	}
 	this->RenderNotes(nullptr);
 }
