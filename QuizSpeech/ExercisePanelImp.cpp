@@ -135,7 +135,9 @@ void ExercisePanelImp::RecordQuestion()
 	{
 		viewModel.GetCurrentQuestion()->SetQuestionFile(filePathBuffer);
 		RecordAnswer();
+		return;
 	}
+	SetupSpeechHandlers();
 }
 
 void ExercisePanelImp::RecordAnswer()
@@ -148,6 +150,7 @@ void ExercisePanelImp::RecordAnswer()
 		//lets auto save this question
 		Update();
 	}
+	SetupSpeechHandlers();
 }
 
 void ExercisePanelImp::Update()
@@ -156,13 +159,14 @@ void ExercisePanelImp::Update()
 	if (ValidateQuiz())
 	{
 		viewModel.GetQuiz().SetName(txtName->GetValue().ToStdWstring());
-		if (cboTopics->GetSelection() > 0)
+		if (cboTopics->GetCurrentSelection() != wxNOT_FOUND)
 		{
-			Topic* topic = reinterpret_cast<Topic*>(cboTopics->GetClientData(cboTopics->GetSelection()));
-			if (topic != nullptr)
-			{
-				viewModel.GetQuiz().SetTopicId(topic->getTopicId());
-			}
+			int i = cboTopics->GetCurrentSelection();
+			void* data = cboTopics->GetClientData(i);
+			unsigned long topicId = (unsigned long)data;
+			//Topic* topic = reinterpret_cast<Topic*>(data);
+			viewModel.GetQuiz().SetTopicId(topicId);
+			
 		}
 
 		if (!viewModel.GetQuiz().IsNew())
@@ -220,7 +224,7 @@ void ExercisePanelImp::RenderTopics()
 	for (int i = 0; i < viewModel.GetTopicList()->size(); i++)
 	{
 		Topic topic = viewModel.GetTopicList()->at(i);
-		int index = cboTopics->Append(wxString(topic.getName()), &topic);
+		int index = cboTopics->Append(wxString(topic.getName()), (void*)viewModel.GetTopicList()->at(i).getTopicId());
 		if (viewModel.GetQuiz().GetTopicId() > 0)
 		{
 			if (topic.getTopicId() == viewModel.GetQuiz().GetTopicId())

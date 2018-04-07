@@ -50,6 +50,11 @@ bool SpeechMessageDialog::IsModal() const
 
 void SpeechMessageDialog::OnCommandRecognized(std::wstring& phrase, std::vector<CommandProperty> commandPropertyList)
 {
+	//sometimes this gets called erroneously after dialog has been closed
+	if (this == nullptr)
+	{
+		return;
+	}
 	std::wstring actionName;
 	std::wstring actionTarget;
 	std::wstring targetValue;
