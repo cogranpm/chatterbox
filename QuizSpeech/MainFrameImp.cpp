@@ -64,6 +64,7 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	
 	ruleNames.push_back(MyApp::RULE_HOME_SCREEN);
 	ruleNames.push_back(MyApp::RULE_FILE_MENU);
+	ruleNames.push_back(MyApp::RULE_LIST_ACTIONS);
 	SetupSpeechHandlers();
 	initialized = true;
 }
@@ -308,7 +309,9 @@ void MainFrameImp::RenderShelves(Shelf* shelf)
 	this->shelfModel->DeleteAllItems();
 	wxVector<wxVariant> data;
 	boost::ptr_vector<Shelf>* shelfList = wxGetApp().GetMainFrameViewModel()->getShelfList();
+	
 	wxGetApp().GetSpeechListener().GetSpeechRecognitionContext()->BeginCreateDynamicRule(MyApp::RULE_MAINFRAME_LOOKUP);
+	
 	for(int i = 0; i < shelfList->size(); i ++ )
 	{
 		data.clear();
@@ -822,17 +825,17 @@ void MainFrameImp::OnCommandRecognized(std::wstring& phrase, std::vector<Command
 			return;
 		}
 	}
-	if (boost::algorithm::equals(ruleName, L"LIST_ACTIONS"))
+	else if (boost::algorithm::equals(ruleName, L"LIST_ACTIONS"))
 	{
 		if (boost::algorithm::equals(actionName, L"enter"))
 		{
 			if (m_dvlShelf->HasFocus())
 			{
-
+				this->EditShelf();
 			}
 			else if (m_lstSubject->HasFocus())
 			{
-
+				this->EditSubject();
 			}
 			else if (lstPublication->HasFocus())
 			{

@@ -61,6 +61,7 @@ public:
 	static const std::wstring RULE_SELECT_TOPIC;
 	static const std::wstring RULE_SELECT_NOTE;
 	static const std::wstring RULE_SELECT_QUIZ;
+	static const std::wstring RULE_LIST_ACTIONS;
 
 	/* publication panel */
 	static const std::wstring RULE_PUBLICATION_PANEL;

@@ -37,8 +37,9 @@ class PublicationPanelImp : public pnlMain
 		void RenderNotes(Note* note);
 		void OnSelectNote(Note* note);
 		void OnPlayNote();
+		void OnPlayAll ();
 		void BindModel();
-		void OnAfterNoteDialogClosed(NoteDialogImp& dialog, Note* note);
+		
 		void OnEditNote();
 		void RenderExercises(Quiz* quiz);
 		void OnSelectExercise(Quiz* quiz);

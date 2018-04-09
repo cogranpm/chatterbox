@@ -203,6 +203,11 @@ void PublicationPanelImp::OnCommandRecognized(std::wstring& phrase, const std::v
 		OnPlayNote();
 		return;
 	}
+	else if (boost::algorithm::equals(actionName, L"playall"))
+	{
+		OnPlayAll();
+		return;
+	}
 	else if (boost::algorithm::equals(actionName, L"stop"))
 	{
 		OnStop();
@@ -800,6 +805,13 @@ void PublicationPanelImp::OnPlayNote()
 	}
 }
 
+void PublicationPanelImp::OnPlayAll()
+{
+	btnStop->Enable();
+	isPlayingList = true;
+	noteListAudioPlayer.Start(_viewModel->GetNoteList());
+}
+
 void PublicationPanelImp::PlayOnButtonClick(wxCommandEvent& event) 
 {
 	OnPlayNote();
@@ -807,10 +819,8 @@ void PublicationPanelImp::PlayOnButtonClick(wxCommandEvent& event)
 
 
 void PublicationPanelImp::PlayAllOnButtonClick(wxCommandEvent& event) 
-{ 
-	btnStop->Enable();
-	isPlayingList = true;
-	noteListAudioPlayer.Start(_viewModel->GetNoteList());
+{
+	OnPlayAll();
 }
 
 void PublicationPanelImp::OnStop()

@@ -27,6 +27,7 @@ const std::wstring MyApp::RULE_SELECT_PUBLICATION = L"SELECT_PUBLICATION";
 const std::wstring MyApp::RULE_SELECT_TOPIC = L"SELECT_TOPIC";
 const std::wstring MyApp::RULE_SELECT_NOTE = L"SELECT_NOTE";
 const std::wstring MyApp::RULE_SELECT_QUIZ = L"SELECT_QUIZ";
+const std::wstring MyApp::RULE_LIST_ACTIONS = L"LIST_ACTIONS";
 
 /* PUBLICATION PANEL */
 const std::wstring MyApp::RULE_PUBLICATION_PANEL = L"PUBLICATION_PANEL";
