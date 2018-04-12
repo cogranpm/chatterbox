@@ -920,6 +920,9 @@ void SqliteProvider::RelocateAudioFiles(FileHandler* fileHandler)
 		//fileHandler->MakeDirectory(std::wstring(L""));
 
 		std::wstring publicationAudioPath = subjectAudioPath + "\\" + publication.ToStdWstring() + "\\";
+		std::wstring targetFile = publicationAudioPath + "\\" + audioFile;
+		std::wstring sourceFile = fileHandler->GetAudioPath() + "\\" + audioFile;
+		bool copyResult = fileHandler->MoveFile(sourceFile, targetFile);
 		//fileHandler->SetCurrentPath(publicationAudioPath);
 	//	fileHandler->MakeDirectory(std::wstring(L""));
 

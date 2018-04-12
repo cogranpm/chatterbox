@@ -33,6 +33,8 @@ public:
 	std::wstring GetFullAudioPathToFile(const std::wstring& fileName);
 	std::wstring GetNewAudioFileName();
 	bool IsFileEmpty(const std::wstring& path);
+	bool MoveFile(const std::wstring& oldPath, const std::wstring& newPath);
+
 protected:
 
 

@@ -68,6 +68,24 @@ PublicationPanelImp::~PublicationPanelImp()
 
 void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 {
+	std::wstring publicationTitle = wxGetApp().GetMainFrameViewModel()->GetCurrentPublication()->getTitle();
+	std::wstring shelfTitle = wxGetApp().GetMainFrameViewModel()->GetCurrentShelf()->getTitle();
+	std::wstring subjectTitle = wxGetApp().GetMainFrameViewModel()->GetCurrentSubject()->getTitle();
+	
+	std::wstring shelfPath = wxGetApp().GetFileHandler().GetAudioPath() + "\\" + shelfTitle + "\\";
+	std::wstring subjectPath = shelfPath + subjectTitle + "\\";
+	std::wstring publicationPath = subjectPath + publicationTitle + "\\";
+
+	wxGetApp().GetFileHandler().SetCurrentPath(shelfPath);
+	wxGetApp().GetFileHandler().MakeDirectory(L"");
+
+	wxGetApp().GetFileHandler().SetCurrentPath(subjectPath);
+	wxGetApp().GetFileHandler().MakeDirectory(L"");
+
+	wxGetApp().GetFileHandler().SetCurrentPath(publicationPath);
+	wxGetApp().GetFileHandler().MakeDirectory(L"");
+	wxGetApp().GetFileHandler().SetAudioPath(publicationPath);
+
 	btnEditTopic->SetBitmap(*wxGetApp().GetImages().edit_icon);
 	btnEditNote->SetBitmap(*wxGetApp().GetImages().edit_icon);
 	btnEditQuiz->SetBitmap(*wxGetApp().GetImages().edit_icon);

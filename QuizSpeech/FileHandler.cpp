@@ -321,3 +321,17 @@ std::wstring FileHandler::GetNewAudioFileName()
 {
 	return GetFileNameByTime(L"wav");
 }
+
+bool FileHandler::MoveFile(const std::wstring& oldPath, const std::wstring& newPath)
+{
+	if (!FileExists(oldPath))
+	{
+		return false;
+	}
+	boost::filesystem::path source(oldPath);
+	boost::filesystem::path destination(newPath);
+	boost::filesystem::copy_file(oldPath, newPath);
+	//boost::filesystem::remove(oldPath);
+	return true;
+
+}
