@@ -7,7 +7,6 @@
 #endif
 
 
-
 SqliteProvider::SqliteProvider(void) : db(nullptr), ddl(nullptr)
 {
 }
@@ -894,4 +893,105 @@ void SqliteProvider::Export(const std::wstring& path)
 	}
 
 	db.Close();
+}
+
+void SqliteProvider::RelocateAudioFiles(FileHandler* fileHandler)
+{
+	wxString audioPaths ("select shelf, subject, publication, audiofile from VAUDIOBYFOLDER order by shelf, subject, publication;");
+	wxSQLite3Statement stmt = db->PrepareStatement(audioPaths);
+	wxSQLite3ResultSet set = stmt.ExecuteQuery();
+	wxString shelf;
+	wxString subject;
+	wxString publication;
+	wxString audioFile;
+	while (set.NextRow())
+	{
+		shelf = set.GetAsString(0);
+		subject = set.GetAsString(1);
+		publication = set.GetAsString(2);
+		audioFile = set.GetAsString(3);
+
+		std::wstring shelfAudioPath = fileHandler->GetAudioPath() + "\\" + shelf.ToStdWstring() + "\\";
+		//fileHandler->SetCurrentPath(shelfAudioPath);
+		//fileHandler->MakeDirectory(std::wstring(L""));
+
+		std::wstring subjectAudioPath = shelfAudioPath + "\\" + subject.ToStdWstring() + "\\";
+		//fileHandler->SetCurrentPath(subjectAudioPath);
+		//fileHandler->MakeDirectory(std::wstring(L""));
+
+		std::wstring publicationAudioPath = subjectAudioPath + "\\" + publication.ToStdWstring() + "\\";
+		//fileHandler->SetCurrentPath(publicationAudioPath);
+	//	fileHandler->MakeDirectory(std::wstring(L""));
+
+
+	}
+	set.Finalize();
+	stmt.Finalize();
+	
+	return;
+
+
+	/*
+	std::wstring audioDirectory = dataDirectory + L"\\Audio\\";
+	wxGetApp().GetFileHandler().MakeDirectory(L"Audio");
+	wxGetApp().GetFileHandler().SetCurrentPath(audioDirectory);
+	wxGetApp().GetFileHandler().SetAudioPath(audioDirectory);
+	*/
+
+	/* create folders for each shelf, subject and publication */
+	boost::ptr_vector<Shelf> shelfList;
+	this->GetAllShelves(&shelfList);
+	for (boost::ptr_vector<Shelf>::iterator it = shelfList.begin(); it != shelfList.end(); ++it)
+	{
+		std::wstring shelfName = it->getTitle();
+		if (shelfName.length() > 259)
+		{
+			continue;
+		}
+		std::wstring shelfAudioPath = fileHandler->GetAudioPath() + "\\" + shelfName + "\\";
+		fileHandler->SetCurrentPath(shelfAudioPath);
+		fileHandler->MakeDirectory(std::wstring(L""));
+		
+		boost::ptr_vector<Subject> subjectList;
+		this->GetSubjectsByShelf(&(*it), &subjectList);
+		for (boost::ptr_vector<Subject>::iterator st = subjectList.begin(); st != subjectList.end(); ++st)
+		{
+			std::wstring subjectName = st->getTitle();
+			if (subjectName.length() > 259)
+			{
+				continue;
+			}
+			std::wstring subjectAudioPath = shelfAudioPath + "\\" + subjectName + "\\";
+			fileHandler->SetCurrentPath(subjectAudioPath);
+			fileHandler->MakeDirectory(std::wstring(L""));
+
+			boost::ptr_vector<Publication> publicationList;
+			this->GetPublicationsBySubject(&(*st), &publicationList);
+
+			for (boost::ptr_vector<Publication>::iterator pt = publicationList.begin(); pt != publicationList.end(); ++pt)
+			{
+				std::wstring publicationName = pt->getTitle();
+				if (publicationName.length() > 259)
+				{
+					continue;
+				}
+				std::wstring publicationAudioPath = subjectAudioPath + "\\" + publicationName + "\\";
+				fileHandler->SetCurrentPath(publicationAudioPath);
+				try
+				{
+					fileHandler->MakeDirectory(std::wstring(L""));
+				}
+				catch (...)
+				{
+					//forget it, could be an issue with file name
+				}
+
+				//move all note audio files
+				//move all note segment audio files
+				//move all quiz audio files
+				//move all quiz run audio files
+
+			}
+		}
+	}
 }

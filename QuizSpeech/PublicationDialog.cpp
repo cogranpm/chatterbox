@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 23 2018)
+// C++ code generated with wxFormBuilder (version Apr 24 2017)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "PublicationDialog.h"
@@ -31,6 +31,14 @@ PublicationDialog::PublicationDialog( wxWindow* parent, wxWindowID id, const wxS
 	sizerForm->Add( lblTitle, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_RIGHT|wxALL, 5 );
 	
 	txtTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,-1 ), 0 );
+	#ifdef __WXGTK__
+	if ( !txtTitle->HasFlag( wxTE_MULTILINE ) )
+	{
+	txtTitle->SetMaxLength( 60 );
+	}
+	#else
+	txtTitle->SetMaxLength( 60 );
+	#endif
 	txtTitle->SetValidator( wxTextValidator( wxFILTER_NONE, &_title ) );
 	
 	sizerForm->Add( txtTitle, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );

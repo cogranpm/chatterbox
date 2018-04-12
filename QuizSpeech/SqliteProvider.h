@@ -14,6 +14,7 @@
 #include "NoteSegment.h"
 #include "NoteSegmentTypeHeader.h"
 #include "NoteSegmentType.h"
+#include "FileHandler.h"
 
 class SqliteProvider
 {
@@ -62,6 +63,7 @@ public:
 	void CreateSystemData();
 	void CreateSampleData();
 	void Export(const std::wstring& path);
+	void RelocateAudioFiles(FileHandler* fileHandler);
 
 private:
 	wxSQLite3Database* db;

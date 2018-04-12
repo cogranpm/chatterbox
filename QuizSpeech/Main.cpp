@@ -113,6 +113,7 @@ bool MyApp::OnInit()
 		//initialize the database provider
 		dataProvider = std::make_unique<SqliteProvider>();
 		SetDefaultPaths();
+		dataProvider->RelocateAudioFiles(&wxGetApp().GetFileHandler());
 		//sp.setStopWord(L"orange");
 		sp.InitSpeech();
 	}
