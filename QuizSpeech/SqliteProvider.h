@@ -63,7 +63,8 @@ public:
 	void CreateSystemData();
 	void CreateSampleData();
 	void Export(const std::wstring& path);
-	void RelocateAudioFiles(FileHandler* fileHandler);
+	unsigned long GetShelfIdBySubject(unsigned long subjectId);
+	void RelocateAudioFiles();
 
 private:
 	wxSQLite3Database* db;
@@ -80,5 +81,7 @@ private:
 
 	void SetVersion(int version);
 	int GetVersion();
+
+	
 };
 

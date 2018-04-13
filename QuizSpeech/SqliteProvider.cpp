@@ -1,6 +1,10 @@
 #include "SqliteProvider.h"
 #include "HelpConstants.h"
 #include "GlobalConstants.h"
+#include "MyApp.h"
+#include <wx/app.h> 
+#include <wx/log.h> 
+
 #include <wx/wxprec.h>
 #ifndef WX_PRECOMP
     #include <wx/wx.h>
@@ -179,6 +183,7 @@ void SqliteProvider::Update(Shelf* shelf)
 	stmt.Bind(3, wxLongLong(shelf->getShelfId()));
     stmt.ExecuteUpdate();	
 	shelf->SetDirty(false);
+	
 }
 
 
@@ -248,6 +253,7 @@ void SqliteProvider::Update(Subject* subject)
 		stmt.Bind(4, wxLongLong(subject->getSubjectId()));
 		stmt.ExecuteUpdate();
 		subject->SetDirty(false);
+		
 	}
 	catch(wxSQLite3Exception& e)
 	{
@@ -331,6 +337,7 @@ void SqliteProvider::Update(Publication* publication)
 		stmt.Bind(5, wxLongLong(publication->getPublicationId()));
 		stmt.ExecuteUpdate();
 		publication->SetDirty(false);
+		
 	}
 	catch(wxSQLite3Exception& e)
 	{
@@ -895,106 +902,63 @@ void SqliteProvider::Export(const std::wstring& path)
 	db.Close();
 }
 
-void SqliteProvider::RelocateAudioFiles(FileHandler* fileHandler)
+void SqliteProvider::RelocateAudioFiles()
 {
-	wxString audioPaths ("select shelf, subject, publication, audiofile from VAUDIOBYFOLDER order by shelf, subject, publication;");
+	FileHandler fileHandler = wxGetApp().GetFileHandler();
+	wxString audioPaths ("select shelf, shelfId, subject, subjectId, publication, publicationId, audiofile from VAUDIOBYFOLDER where shelfId = ? order by shelf, subject, publication;");
 	wxSQLite3Statement stmt = db->PrepareStatement(audioPaths);
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	wxString shelf;
+	unsigned int shelfId;
 	wxString subject;
+	unsigned int subjectId;
 	wxString publication;
+	unsigned int publicationId;
 	wxString audioFile;
 	while (set.NextRow())
 	{
 		shelf = set.GetAsString(0);
-		subject = set.GetAsString(1);
-		publication = set.GetAsString(2);
-		audioFile = set.GetAsString(3);
+		shelfId = set.GetInt64(1).ToLong();
+		subject = set.GetAsString(2);
+		subjectId = set.GetInt64(3).ToLong();
+		publication = set.GetAsString(4);
+		publicationId = set.GetInt64(5).ToLong();
+		audioFile = set.GetAsString(6);
 
-		std::wstring shelfAudioPath = fileHandler->GetAudioPath() + "\\" + shelf.ToStdWstring() + "\\";
-		//fileHandler->SetCurrentPath(shelfAudioPath);
-		//fileHandler->MakeDirectory(std::wstring(L""));
+		std::wstring shelfAudioPath = fileHandler.GetAudioPath() + "\\" + boost::lexical_cast<std::wstring>(shelfId) + "\\";
+		fileHandler.SetCurrentPath(shelfAudioPath);
+		fileHandler.MakeDirectory(std::wstring(L""));
 
-		std::wstring subjectAudioPath = shelfAudioPath + "\\" + subject.ToStdWstring() + "\\";
-		//fileHandler->SetCurrentPath(subjectAudioPath);
-		//fileHandler->MakeDirectory(std::wstring(L""));
+		std::wstring subjectAudioPath = shelfAudioPath + "\\" + boost::lexical_cast<std::wstring>(subjectId) + "\\";
+		fileHandler.SetCurrentPath(subjectAudioPath);
+		fileHandler.MakeDirectory(std::wstring(L""));
 
-		std::wstring publicationAudioPath = subjectAudioPath + "\\" + publication.ToStdWstring() + "\\";
+		std::wstring publicationAudioPath = subjectAudioPath + "\\" + boost::lexical_cast<std::wstring>(publicationId) + "\\";
+		fileHandler.SetCurrentPath(publicationAudioPath);
+		fileHandler.MakeDirectory(std::wstring(L""));
+
 		std::wstring targetFile = publicationAudioPath + "\\" + audioFile;
-		std::wstring sourceFile = fileHandler->GetAudioPath() + "\\" + audioFile;
-		bool copyResult = fileHandler->MoveFile(sourceFile, targetFile);
-		//fileHandler->SetCurrentPath(publicationAudioPath);
-	//	fileHandler->MakeDirectory(std::wstring(L""));
-
+		std::wstring sourceFile = fileHandler.GetAudioPath() + "\\" + shelf + "\\" + subject + "\\" + publication + "\\" + audioFile;
+		bool copyResult = fileHandler.MoveFile(sourceFile, targetFile);
 
 	}
 	set.Finalize();
 	stmt.Finalize();
-	
-	return;
+}
 
-
-	/*
-	std::wstring audioDirectory = dataDirectory + L"\\Audio\\";
-	wxGetApp().GetFileHandler().MakeDirectory(L"Audio");
-	wxGetApp().GetFileHandler().SetCurrentPath(audioDirectory);
-	wxGetApp().GetFileHandler().SetAudioPath(audioDirectory);
-	*/
-
-	/* create folders for each shelf, subject and publication */
-	boost::ptr_vector<Shelf> shelfList;
-	this->GetAllShelves(&shelfList);
-	for (boost::ptr_vector<Shelf>::iterator it = shelfList.begin(); it != shelfList.end(); ++it)
+unsigned long SqliteProvider::GetShelfIdBySubject(unsigned long subjectId)
+{
+	wxString select("select shelfId from subject where subjectId = ?;");
+	wxSQLite3Statement stmt = db->PrepareStatement(select);
+	stmt.Bind(1, wxLongLong(subjectId));
+	wxSQLite3ResultSet set = stmt.ExecuteQuery();
+	unsigned long shelfId;
+	while (set.NextRow())
 	{
-		std::wstring shelfName = it->getTitle();
-		if (shelfName.length() > 259)
-		{
-			continue;
-		}
-		std::wstring shelfAudioPath = fileHandler->GetAudioPath() + "\\" + shelfName + "\\";
-		fileHandler->SetCurrentPath(shelfAudioPath);
-		fileHandler->MakeDirectory(std::wstring(L""));
-		
-		boost::ptr_vector<Subject> subjectList;
-		this->GetSubjectsByShelf(&(*it), &subjectList);
-		for (boost::ptr_vector<Subject>::iterator st = subjectList.begin(); st != subjectList.end(); ++st)
-		{
-			std::wstring subjectName = st->getTitle();
-			if (subjectName.length() > 259)
-			{
-				continue;
-			}
-			std::wstring subjectAudioPath = shelfAudioPath + "\\" + subjectName + "\\";
-			fileHandler->SetCurrentPath(subjectAudioPath);
-			fileHandler->MakeDirectory(std::wstring(L""));
-
-			boost::ptr_vector<Publication> publicationList;
-			this->GetPublicationsBySubject(&(*st), &publicationList);
-
-			for (boost::ptr_vector<Publication>::iterator pt = publicationList.begin(); pt != publicationList.end(); ++pt)
-			{
-				std::wstring publicationName = pt->getTitle();
-				if (publicationName.length() > 259)
-				{
-					continue;
-				}
-				std::wstring publicationAudioPath = subjectAudioPath + "\\" + publicationName + "\\";
-				fileHandler->SetCurrentPath(publicationAudioPath);
-				try
-				{
-					fileHandler->MakeDirectory(std::wstring(L""));
-				}
-				catch (...)
-				{
-					//forget it, could be an issue with file name
-				}
-
-				//move all note audio files
-				//move all note segment audio files
-				//move all quiz audio files
-				//move all quiz run audio files
-
-			}
-		}
+		shelfId = set.GetInt64("ShelfId").ToLong();
 	}
+
+	set.Finalize();
+	stmt.Finalize();
+	return shelfId;
 }

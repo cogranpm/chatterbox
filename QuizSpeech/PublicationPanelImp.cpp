@@ -68,13 +68,13 @@ PublicationPanelImp::~PublicationPanelImp()
 
 void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 {
-	std::wstring publicationTitle = wxGetApp().GetMainFrameViewModel()->GetCurrentPublication()->getTitle();
-	std::wstring shelfTitle = wxGetApp().GetMainFrameViewModel()->GetCurrentShelf()->getTitle();
-	std::wstring subjectTitle = wxGetApp().GetMainFrameViewModel()->GetCurrentSubject()->getTitle();
+	unsigned long publicationId = wxGetApp().GetMainFrameViewModel()->GetCurrentPublication()->getPublicationId();
+	unsigned long shelfId = wxGetApp().GetMainFrameViewModel()->GetCurrentShelf()->getShelfId();
+	unsigned long subjectId = wxGetApp().GetMainFrameViewModel()->GetCurrentSubject()->getSubjectId();
 	
-	std::wstring shelfPath = wxGetApp().GetFileHandler().GetAudioPath() + "\\" + shelfTitle + "\\";
-	std::wstring subjectPath = shelfPath + subjectTitle + "\\";
-	std::wstring publicationPath = subjectPath + publicationTitle + "\\";
+	std::wstring shelfPath = wxGetApp().GetFileHandler().GetAudioPath() + "\\" + boost::lexical_cast<std::wstring>(shelfId) + "\\";
+	std::wstring subjectPath = shelfPath + boost::lexical_cast<std::wstring>(subjectId) + "\\";
+	std::wstring publicationPath = subjectPath + boost::lexical_cast<std::wstring>(publicationId) + "\\";
 
 	wxGetApp().GetFileHandler().SetCurrentPath(shelfPath);
 	wxGetApp().GetFileHandler().MakeDirectory(L"");

@@ -114,7 +114,7 @@ bool MyApp::OnInit()
 		dataProvider = std::make_unique<SqliteProvider>();
 		SetDefaultPaths();
 		/* this was a once off when files where moved into publication directories */
-		//dataProvider->RelocateAudioFiles(&wxGetApp().GetFileHandler());
+		dataProvider->RelocateAudioFiles();
 		//sp.setStopWord(L"orange");
 		sp.InitSpeech();
 	}
