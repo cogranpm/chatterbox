@@ -905,7 +905,7 @@ void SqliteProvider::Export(const std::wstring& path)
 void SqliteProvider::RelocateAudioFiles()
 {
 	FileHandler fileHandler = wxGetApp().GetFileHandler();
-	wxString audioPaths ("select shelf, shelfId, subject, subjectId, publication, publicationId, audiofile from VAUDIOBYFOLDER where shelfId = ? order by shelf, subject, publication;");
+	wxString audioPaths ("select shelf, shelfId, subject, subjectId, publication, publicationId, audiofile from VAUDIOBYFOLDER order by shelf, subject, publication;");
 	wxSQLite3Statement stmt = db->PrepareStatement(audioPaths);
 	wxSQLite3ResultSet set = stmt.ExecuteQuery();
 	wxString shelf;
