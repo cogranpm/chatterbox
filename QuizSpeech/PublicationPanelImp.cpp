@@ -72,7 +72,8 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	unsigned long shelfId = wxGetApp().GetMainFrameViewModel()->GetCurrentShelf()->getShelfId();
 	unsigned long subjectId = wxGetApp().GetMainFrameViewModel()->GetCurrentSubject()->getSubjectId();
 	
-	std::wstring shelfPath = wxGetApp().GetFileHandler().GetAudioPath() + "\\" + boost::lexical_cast<std::wstring>(shelfId) + "\\";
+	std::wstring initialPath = wxGetApp().GetDataDirectory() + "\\Audio\\";
+	std::wstring shelfPath = initialPath + boost::lexical_cast<std::wstring>(shelfId) + "\\";
 	std::wstring subjectPath = shelfPath + boost::lexical_cast<std::wstring>(subjectId) + "\\";
 	std::wstring publicationPath = subjectPath + boost::lexical_cast<std::wstring>(publicationId) + "\\";
 
