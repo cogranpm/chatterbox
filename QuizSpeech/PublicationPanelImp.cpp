@@ -1060,6 +1060,7 @@ void PublicationPanelImp::Refresh()
 	this->RenderExercises(nullptr);
 	if (_viewModel->GetTopic() != nullptr)
 	{
+		this->_viewModel->GetNoteList()->clear();
 		wxGetApp().GetProvider()->GetNotesByTopic(this->_viewModel->GetTopic(), this->_viewModel->GetNoteList());
 		RenderNotes(nullptr);
 	}
