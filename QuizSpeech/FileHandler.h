@@ -26,6 +26,7 @@ public:
 	std::wstring getFileExtension(const std::wstring&);
 	void loadFileNamesByExtension(std::list<std::wstring>& lst, const std::wstring& extension, const std::wstring& directoryPath);
 
+	bool FolderExists(const std::wstring& path);
 	bool FileExists(const std::wstring& path);
 	bool FileExists(const std::string& path);
 	std::wstring& GetAudioPath() { return audioPath; }

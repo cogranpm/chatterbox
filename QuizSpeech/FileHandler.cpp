@@ -282,6 +282,12 @@ void FileHandler::loadFileNamesByExtension(std::list<std::wstring>& lst, const s
 	}
 }
 
+bool FileHandler::FolderExists(const std::wstring& path)
+{
+	boost::filesystem::path folderPath(path);
+	return exists(folderPath);
+}
+
 bool FileHandler::FileExists(const std::wstring& path)
 {	
 	boost::filesystem::path filePath(path);

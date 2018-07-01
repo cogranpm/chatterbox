@@ -37,7 +37,8 @@ public:
 	const std::wstring const GetUserDataDirectory();
 	const std::wstring const GetDataDirectory();
 	void ChangeDataDirectory(const std::wstring& newDataDirectory);
-	void SetDefaultPaths();
+	bool SetDefaultPaths();
+	bool InitializeFrame();
 	//constants
 	static const std::string APPLICATION_NAME;
 	static const size_t HOME_PAGE_INDEX;

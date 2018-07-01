@@ -2,6 +2,8 @@
 #include <wx/mediactrl.h>
 #include <wx/stdpaths.h>
 #include <wx/image.h> 
+#include "SettingsDialogImp.h"
+
 
 wxIMPLEMENT_APP(MyApp);
 
@@ -112,10 +114,57 @@ bool MyApp::OnInit()
 		LoadDefaultSettings();
 		//initialize the database provider
 		dataProvider = std::make_unique<SqliteProvider>();
-		SetDefaultPaths();
-		/* this was a once off when files where moved into publication directories */
-		//dataProvider->RelocateAudioFiles();
-		//sp.setStopWord(L"orange");
+		bool result = SetDefaultPaths();
+		if (!result)
+		{
+			int maxAttempts = 3;
+			int currentAttempt = 0;
+			while (currentAttempt < maxAttempts)
+			{
+				SettingsDialogImp dlg(NULL);
+				dlg.SetDataDirectory(wxString(""));
+				if (dlg.ShowModal() == wxID_OK)
+				{
+					if (dlg.GetDataDirectoryDirty())
+					{
+						dataDirectory = dlg.GetDataDirectory();
+						wxConfigBase* config = wxConfigBase::Get();
+						bool isWriteOk = config->Write(MyApp::CONFIGKEY_DATA_DIRECTORY, wxString(dataDirectory));
+
+						if (SetDefaultPaths())
+						{
+							break;
+						}
+					}
+				}
+				currentAttempt++;
+			}
+			/* show the settings dialog and redo this if necessary */
+		}
+		return InitializeFrame();
+		
+	}
+	catch (std::runtime_error& re)
+	{
+		//show error message and exit
+		wxMessageBox(re.what(), L"Error", wxICON_ERROR);
+		return false;
+	}
+	catch (std::exception& ex)
+	{
+		//show a message here and exit etc
+		wxMessageBox(ex.what(), L"Error", wxICON_ERROR);
+		return false;
+	}
+   
+}
+
+
+bool MyApp::InitializeFrame()
+{
+	try
+	{
+
 		sp.InitSpeech();
 	}
 	catch (std::runtime_error& re)
@@ -160,15 +209,30 @@ bool MyApp::OnInit()
 		return false;
 	}
 
-    return true;
+	return true;
 }
 
-void MyApp::SetDefaultPaths()
+bool MyApp::SetDefaultPaths()
 {
 	wxString databaseName;
 	//databaseName = wxGetCwd() + "/" + MyApp::DATABASE_FILE_NAME;
+
+	//lets make sure the datadirectory exists, things may have changed
+	if (!wxGetApp().GetFileHandler().FolderExists(dataDirectory))
+	{
+		return false;
+	}
+	
 	databaseName = dataDirectory + L"/" + MyApp::DATABASE_FILE_NAME;
-	this->dataProvider->initDB(databaseName);
+	try
+	{
+		this->dataProvider->initDB(databaseName);
+	}
+	catch (std::exception e)
+	{
+		//could be an incorrect path to data file need to react
+		return false;
+	}
 
 	//set up the current path in the FileHandler instance.
 	//note currentPath is set when MakeDirectory is called
@@ -179,6 +243,7 @@ void MyApp::SetDefaultPaths()
 	wxGetApp().GetFileHandler().MakeDirectory(L"Audio");
 	wxGetApp().GetFileHandler().SetCurrentPath(audioDirectory);
 	wxGetApp().GetFileHandler().SetAudioPath(audioDirectory);
+	return true;
 }
 
 const std::wstring const MyApp::GetDataDirectory()
