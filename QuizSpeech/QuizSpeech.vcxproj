@@ -140,7 +140,7 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_WINDOWS;NOPCH;POCO_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(LIB)\SDL2-2.0.7\include;$(LIB)\wxSqlIte\wxsqlite3\include;$(DXSDK_DIR)Include;$(LIB)\boost_1_66_0;$(WXWIN)\include\msvc;$(WXWIN)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LIB)\SDL2-2.0.7\include;$(LIB)\wxSqlIte\wxsqlite3\include;$(LIB)\boost_1_66_0;$(WXWIN)\include\msvc;$(WXWIN)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -148,7 +148,7 @@ COPY "$(ProjectDir)rulescc.xml" "$(TargetDir)" /Y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>nothrownew.obj;d2d1.lib;dwrite.lib;windowscodecs.lib;dxgi.lib;d3d10_1.lib;Winmm.lib;dxerr.lib;wxbase31u.lib;wxmsw31u_aui.lib;wxmsw31u_adv.lib;wxmsw31u_core.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;wxsqlite3.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;Mf.lib;Mfplat.lib;mfplay.lib;Mfuuid.lib;shlwapi.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>nothrownew.obj;windowscodecs.lib;Winmm.lib;wxbase31u.lib;wxmsw31u_aui.lib;wxmsw31u_adv.lib;wxmsw31u_core.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;wxsqlite3.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;Mf.lib;Mfplat.lib;mfplay.lib;Mfuuid.lib;shlwapi.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(LIB)\SDL2-2.0.7\VisualC\x64\Release;$(LIB)\wxSqlIte\wxsqlite3\lib\vc_x64_lib;$(LIB)\boost_1_66_0\lib64-msvc-14.1;$(DXSDK_DIR)Lib\x64;$(WXWIN)\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>

@@ -135,9 +135,27 @@ void PublicationPanelImp::OnInitDialog( wxInitDialogEvent& event )
 	this->btnCancel->Enable(false);
 	this->_viewModel->GetPublication()->SetDirty(false);
 	_topicModel = new ShelfDataViewListStore();
+	_topicModel->AppendColumn(wxEmptyString);
+	_topicModel->AppendColumn(wxEmptyString);
+
 	_noteModel = new ShelfDataViewListStore();
+	_noteModel->AppendColumn(wxEmptyString);
+	_noteModel->AppendColumn(wxEmptyString);
+	_noteModel->AppendColumn(wxEmptyString);
+	_noteModel->AppendColumn(wxEmptyString);
+	_noteModel->AppendColumn(wxEmptyString);
+	_noteModel->AppendColumn(wxEmptyString);
+
 	_quizModel = new ShelfDataViewListStore();
+	_quizModel->AppendColumn(wxEmptyString);
+	_quizModel->AppendColumn(wxEmptyString);
+	
 	quizRunModel = new ShelfDataViewListStore();
+	quizRunModel->AppendColumn(wxEmptyString);
+	quizRunModel->AppendColumn(wxEmptyString);
+	quizRunModel->AppendColumn(wxEmptyString);
+	quizRunModel->AppendColumn(wxEmptyString);
+
 	this->lstTopics->AssociateModel(_topicModel);
 	this->lstNotes->AssociateModel(_noteModel);
 	this->lstQuiz->AssociateModel(_quizModel);

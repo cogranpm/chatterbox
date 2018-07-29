@@ -50,9 +50,17 @@ MainFrame( parent ), shelfModel(nullptr), subjectModel(nullptr), publicationMode
 	colPublicationIndex->SetFlag(wxDATAVIEW_COL_SORTABLE);
 
 	shelfModel = new ShelfDataViewListStore();
+	shelfModel->AppendColumn(wxEmptyString);
+	shelfModel->AppendColumn(wxEmptyString);
 	
 	subjectModel = new ShelfDataViewListStore();
+	subjectModel->AppendColumn(wxEmptyString);
+	subjectModel->AppendColumn(wxEmptyString);
+
 	publicationModel = new ShelfDataViewListStore();
+	publicationModel->AppendColumn(wxEmptyString);
+	publicationModel->AppendColumn(wxEmptyString);
+
 	this->m_dvlShelf->AssociateModel(shelfModel);
 	this->m_lstSubject->AssociateModel(subjectModel);
 	this->lstPublication->AssociateModel(publicationModel);
