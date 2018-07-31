@@ -19,15 +19,15 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	btnPlayAll = new wxButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnPlayAll->SetToolTip( wxT("Play All") );
 	
-	buttonBar->Add( btnPlayAll, 0, wxALL, 5 );
+	buttonBar->Add( btnPlayAll, 0, 0, 5 );
 	
 	btnStopAll = new wxButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnStopAll->SetToolTip( wxT("Stop Playing") );
 	
-	buttonBar->Add( btnStopAll, 0, wxALL, 5 );
+	buttonBar->Add( btnStopAll, 0, 0, 5 );
 	
 	
-	dialogSizer->Add( buttonBar, 0, wxEXPAND, 5 );
+	dialogSizer->Add( buttonBar, 0, 0, 1 );
 	
 	wxBoxSizer* bSizer16;
 	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
@@ -66,7 +66,7 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	m_staticText1->Wrap( -1 );
 	m_staticText1->SetMaxSize( wxSize( 65,-1 ) );
 	
-	gbSizer21->Add( m_staticText1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer21->Add( m_staticText1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), 0, 5 );
 	
 	txtTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,20 ), 0 );
 	#ifdef __WXGTK__
@@ -106,7 +106,7 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Description"), wxDefaultPosition, wxSize( 65,-1 ), 0 );
 	m_staticText2->Wrap( -1 );
-	gbSizer21->Add( m_staticText2, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	gbSizer21->Add( m_staticText2, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), 0, 5 );
 	
 	txtDescription = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
 	#ifdef __WXGTK__
@@ -126,10 +126,10 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	gbSizer21->AddGrowableCol( 1 );
 	gbSizer21->AddGrowableRow( 3 );
 	
-	sizerNoteFields->Add( gbSizer21, 1, wxALL|wxEXPAND, 5 );
+	sizerNoteFields->Add( gbSizer21, 1, wxEXPAND, 5 );
 	
 	
-	bSizer16->Add( sizerNoteFields, 1, wxEXPAND, 5 );
+	bSizer16->Add( sizerNoteFields, 1, wxEXPAND, 1 );
 	
 	wxBoxSizer* sizerTemplates;
 	sizerTemplates = new wxBoxSizer( wxVERTICAL );
@@ -141,7 +141,13 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	segmentSelectionSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Segment Templates") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Segment Templates") ), wxHORIZONTAL );
+	
+	wxBoxSizer* bSizer17;
+	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxBoxSizer* bSizer18;
+	bSizer18 = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizer13;
 	bSizer13 = new wxBoxSizer( wxHORIZONTAL );
@@ -149,49 +155,55 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	btnAddSegment = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnAddSegment->SetToolTip( wxT("Append selected segment") );
 	
-	bSizer13->Add( btnAddSegment, 0, wxALL, 5 );
+	bSizer13->Add( btnAddSegment, 0, 0, 5 );
 	
 	btnClear = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnClear->SetToolTip( wxT("Remove all segments from Note") );
 	
-	bSizer13->Add( btnClear, 0, wxALL, 5 );
+	bSizer13->Add( btnClear, 0, 0, 5 );
 	
 	btnNewSegment = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnNewSegment->SetToolTip( wxT("Create Note Segment Template") );
 	
-	bSizer13->Add( btnNewSegment, 0, wxALL, 5 );
+	bSizer13->Add( btnNewSegment, 0, 0, 5 );
 	
 	btnEditSegment = new wxButton( sbSizer2->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
 	btnEditSegment->SetToolTip( wxT("Edit Segment Template") );
 	
-	bSizer13->Add( btnEditSegment, 0, wxALL, 5 );
+	bSizer13->Add( btnEditSegment, 0, 0, 5 );
 	
 	
-	sbSizer2->Add( bSizer13, 0, 0, 5 );
+	bSizer18->Add( bSizer13, 0, 0, 5 );
+	
+	lstTypes = new wxListBox( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,150 ), 0, NULL, 0 ); 
+	bSizer18->Add( lstTypes, 0, wxEXPAND, 5 );
+	
+	
+	bSizer17->Add( bSizer18, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
-	
-	lstTypes = new wxListBox( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,150 ), 0, NULL, 0 ); 
-	bSizer4->Add( lstTypes, 0, wxALL|wxEXPAND, 5 );
 	
 	typeInfo = new wxHtmlWindow( sbSizer2->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_NEVER );
 	typeInfo->SetMinSize( wxSize( 300,50 ) );
 	typeInfo->SetMaxSize( wxSize( -1,50 ) );
 	
-	bSizer4->Add( typeInfo, 2, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( typeInfo, 2, wxEXPAND, 5 );
 	
 	
-	sbSizer2->Add( bSizer4, 1, wxEXPAND, 5 );
+	bSizer17->Add( bSizer4, 2, wxEXPAND, 5 );
 	
 	
-	segmentSelectionSizer->Add( sbSizer2, 1, wxALL|wxEXPAND, 5 );
+	sbSizer2->Add( bSizer17, 1, wxEXPAND, 5 );
 	
 	
-	bSizer8->Add( segmentSelectionSizer, 1, 0, 5 );
+	segmentSelectionSizer->Add( sbSizer2, 1, wxEXPAND, 5 );
 	
 	
-	sizerTemplates->Add( bSizer8, 1, 0, 5 );
+	bSizer8->Add( segmentSelectionSizer, 1, wxEXPAND, 1 );
+	
+	
+	sizerTemplates->Add( bSizer8, 1, 0, 1 );
 	
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
@@ -209,16 +221,16 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	segmentContainer->SetSizer( panelSizer );
 	segmentContainer->Layout();
 	panelSizer->Fit( segmentContainer );
-	bSizer6->Add( segmentContainer, 5, wxEXPAND | wxALL, 5 );
+	bSizer6->Add( segmentContainer, 5, wxEXPAND, 5 );
 	
 	
-	sizerTemplates->Add( bSizer6, 5, wxEXPAND, 5 );
+	sizerTemplates->Add( bSizer6, 5, wxEXPAND, 1 );
 	
 	
-	bSizer16->Add( sizerTemplates, 1, wxEXPAND, 5 );
+	bSizer16->Add( sizerTemplates, 1, wxEXPAND, 1 );
 	
 	
-	dialogSizer->Add( bSizer16, 1, wxEXPAND, 5 );
+	dialogSizer->Add( bSizer16, 1, wxEXPAND, 1 );
 	
 	wxBoxSizer* bSizer15;
 	bSizer15 = new wxBoxSizer( wxHORIZONTAL );
