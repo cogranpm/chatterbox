@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 23 2018)
+// C++ code generated with wxFormBuilder (version May 29 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,6 +28,9 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	
 	
 	dialogSizer->Add( buttonBar, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer16;
+	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxBoxSizer* sizerNoteFields;
 	sizerNoteFields = new wxBoxSizer( wxHORIZONTAL );
@@ -126,10 +129,10 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	sizerNoteFields->Add( gbSizer21, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	dialogSizer->Add( sizerNoteFields, 0, wxEXPAND, 5 );
+	bSizer16->Add( sizerNoteFields, 2, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer3 = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -212,7 +215,10 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer3->Add( bSizer6, 5, wxEXPAND, 5 );
 	
 	
-	dialogSizer->Add( bSizer3, 2, wxEXPAND, 5 );
+	bSizer16->Add( bSizer3, 1, wxEXPAND, 5 );
+	
+	
+	dialogSizer->Add( bSizer16, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer15;
 	bSizer15 = new wxBoxSizer( wxHORIZONTAL );

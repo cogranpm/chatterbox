@@ -31,18 +31,7 @@ public:
 
 	//getters
 	CComPtr<ISpRecoContext> GetContext();
-	//CComPtr<ISpVoice> GetVoice();
-	//define the signals that this class will emit
-	//typedef boost::signals2::signal<void(std::wstring)>  type_speechrecognized;
-	//typedef boost::signals2::signal<void(void)>  type_dictationcompleted;
-	
 
-	//boost::signals2::connection onSpeechRecognized(type_speechrecognized::slot_function_type subscriber);
-	//boost::signals2::connection onDictationCompleted(type_dictationcompleted::slot_function_type subscriber);
-	
-	//temporarily public, place in getters later
-	//type_speechrecognized m_speech_recognized;
-	//type_dictationcompleted m_dictation_completed;
 
 protected:
 
