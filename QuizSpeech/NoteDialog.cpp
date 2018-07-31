@@ -40,26 +40,6 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	gbSizer21->SetFlexibleDirection( wxBOTH );
 	gbSizer21->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Title"), wxDefaultPosition, wxSize( 65,-1 ), 0 );
-	m_staticText1->Wrap( -1 );
-	m_staticText1->SetMaxSize( wxSize( 65,-1 ) );
-	
-	gbSizer21->Add( m_staticText1, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
-	
-	txtTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,20 ), 0 );
-	#ifdef __WXGTK__
-	if ( !txtTitle->HasFlag( wxTE_MULTILINE ) )
-	{
-	txtTitle->SetMaxLength( 60 );
-	}
-	#else
-	txtTitle->SetMaxLength( 60 );
-	#endif
-	txtTitle->Enable( false );
-	txtTitle->SetMaxSize( wxSize( -1,20 ) );
-	
-	gbSizer21->Add( txtTitle, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL|wxEXPAND, 5 );
-	
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -80,25 +60,27 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer9->Add( szTitlePlayer, 1, wxEXPAND, 5 );
 	
 	
-	gbSizer21->Add( bSizer9, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	gbSizer21->Add( bSizer9, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Description"), wxDefaultPosition, wxSize( 65,-1 ), 0 );
-	m_staticText2->Wrap( -1 );
-	gbSizer21->Add( m_staticText2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Title"), wxDefaultPosition, wxSize( 65,-1 ), 0 );
+	m_staticText1->Wrap( -1 );
+	m_staticText1->SetMaxSize( wxSize( 65,-1 ) );
 	
-	txtDescription = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	gbSizer21->Add( m_staticText1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	txtTitle = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,20 ), 0 );
 	#ifdef __WXGTK__
-	if ( !txtDescription->HasFlag( wxTE_MULTILINE ) )
+	if ( !txtTitle->HasFlag( wxTE_MULTILINE ) )
 	{
-	txtDescription->SetMaxLength( 32000 );
+	txtTitle->SetMaxLength( 60 );
 	}
 	#else
-	txtDescription->SetMaxLength( 32000 );
+	txtTitle->SetMaxLength( 60 );
 	#endif
-	txtDescription->Enable( false );
-	txtDescription->SetMinSize( wxSize( -1,120 ) );
+	txtTitle->Enable( false );
+	txtTitle->SetMaxSize( wxSize( -1,20 ) );
 	
-	gbSizer21->Add( txtDescription, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL|wxEXPAND, 5 );
+	gbSizer21->Add( txtTitle, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxHORIZONTAL );
@@ -120,19 +102,37 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer11->Add( szDescriptionPlayer, 1, wxEXPAND, 5 );
 	
 	
-	gbSizer21->Add( bSizer11, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	gbSizer21->Add( bSizer11, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+	
+	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Description"), wxDefaultPosition, wxSize( 65,-1 ), 0 );
+	m_staticText2->Wrap( -1 );
+	gbSizer21->Add( m_staticText2, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	txtDescription = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	#ifdef __WXGTK__
+	if ( !txtDescription->HasFlag( wxTE_MULTILINE ) )
+	{
+	txtDescription->SetMaxLength( 32000 );
+	}
+	#else
+	txtDescription->SetMaxLength( 32000 );
+	#endif
+	txtDescription->Enable( false );
+	txtDescription->SetMinSize( wxSize( -1,120 ) );
+	
+	gbSizer21->Add( txtDescription, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_LEFT|wxALL|wxEXPAND, 5 );
 	
 	
 	gbSizer21->AddGrowableCol( 1 );
-	gbSizer21->AddGrowableRow( 1 );
+	gbSizer21->AddGrowableRow( 3 );
 	
 	sizerNoteFields->Add( gbSizer21, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer16->Add( sizerNoteFields, 2, wxEXPAND, 5 );
+	bSizer16->Add( sizerNoteFields, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* sizerTemplates;
+	sizerTemplates = new wxBoxSizer( wxVERTICAL );
 	
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -191,7 +191,7 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer8->Add( segmentSelectionSizer, 1, 0, 5 );
 	
 	
-	bSizer3->Add( bSizer8, 1, 0, 5 );
+	sizerTemplates->Add( bSizer8, 1, 0, 5 );
 	
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
@@ -212,10 +212,10 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer6->Add( segmentContainer, 5, wxEXPAND | wxALL, 5 );
 	
 	
-	bSizer3->Add( bSizer6, 5, wxEXPAND, 5 );
+	sizerTemplates->Add( bSizer6, 5, wxEXPAND, 5 );
 	
 	
-	bSizer16->Add( bSizer3, 1, wxEXPAND, 5 );
+	bSizer16->Add( sizerTemplates, 1, wxEXPAND, 5 );
 	
 	
 	dialogSizer->Add( bSizer16, 1, wxEXPAND, 5 );
@@ -245,14 +245,14 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlNote::OnInitDialog ) );
 	btnPlayAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::PlayAllOnButtonClick ), NULL, this );
 	btnStopAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::StopAllOnButtonClick ), NULL, this );
-	txtTitle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::TitleOnText ), NULL, this );
 	btnUnlockTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockTitleOnButtonClick ), NULL, this );
 	btnRecordTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordTitleOnButtonClick ), NULL, this );
 	btnClearTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearTitleOnButtonClick ), NULL, this );
-	txtDescription->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::DescriptionOnText ), NULL, this );
+	txtTitle->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::TitleOnText ), NULL, this );
 	btnUnlockDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockDescriptionOnButtonClick ), NULL, this );
 	btnRecordDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordDescriptionOnButtonClick ), NULL, this );
 	btnClearDescription->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearDescriptionOnButtonClick ), NULL, this );
+	txtDescription->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::DescriptionOnText ), NULL, this );
 	btnAddSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::AddSegmentOnButtonClick ), NULL, this );
 	btnClear->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearSegmentOnButtonClick ), NULL, this );
 	btnNewSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::NewSegmentOnButtonClick ), NULL, this );
@@ -271,14 +271,14 @@ pnlNote::~pnlNote()
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlNote::OnInitDialog ) );
 	btnPlayAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::PlayAllOnButtonClick ), NULL, this );
 	btnStopAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::StopAllOnButtonClick ), NULL, this );
-	txtTitle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::TitleOnText ), NULL, this );
 	btnUnlockTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockTitleOnButtonClick ), NULL, this );
 	btnRecordTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordTitleOnButtonClick ), NULL, this );
 	btnClearTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearTitleOnButtonClick ), NULL, this );
-	txtDescription->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::DescriptionOnText ), NULL, this );
+	txtTitle->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::TitleOnText ), NULL, this );
 	btnUnlockDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockDescriptionOnButtonClick ), NULL, this );
 	btnRecordDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordDescriptionOnButtonClick ), NULL, this );
 	btnClearDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearDescriptionOnButtonClick ), NULL, this );
+	txtDescription->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( pnlNote::DescriptionOnText ), NULL, this );
 	btnAddSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::AddSegmentOnButtonClick ), NULL, this );
 	btnClear->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearSegmentOnButtonClick ), NULL, this );
 	btnNewSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::NewSegmentOnButtonClick ), NULL, this );

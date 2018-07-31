@@ -40,16 +40,16 @@ class pnlNote : public wxPanel
 		wxBoxSizer* dialogSizer;
 		wxButton* btnPlayAll;
 		wxButton* btnStopAll;
-		wxStaticText* m_staticText1;
-		wxTextCtrl* txtTitle;
 		wxButton* btnUnlockTitle;
 		wxButton* btnRecordTitle;
 		wxButton* btnClearTitle;
-		wxStaticText* m_staticText2;
-		wxTextCtrl* txtDescription;
+		wxStaticText* m_staticText1;
+		wxTextCtrl* txtTitle;
 		wxButton* btnUnlockDescription;
 		wxButton* btnRecordDescription;
 		wxButton* btnClearDescription;
+		wxStaticText* m_staticText2;
+		wxTextCtrl* txtDescription;
 		wxButton* btnAddSegment;
 		wxButton* btnClear;
 		wxButton* btnNewSegment;
@@ -66,14 +66,14 @@ class pnlNote : public wxPanel
 		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void PlayAllOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void StopAllOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void TitleOnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UnlockTitleOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RecordTitleOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ClearTitleOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void DescriptionOnText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void TitleOnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UnlockDescriptionOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RecordDescriptionOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ClearDescriptionOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DescriptionOnText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void AddSegmentOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ClearSegmentOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void NewSegmentOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
