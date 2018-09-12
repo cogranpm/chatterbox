@@ -27,10 +27,30 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	buttonBar->Add( btnStopAll, 0, 0, 5 );
 	
 	
-	dialogSizer->Add( buttonBar, 0, 0, 1 );
+	dialogSizer->Add( buttonBar, 1, 0, 5 );
 	
-	wxBoxSizer* bSizer16;
-	bSizer16 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizer15;
+	bSizer15 = new wxBoxSizer( wxHORIZONTAL );
+	
+	btnCancel = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	btnCancel->Enable( false );
+	
+	bSizer15->Add( btnCancel, 0, wxALL, 5 );
+	
+	btnApply = new wxButton( this, wxID_ANY, wxT("&Apply"), wxDefaultPosition, wxDefaultSize, 0 );
+	btnApply->SetDefault(); 
+	btnApply->Enable( false );
+	
+	bSizer15->Add( btnApply, 0, wxALL, 5 );
+	
+	
+	dialogSizer->Add( bSizer15, 0, wxALIGN_RIGHT, 5 );
+	
+	wxBoxSizer* sizerBody;
+	sizerBody = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer30;
+	bSizer30 = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxBoxSizer* sizerNoteFields;
 	sizerNoteFields = new wxBoxSizer( wxHORIZONTAL );
@@ -60,7 +80,7 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer9->Add( szTitlePlayer, 1, wxEXPAND, 5 );
 	
 	
-	gbSizer21->Add( bSizer9, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+	gbSizer21->Add( bSizer9, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, wxT("Title"), wxDefaultPosition, wxSize( 65,-1 ), 0 );
 	m_staticText1->Wrap( -1 );
@@ -102,7 +122,7 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	bSizer11->Add( szDescriptionPlayer, 1, wxEXPAND, 5 );
 	
 	
-	gbSizer21->Add( bSizer11, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+	gbSizer21->Add( bSizer11, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Description"), wxDefaultPosition, wxSize( 65,-1 ), 0 );
 	m_staticText2->Wrap( -1 );
@@ -129,7 +149,7 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	sizerNoteFields->Add( gbSizer21, 1, wxEXPAND, 5 );
 	
 	
-	bSizer16->Add( sizerNoteFields, 1, wxEXPAND, 1 );
+	bSizer30->Add( sizerNoteFields, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* sizerTemplates;
 	sizerTemplates = new wxBoxSizer( wxVERTICAL );
@@ -227,27 +247,13 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	sizerTemplates->Add( bSizer6, 5, wxEXPAND, 1 );
 	
 	
-	bSizer16->Add( sizerTemplates, 1, wxEXPAND, 1 );
+	bSizer30->Add( sizerTemplates, 1, wxEXPAND, 5 );
 	
 	
-	dialogSizer->Add( bSizer16, 1, wxEXPAND, 1 );
-	
-	wxBoxSizer* bSizer15;
-	bSizer15 = new wxBoxSizer( wxHORIZONTAL );
-	
-	btnCancel = new wxButton( this, wxID_ANY, wxT("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-	btnCancel->Enable( false );
-	
-	bSizer15->Add( btnCancel, 0, wxALL, 5 );
-	
-	btnApply = new wxButton( this, wxID_ANY, wxT("&Apply"), wxDefaultPosition, wxDefaultSize, 0 );
-	btnApply->SetDefault(); 
-	btnApply->Enable( false );
-	
-	bSizer15->Add( btnApply, 0, wxALL, 5 );
+	sizerBody->Add( bSizer30, 1, wxEXPAND, 5 );
 	
 	
-	dialogSizer->Add( bSizer15, 0, wxALIGN_RIGHT, 5 );
+	dialogSizer->Add( sizerBody, 1, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( dialogSizer );
@@ -257,6 +263,10 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlNote::OnInitDialog ) );
 	btnPlayAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::PlayAllOnButtonClick ), NULL, this );
 	btnStopAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::StopAllOnButtonClick ), NULL, this );
+	btnCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnCancelButtonClick ), NULL, this );
+	btnCancel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::CancelOnUpdateUI ), NULL, this );
+	btnApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnOKButtonClick ), NULL, this );
+	btnApply->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::ApplyOnUpdateUI ), NULL, this );
 	btnUnlockTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockTitleOnButtonClick ), NULL, this );
 	btnRecordTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordTitleOnButtonClick ), NULL, this );
 	btnClearTitle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearTitleOnButtonClick ), NULL, this );
@@ -271,10 +281,6 @@ pnlNote::pnlNote( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxS
 	btnEditSegment->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::EditSegmentOnButtonClick ), NULL, this );
 	lstTypes->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( pnlNote::TypesOnListBox ), NULL, this );
 	lstTypes->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( pnlNote::TypesOnListBoxDClick ), NULL, this );
-	btnCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnCancelButtonClick ), NULL, this );
-	btnCancel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::CancelOnUpdateUI ), NULL, this );
-	btnApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnOKButtonClick ), NULL, this );
-	btnApply->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::ApplyOnUpdateUI ), NULL, this );
 }
 
 pnlNote::~pnlNote()
@@ -283,6 +289,10 @@ pnlNote::~pnlNote()
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( pnlNote::OnInitDialog ) );
 	btnPlayAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::PlayAllOnButtonClick ), NULL, this );
 	btnStopAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::StopAllOnButtonClick ), NULL, this );
+	btnCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnCancelButtonClick ), NULL, this );
+	btnCancel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::CancelOnUpdateUI ), NULL, this );
+	btnApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnOKButtonClick ), NULL, this );
+	btnApply->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::ApplyOnUpdateUI ), NULL, this );
 	btnUnlockTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::UnlockTitleOnButtonClick ), NULL, this );
 	btnRecordTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::RecordTitleOnButtonClick ), NULL, this );
 	btnClearTitle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::ClearTitleOnButtonClick ), NULL, this );
@@ -297,9 +307,5 @@ pnlNote::~pnlNote()
 	btnEditSegment->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::EditSegmentOnButtonClick ), NULL, this );
 	lstTypes->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( pnlNote::TypesOnListBox ), NULL, this );
 	lstTypes->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( pnlNote::TypesOnListBoxDClick ), NULL, this );
-	btnCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnCancelButtonClick ), NULL, this );
-	btnCancel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::CancelOnUpdateUI ), NULL, this );
-	btnApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( pnlNote::OnOKButtonClick ), NULL, this );
-	btnApply->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( pnlNote::ApplyOnUpdateUI ), NULL, this );
 	
 }
