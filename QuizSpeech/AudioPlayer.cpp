@@ -29,6 +29,8 @@ AudioPlayer::~AudioPlayer()
 	SafeRelease(&presentationDescriptor);
 	SafeRelease(&sourceResolver);
 	SafeRelease(&mediaSourceObject);
+	SafeRelease(&callback);
+	SafeRelease(&sourceCallback);
 	//presentationDescriptor->Release();
 	//sourceResolver->Release();
 	//mediaSourceObject->Release();

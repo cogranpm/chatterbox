@@ -97,6 +97,11 @@ const std::wstring MyApp::CONFIGKEY_DATA_DIRECTORY = L"DataDirectory";
 
 bool MyApp::OnInit()
 {
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(9554);
+	//_CrtSetBreakAlloc(9553);
+	//_CrtSetBreakAlloc(9552);
+
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 	if(FAILED(hr))
 	{
