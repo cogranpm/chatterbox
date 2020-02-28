@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jun 28 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -102,6 +102,8 @@ ExercisePanel::ExercisePanel( wxWindow* parent, wxWindowID id, const wxPoint& po
 	sizerQuestionButtons = new wxBoxSizer( wxHORIZONTAL );
 	
 	btnAddQuestion = new wxButton( pnlGrid, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
+	btnAddQuestion->SetToolTip( wxT("Add Question") );
+	
 	sizerQuestionButtons->Add( btnAddQuestion, 0, 0, 5 );
 	
 	btnDeleteQuestion = new wxButton( pnlGrid, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 20,20 ), 0 );
