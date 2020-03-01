@@ -162,10 +162,15 @@ void ExercisePanelImp::Update()
 		if (cboTopics->GetCurrentSelection() != wxNOT_FOUND)
 		{
 			int i = cboTopics->GetCurrentSelection();
-			void* data = cboTopics->GetClientData(i);
-			unsigned long topicId = (unsigned long)data;
-			//Topic* topic = reinterpret_cast<Topic*>(data);
-			viewModel.GetQuiz().SetTopicId(topicId);
+			//trying to  fix issue is blank item is selected in topics combo
+			if (!cboTopics->GetString(i).IsEmpty())
+			{
+				void* data = cboTopics->GetClientData(i);
+				unsigned long topicId = (unsigned long)data;
+				//Topic* topic = reinterpret_cast<Topic*>(data);
+				viewModel.GetQuiz().SetTopicId(topicId);
+			}
+			
 			
 		}
 
